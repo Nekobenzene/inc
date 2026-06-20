@@ -2,13 +2,12 @@
 
 // 计算总速率（所有乘数相乘）
 function computeTotalRate() {
-    let r = new Decimal(1);
-    for (const u of state.upgrades) {
-        r = r.mul(u.multiple);
-    }
-    let ach7Effect = state.points.ln().pow(state.achReward.ach7)
-    r = r.mul(ach7Effect);
-    return r;
+    return GROWTH_CONFIG.computeTotalRate(state);
+}
+
+// 计算增长
+function applyGrowth(deltaSeconds) {
+    GROWTH_CONFIG.applyGrowth(state, deltaSeconds);
 }
 
 // 执行购入（或升级）
@@ -31,24 +30,6 @@ function performGenerator(index) {
         state.totalClicks = state.totalClicks.add(1);
         return 'buy';
     }
-}
-
-// 增长计算（每秒）
-function applyGrowth(deltaSeconds) {
-    if (deltaSeconds <= 0) return;
-    for (const u of state.upgrades) {
-        const increment = u.getRate().mul(deltaSeconds);
-        u.multiple = u.multiple.add(increment);
-        if (u.multiple.lt(0)) u.multiple = new Decimal(0);
-    }
-    const rate = computeTotalRate();
-    const gained = rate.mul(deltaSeconds);
-    state.points = state.points.add(gained);
-    state.totalPointsEarned = state.totalPointsEarned.add(gained);
-    if (state.points.gt(state.peakPoints)) {
-        state.peakPoints = new Decimal(state.points);
-    }
-    checkUnlockAll();
 }
 
 // 检查成就（更新 unlocked 状态）

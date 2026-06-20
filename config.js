@@ -124,6 +124,54 @@ const UPGRADE_CONFIGS = [
 ];
 const COUNT = UPGRADE_CONFIGS.length;
 
+// ---------- 增长计算配置 ----------
+const GROWTH_CONFIG = {
+    /**
+     * 计算当前总速率（每秒点数增量）
+     * @param {Object} state - 全局状态对象
+     * @returns {Decimal} 总速率
+     */
+    computeTotalRate: (state) => {
+        let r = new Decimal(1);
+        for (const u of state.upgrades) {
+            r = r.mul(u.multiple);
+        }
+        // 成就奖励 7：ln(P) 因子
+        if (state.achReward.ach7.gt(0)) {
+            r = r.mul(state.points.ln().pow(state.achReward.ach7));
+        }
+        return r;
+    },
+
+    /**
+     * 应用时间增量，更新点数和所有升级的 multiple
+     * @param {Object} state - 全局状态对象
+     * @param {number} deltaSeconds - 经过的秒数（浮点数）
+     */
+    applyGrowth: (state, deltaSeconds) => {
+        if (deltaSeconds <= 0) return;
+
+        // 1. 更新每个升级的 multiple
+        for (const u of state.upgrades) {
+            const increment = u.getRate().mul(deltaSeconds);
+            u.multiple = u.multiple.add(increment);
+            if (u.multiple.lt(0)) u.multiple = new Decimal(0);
+        }
+
+        // 2. 计算总速率并增加点数
+        const rate = GROWTH_CONFIG.computeTotalRate(state);
+        const gained = rate.mul(deltaSeconds);
+        state.points = state.points.add(gained);
+        state.totalPointsEarned = state.totalPointsEarned.add(gained);
+        if (state.points.gt(state.peakPoints)) {
+            state.peakPoints = new Decimal(state.points);
+        }
+
+        // 3. 检查升级解锁（根据点数阈值）
+        checkUnlockAll();
+    }
+};
+
 // ---------- 统计配置 ----------
 const STATS_CONFIG = {
     fields: [
