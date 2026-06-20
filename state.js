@@ -8,7 +8,7 @@ const state = {
     peakPoints: new Decimal(GAME_CONFIG.startingPoints),
     totalQuantityCount: new Decimal(0),
     gameStartTime: Date.now(),
-    upgrades: [],
+    generatorUpgrades: [],
     achievements: [], // 每个成就的解锁状态（布尔值）
     achReward: {
         ach3: new Decimal(1),
@@ -21,7 +21,7 @@ const state = {
 
 // 检查所有发电机数量是否达到解锁阈值
 function checkUnlockAll() {
-    for (const u of state.upgrades) {
+    for (const u of state.generatorUpgrades) {
         if (!u.unlocked && state.points.gte(u.unlockThreshold)) {
             u.unlocked = true;
         }
@@ -31,7 +31,7 @@ function checkUnlockAll() {
 // 初始化升级（根据 GENERATOR_CONFIGS）和成就状态
 function initState() {
     // 初始化升级
-    state.upgrades = GENERATOR_CONFIGS.map((config, index) => ({
+    state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => ({
         id: index,
         quantity: new Decimal(config.initial.quantity),
         level: new Decimal(config.initial.level),
@@ -95,7 +95,7 @@ function serializeState() {
         peakPoints: state.peakPoints,
         totalQuantityCount: state.totalQuantityCount,
         gameStartTime: state.gameStartTime,
-        upgrades: state.upgrades.map(u => ({
+        generatorUpgrades: state.generatorUpgrades.map(u => ({
             quantity: u.quantity,
             level: u.level,
             multiple: u.multiple,
@@ -149,13 +149,13 @@ function deserializeState(data) {
 
     
     // 还原升级
-    if (deserialized.upgrades && Array.isArray(deserialized.upgrades)) {
-        for (let i = 0; i < state.upgrades.length && i < deserialized.upgrades.length; i++) {
-            const u = deserialized.upgrades[i];
-            state.upgrades[i].quantity = u.quantity instanceof Decimal ? u.quantity : new Decimal(u.quantity || 0);
-            state.upgrades[i].level = u.level instanceof Decimal ? u.level : new Decimal(u.level || 0);
-            state.upgrades[i].multiple = u.multiple instanceof Decimal ? u.multiple : new Decimal(u.multiple || 1);
-            state.upgrades[i].unlocked = !!u.unlocked;
+    if (deserialized.generatorUpgrades && Array.isArray(deserialized.generatorUpgrades)) {
+        for (let i = 0; i < state.generatorUpgrades.length && i < deserialized.generatorUpgrades.length; i++) {
+            const u = deserialized.generatorUpgrades[i];
+            state.generatorUpgrades[i].quantity = u.quantity instanceof Decimal ? u.quantity : new Decimal(u.quantity || 0);
+            state.generatorUpgrades[i].level = u.level instanceof Decimal ? u.level : new Decimal(u.level || 0);
+            state.generatorUpgrades[i].multiple = u.multiple instanceof Decimal ? u.multiple : new Decimal(u.multiple || 1);
+            state.generatorUpgrades[i].unlocked = !!u.unlocked;
         }
     }
     

@@ -56,8 +56,8 @@ function renderMainUI() {
     dom.pointsFormula.textContent = formulaText;
 
     // 乘数：根据解锁状态控制整个框的显示
-    for (let i = 0; i < state.upgrades.length; i++) {
-        const u = state.upgrades[i];
+    for (let i = 0; i < state.generatorUpgrades.length; i++) {
+        const u = state.generatorUpgrades[i];
         const container = dom.multipleContainers[i];
         if (container) {
             container.style.display = u.unlocked ? '' : 'none';
@@ -69,10 +69,10 @@ function renderMainUI() {
     }
     
     // 升级面板
-    for (let i = 0; i < state.upgrades.length; i++) {
+    for (let i = 0; i < state.generatorUpgrades.length; i++) {
         const ref = dom.upgradeBoxes[i];
         if (!ref) continue;
-        const u = state.upgrades[i];
+        const u = state.generatorUpgrades[i];
         
         if (u.unlocked) {
             ref.box.style.display = '';
@@ -81,19 +81,19 @@ function renderMainUI() {
             const isMaxed = u.quantity.gte(maxQuantity);
             const canAfford = state.points.gte(cost);
             
-            ref.quantitySpan.textContent = `${UI_TEXTS.upgrades.quantity}${formatDecimal(u.quantity)}${UI_TEXTS.upgrades.maxQuantity}${formatDecimal(maxQuantity)}`;
-            ref.levelSpan.textContent = `${UI_TEXTS.upgrades.level}${formatDecimal(u.level)}`;
-            ref.effectSpan.textContent = `${UI_TEXTS.upgrades.effect}${i+1}${UI_TEXTS.upgrades.effectSuffix}${formatDecimal(u.getRate())}`;
+            ref.quantitySpan.textContent = `${UI_TEXTS.generatorUpgrades.quantity}${formatDecimal(u.quantity)}${UI_TEXTS.generatorUpgrades.maxQuantity}${formatDecimal(maxQuantity)}`;
+            ref.levelSpan.textContent = `${UI_TEXTS.generatorUpgrades.level}${formatDecimal(u.level)}`;
+            ref.effectSpan.textContent = `${UI_TEXTS.generatorUpgrades.effect}${i+1}${UI_TEXTS.generatorUpgrades.effectSuffix}${formatDecimal(u.getRate())}`;
             
             if (isMaxed) {
                 ref.btn.classList.add('upgrade-mode');
                 ref.btn.classList.remove('locked');
-                ref.labelSpan.textContent = UI_TEXTS.upgrades.upgradeLabel;
-                ref.costSpan.textContent = UI_TEXTS.upgrades.upgradeCost;
+                ref.labelSpan.textContent = UI_TEXTS.generatorUpgrades.upgradeLabel;
+                ref.costSpan.textContent = UI_TEXTS.generatorUpgrades.upgradeCost;
             } else {
                 ref.btn.classList.remove('upgrade-mode');
-                ref.labelSpan.textContent = UI_TEXTS.upgrades.buyLabel;
-                ref.costSpan.textContent = `${UI_TEXTS.upgrades.cost}${formatDecimal(cost)}`;
+                ref.labelSpan.textContent = UI_TEXTS.generatorUpgrades.buyLabel;
+                ref.costSpan.textContent = `${UI_TEXTS.generatorUpgrades.cost}${formatDecimal(cost)}`;
                 ref.btn.classList.toggle('locked', !canAfford);
             }
         } else {

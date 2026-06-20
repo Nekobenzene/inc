@@ -6,21 +6,21 @@ const ACHIEVEMENTS = [
         id: 'first_step',
         name: '第一步',
         description: '购入发电机1',
-        check: () => state.upgrades[0].quantity.gte(1),
+        check: () => state.generatorUpgrades[0].quantity.gte(1),
         unlocked: false
     },
     {
         id: 'second',
         name: '二龙戏珠',
         description: '购入发电机2',
-        check: () => state.upgrades[1].quantity.gte(1),
+        check: () => state.generatorUpgrades[1].quantity.gte(1),
         unlocked: false
     },
     {
         id: 'levelup',
         name: '我重生了？',
         description: '升级发电机1',
-        check: () => state.upgrades[0].level.gte(1),
+        check: () => state.generatorUpgrades[0].level.gte(1),
         rewardDescription: '发电机1效率×2',
         reward: (state) => {
             state.achReward.ach3 = new Decimal(2)
@@ -38,14 +38,14 @@ const ACHIEVEMENTS = [
         id: 'third',
         name: '三阳开泰',
         description: '购入发电机3',
-        check: () => state.upgrades[2].quantity.gte(1),
+        check: () => state.generatorUpgrades[2].quantity.gte(1),
         unlocked: false
     },
     {
         id: 'full_multiple',
         name: '没有更多了',
         description: '购入发电机4',
-        check: () => state.upgrades[3].quantity.gte(1),
+        check: () => state.generatorUpgrades[3].quantity.gte(1),
         rewardDescription: '发电机购入增长减缓(^0.9)',
         reward: (state) => {
             state.achReward.ach6 = new Decimal(0.9)
@@ -58,7 +58,7 @@ const ACHIEVEMENTS = [
         description: '达发电机共9级',
         check: () => {
             let s = new Decimal(0);
-            for (const u of state.upgrades) s = s.add(u.level);
+            for (const u of state.generatorUpgrades) s = s.add(u.level);
             return s.gte(9)
         },
         rewardDescription: '分数微弱加成分数生产(ln(P))',
@@ -118,7 +118,7 @@ const GENERATOR_CONFIGS = [
     {
         costFn: (quantity, level) => new Decimal(1e13).mul(new Decimal(15).pow(quantity.add(new Decimal(level).mul(4)).mul(state.achReward.ach6))),
         maxQuantityFn: (level) => new Decimal(level).add(1).mul(30),
-        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.5).pow(quantity)).mul(new Decimal(32).pow(level)),
+        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.3).pow(quantity)).mul(new Decimal(25).pow(level)),
         initial: { quantity: 0, level: 0, multiple: 1 }
     }
 ];
@@ -133,7 +133,7 @@ const GROWTH_CONFIG = {
      */
     computeTotalRate: (state) => {
         let r = new Decimal(1);
-        for (const u of state.upgrades) {
+        for (const u of state.generatorUpgrades) {
             r = r.mul(u.multiple);
         }
         // 成就奖励 7：ln(P) 因子
@@ -154,7 +154,7 @@ const GROWTH_CONFIG = {
         if (deltaSeconds <= 0) return;
 
         // 1. 更新每个升级的 multiple
-        for (const u of state.upgrades) {
+        for (const u of state.generatorUpgrades) {
             const increment = u.getRate().mul(deltaSeconds);
             u.multiple = u.multiple.add(increment);
             if (u.multiple.lt(0)) u.multiple = new Decimal(0);
@@ -183,10 +183,10 @@ const STATS_CONFIG = {
             return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
         }},
         { id: 'clicks', label: '总点击数', format: (value) => formatDecimal(value) },
-        { id: 'level', label: '总等级', format: (value) => formatDecimal(value) },
-        { id: 'peak', label: '最高 P', format: (value) => formatDecimal(value) },
-        { id: 'totalEarned', label: '累计获得 P', format: (value) => formatDecimal(value) },
-        { id: 'quantityCount', label: '升级总次数', format: (value) => formatDecimal(value) },
+        { id: 'generatorTotalLevel', label: '总等级', format: (value) => formatDecimal(value) },
+        { id: 'peakPoints', label: '最高 P', format: (value) => formatDecimal(value) },
+        { id: 'pointsTotalEarned', label: '累计获得 P', format: (value) => formatDecimal(value) },
+        { id: 'generatorQuantityCount', label: '升级总次数', format: (value) => formatDecimal(value) },
     ]
 };
 
@@ -198,7 +198,7 @@ const UI_TEXTS = {
         formula: '公式：',
         formulaValue: 'Π(M)',
     },
-    upgrades: {
+    generatorUpgrades: {
         quantity: '数量：',
         maxQuantity: ' / ',
         level: '等级: ',

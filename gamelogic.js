@@ -12,7 +12,7 @@ function applyGrowth(deltaSeconds) {
 
 // 执行购入（或升级）
 function performGenerator(index) {
-    const u = state.upgrades[index];
+    const u = state.generatorUpgrades[index];
     const maxQuantity = u.getMaxQuantity();
     if (u.quantity.gte(maxQuantity)) {
         // 升级
@@ -51,13 +51,13 @@ function checkAchievements() {
 // 获取统计信息（供 UI 使用）
 function getStats() {
     let totalLevel = new Decimal(0);
-    for (const u of state.upgrades) totalLevel = totalLevel.add(u.level);
+    for (const u of state.generatorUpgrades) totalLevel = totalLevel.add(u.level);
     return {
         playtime: (Date.now() - state.gameStartTime) / 1000,
         clicks: state.totalClicks,
-        level: totalLevel,
-        peak: state.peakPoints,
-        totalEarned: state.totalPointsEarned,
-        quantityCount: state.totalQuantityCount,
+        generatorTotalLevel: totalLevel,
+        peakPoints: state.peakPoints,
+        pointsTotalEarned: state.totalPointsEarned,
+        generatorQuantityCount: state.totalQuantityCount,
     };
 }

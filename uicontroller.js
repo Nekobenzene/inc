@@ -145,8 +145,8 @@ function bindEvents() {
         try {
             const raw = devJsonEditor.value;
             const data = JSON.parse(raw);
-            // 基本校验：必须包含 points, upgrades 等
-            if (!data.points || !data.upgrades || !Array.isArray(data.upgrades)) {
+            // 基本校验：必须包含 points, generatorUpgrades 等
+            if (!data.points || !data.generatorUpgrades || !Array.isArray(data.generatorUpgrades)) {
                 throw new Error('无效的状态结构');
             }
             // 应用状态
