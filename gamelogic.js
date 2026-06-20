@@ -1,0 +1,82 @@
+// game-logic.js – 所有游戏规则和计算
+
+// 计算总速率（所有乘数相乘）
+function computeTotalRate() {
+    let r = new Decimal(1);
+    for (const u of state.upgrades) {
+        r = r.mul(u.multiple);
+    }
+    let ach7Effect = state.points.ln().pow(state.achReward.ach7)
+    r = r.mul(ach7Effect);
+    return r;
+}
+
+// 执行购入（或升级）
+function performGenerator(index) {
+    const u = state.upgrades[index];
+    const maxQuantity = u.getMaxQuantity();
+    if (u.quantity.gte(maxQuantity)) {
+        // 升级
+        u.level = u.level.add(1);
+        u.quantity = new Decimal(0);
+        u.multiple = new Decimal(1);
+        state.totalClicks = state.totalClicks.add(1);
+        return 'upgrade';
+    } else {
+        const cost = u.getCost();
+        if (state.points.lt(cost)) return 'insufficient';
+        state.points = state.points.sub(cost);
+        u.quantity = u.quantity.add(1);
+        state.totalQuantityCount = state.totalQuantityCount.add(1);
+        state.totalClicks = state.totalClicks.add(1);
+        return 'buy';
+    }
+}
+
+// 增长计算（每秒）
+function applyGrowth(deltaSeconds) {
+    if (deltaSeconds <= 0) return;
+    for (const u of state.upgrades) {
+        const increment = u.getRate().mul(deltaSeconds);
+        u.multiple = u.multiple.add(increment);
+        if (u.multiple.lt(0)) u.multiple = new Decimal(0);
+    }
+    const rate = computeTotalRate();
+    const gained = rate.mul(deltaSeconds);
+    state.points = state.points.add(gained);
+    state.totalPointsEarned = state.totalPointsEarned.add(gained);
+    if (state.points.gt(state.peakPoints)) {
+        state.peakPoints = new Decimal(state.points);
+    }
+    checkUnlockAll();
+}
+
+// 检查成就（更新 unlocked 状态）
+function checkAchievements() {
+    let anyUnlocked = false;
+    for (const a of ACHIEVEMENTS) {
+        if (!a.unlocked && a.check()) {
+            a.unlocked = true;
+            anyUnlocked = true;
+            console.log(`成就解锁: ${a.icon} ${a.name}`);
+            if (typeof a.reward === 'function') {
+                a.reward(state, a);
+            }
+        }
+    }
+    return anyUnlocked;
+}
+
+// 获取统计信息（供 UI 使用）
+function getStats() {
+    let totalLevel = new Decimal(0);
+    for (const u of state.upgrades) totalLevel = totalLevel.add(u.level);
+    return {
+        playtime: (Date.now() - state.gameStartTime) / 1000,
+        clicks: state.totalClicks,
+        level: totalLevel,
+        peak: state.peakPoints,
+        totalEarned: state.totalPointsEarned,
+        quantityCount: state.totalQuantityCount,
+    };
+}

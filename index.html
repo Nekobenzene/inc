@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>增量</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ========== 桌面导航栏 ========== -->
+    <nav class="desktop-nav" id="desktopNav">
+        <div class="desktop-nav-brand">
+            <span class="brand-name">增量游戏</span>
+        </div>
+        <ul class="desktop-nav-list" id="desktopNavList"></ul>
+        <div class="desktop-nav-actions">
+            <span class="nav-points-badge" id="navPointsBadge">P: 0</span>
+        </div>
+    </nav>
+
+    <!-- ========== 移动端组件 ========== -->
+    <div class="menu-toggle" id="menuToggle">
+        <span></span><span></span><span></span>
+    </div>
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-header">
+            <span class="side-nav-title">导航</span>
+        </div>
+        <div class="side-nav-divider"></div>
+        <ul class="side-nav-list" id="sideNavList"></ul>
+        <div class="side-nav-footer">
+            <span class="side-nav-version">v0.3.0</span>
+        </div>
+    </nav>
+
+    <!-- ========== 页面容器 ========== -->
+    <main class="page-container" id="pageContainer">
+        <!-- 游戏页 -->
+        <div class="page-view active" data-page="game">
+            <div class="currency-panel">
+                <div class="points-display">
+                    <span class="points-text-part">P = </span>
+                    <span id="points" class="points-number-part">0</span>
+                </div>
+                <div class="point-rate">
+                    <span class="points-text-part">dP/dt = </span>
+                    <span id="point-rate" class="points-number-part">1</span>
+                </div>
+            </div>
+
+            <div class="points-formula-module">
+                <span class="formula-text-part">公式：</span>
+                <span id="points-formula" class="points-formula-part">Π(M)</span>
+            </div>
+
+            <div class="divide-points-multiplers"></div>
+
+            <div class="multiplers-grid">
+                <span class="multiplers-item">M₁ = <span id="m1" class="multiplers-number-part">1</span></span>
+                <span class="multiplers-item">M₂ = <span id="m2" class="multiplers-number-part">1</span></span>
+                <span class="multiplers-item">M₃ = <span id="m3" class="multiplers-number-part">1</span></span>
+                <span class="multiplers-item">M₄ = <span id="m4" class="multiplers-number-part">1</span></span>
+            </div>
+
+            <div class="multipler-generator-grid" id="generator-grid">
+                <!-- 升级 1 -->
+                <div class="multipler-generator-box" data-index="0">
+                    <div class="multipler-generator-info">
+                        <span class="multipler-generator-name">乘数发电机1</span>
+                        <span class="multipler-generator-quantity">数量：0 / 10</span>
+                        <span class="multipler-generator-level">等级: 0</span>
+                        <span class="multipler-generator-effect">dM₁/dt = 0.00</span>
+                    </div>
+                    <div class="multipler-generator-button">
+                        <span class="multipler-generator-button-label">购入</span>
+                        <span class="multipler-generator-cost">花费: 10</span>
+                    </div>
+                </div>
+
+                <!-- 升级 2 -->
+                <div class="multipler-generator-box" data-index="1">
+                    <div class="multipler-generator-info">
+                        <span class="multipler-generator-name">乘数发电机2</span>
+                        <span class="multipler-generator-quantity">数量：0 / 15</span>
+                        <span class="multipler-generator-level">等级: 0</span>
+                        <span class="multipler-generator-effect">dM₂/dt = 0.00</span>
+                    </div>
+                    <div class="multipler-generator-button">
+                        <span class="multipler-generator-button-label">购入</span>
+                        <span class="multipler-generator-cost">花费: 1,000</span>
+                    </div>
+                </div>
+
+                <!-- 升级 3 -->
+                <div class="multipler-generator-box" data-index="2">
+                    <div class="multipler-generator-info">
+                        <span class="multipler-generator-name">乘数发电机3</span>
+                        <span class="multipler-generator-quantity">数量：0 / 20</span>
+                        <span class="multipler-generator-level">等级: 0</span>
+                        <span class="multipler-generator-effect">dM₃/dt = 0.00</span>
+                    </div>
+                    <div class="multipler-generator-button">
+                        <span class="multipler-generator-button-label">购入</span>
+                        <span class="multipler-generator-cost">花费: 10,000,000</span>
+                    </div>
+                </div>
+
+                <!-- 升级 4 -->
+                <div class="multipler-generator-box" data-index="3">
+                    <div class="multipler-generator-info">
+                        <span class="multipler-generator-name">乘数发电机4</span>
+                        <span class="multipler-generator-quantity">数量：0 / 30</span>
+                        <span class="multipler-generator-level">等级: 0</span>
+                        <span class="multipler-generator-effect">dM₄/dt = 0.00</span>
+                    </div>
+                    <div class="multipler-generator-button">
+                        <span class="multipler-generator-button-label">购入</span>
+                        <span class="multipler-generator-cost">花费: 10,000,000,000,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成就页 -->
+        <div class="page-view" data-page="achievements">
+            <div class="page-header">
+                <span class="page-title">成就</span>
+                <span class="page-counter" id="achievement-counter">0 / 0</span>
+            </div>
+            <div class="achievements-grid" id="achievement-grid"></div>
+        </div>
+
+        <!-- 统计页 -->
+        <div class="page-view" data-page="stats">
+            <div class="page-header">
+                <span class="page-title">统计</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">游戏时间</span>
+                    <span class="stat-value" id="stat-playtime">0s</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">总点击数</span>
+                    <span class="stat-value" id="stat-clicks">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">总等级</span>
+                    <span class="stat-value" id="stat-level">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">最高 P</span>
+                    <span class="stat-value" id="stat-peak">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 设置页 -->
+        <div class="page-view" data-page="settings">
+            <div class="page-header">
+                <span class="page-title">重置</span>
+            </div>
+            <div class="settings-list">
+                <div class="settings-item">
+                    <span class="settings-label">保存游戏</span>
+                    <button class="settings-btn" id="btnSave">保存</button>
+                </div>
+                <div class="settings-item">
+                    <span class="settings-label">读取存档</span>
+                    <button class="settings-btn" id="btnLoad">读取</button>
+                </div>
+                <div class="settings-item">
+                    <span class="settings-label">重置游戏</span>
+                    <button class="settings-btn danger" id="btnReset">重置</button>
+                </div>
+
+                <!-- 开发者模式 -->
+                <div class="settings-item developer-toggle">
+                    <span class="settings-label">开发者模式</span>
+                    <div class="developer-controls">
+                        <input type="password" id="devPassword" placeholder="输入密码" class="dev-password-input">
+                        <button class="settings-btn" id="devUnlockBtn">解锁</button>
+                    </div>
+                </div>
+                <div class="developer-editor" id="devEditor" style="display:none; margin-top:12px;">
+                    <textarea id="devJsonEditor" rows="10" style="width:100%; background:#1e1e1e; color:#e0e0e0; border:1px solid #444; border-radius:4px; padding:8px; font-family: monospace; font-size:0.9em; resize:vertical;"></textarea>
+                    <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+                        <button class="settings-btn" id="devApplyBtn">应用修改</button>
+                        <button class="settings-btn" id="devRefreshBtn">刷新数据</button>
+                        <span id="devStatus" style="color:#ff6b6b; font-size:0.9em;"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 脚本加载顺序：底层库 → 配置 → 工具 → 状态 → 逻辑 → UI → 控制器 → 应用 → 入口 -->
+    <script src="break_eternity.js"></script>
+    <script src="config.js"></script>
+    <script src="formatter.js"></script>
+    <script src="state.js"></script>
+    <script src="gamelogic.js"></script>
+    <script src="uirenderer.js"></script>
+    <script src="uicontroller.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
