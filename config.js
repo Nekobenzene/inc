@@ -96,7 +96,7 @@ const NAV_PAGES = [
 ];
 
 // ---------- 升级配置 ----------
-const UPGRADE_CONFIGS = [
+const GENERATOR_CONFIGS = [
     {
         costFn: (quantity, level) => new Decimal(10).mul(new Decimal(2).pow(quantity.add(new Decimal(level).mul(4)).mul(state.achReward.ach6))),
         maxQuantityFn: (level) => new Decimal(level).add(1).mul(10),
@@ -122,7 +122,7 @@ const UPGRADE_CONFIGS = [
         initial: { quantity: 0, level: 0, multiple: 1 }
     }
 ];
-const COUNT = UPGRADE_CONFIGS.length;
+const COUNT = GENERATOR_CONFIGS.length;
 
 // ---------- 增长计算配置 ----------
 const GROWTH_CONFIG = {

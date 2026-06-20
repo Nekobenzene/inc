@@ -28,10 +28,10 @@ function checkUnlockAll() {
     }
 }
 
-// 初始化升级（根据 UPGRADE_CONFIGS）和成就状态
+// 初始化升级（根据 GENERATOR_CONFIGS）和成就状态
 function initState() {
     // 初始化升级
-    state.upgrades = UPGRADE_CONFIGS.map((config, index) => ({
+    state.upgrades = GENERATOR_CONFIGS.map((config, index) => ({
         id: index,
         quantity: new Decimal(config.initial.quantity),
         level: new Decimal(config.initial.level),
