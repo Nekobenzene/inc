@@ -67,6 +67,15 @@ const ACHIEVEMENTS = [
         },
         unlocked: false
     },
+    {
+        id: 'hard_2^128',
+        name: '卡在2^128？',
+        description: '达到3.4e38 P',
+        check: () => state.points.gte(new Decimal(2).pow(new Decimal(128))),
+        rewardDescription: '解锁指数',
+        reward: (state) => {},
+        unlocked: false
+    },
 ];
 
 // ---------- 游戏全局参数 ----------

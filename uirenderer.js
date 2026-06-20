@@ -47,8 +47,13 @@ function renderMainUI() {
     dom.points.textContent = formatDecimal(state.points);
     dom.rate.textContent = formatDecimal(computeTotalRate());
     dom.navPointsBadge.textContent = `${UI_TEXTS.nav.pointsBadge}${formatDecimal(state.points)}`;
-    dom.pointsFormula.textContent = UI_TEXTS.game.formulaValue;
-    
+    // 动态生成公式文本
+    let formulaText = 'Π(M)';
+    if (state.achReward.ach7.eq(new Decimal(1))) {
+         formulaText += ' × ln(P)';
+     }
+    dom.pointsFormula.textContent = formulaText;
+
     // 乘数：根据解锁状态控制整个框的显示
     for (let i = 0; i < state.upgrades.length; i++) {
         const u = state.upgrades[i];

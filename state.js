@@ -63,7 +63,6 @@ function initState() {
         ach3: new Decimal(1),
         ach6: new Decimal(1),
         ach7: new Decimal(0),
-        ach8: new Decimal(1),
     };
 }
 
@@ -168,21 +167,23 @@ function deserializeState(data) {
     
     // 还原成就奖励
     if (deserialized.achReward && typeof deserialized.achReward === 'object') {
+        // 强制转换为 Decimal，防止数字类型
+        const rawAch3 = deserialized.achReward.ach3;
+        const rawAch6 = deserialized.achReward.ach6;
+        const rawAch7 = deserialized.achReward.ach7;
         state.achReward = {
-            ach3: deserializeValue(deserialized.achReward.ach3) ?? new Decimal(1),
-            ach6: deserializeValue(deserialized.achReward.ach6) ?? new Decimal(1),
-            ach7: deserializeValue(deserialized.achReward.ach7) ?? new Decimal(0),
+            ach3: rawAch3 instanceof Decimal ? rawAch3 : new Decimal(rawAch3 || 1),
+            ach6: rawAch6 instanceof Decimal ? rawAch6 : new Decimal(rawAch6 || 1),
+            ach7: rawAch7 instanceof Decimal ? rawAch7 : new Decimal(rawAch7 || 0),
         };
     } else {
         state.achReward = {
-            ach3: new Decimal(1), 
+            ach3: new Decimal(1),
             ach6: new Decimal(1),
             ach7: new Decimal(0),
         };
-    
-        
-    }    
-    // 重新检查解锁阈值（可能因为升级数量变化）
+    }
+// 重新检查解锁阈值（可能因为升级数量变化）
     checkUnlockAll();
 }
 
