@@ -50,8 +50,9 @@ function renderMainUI() {
     // 动态生成公式文本
     let formulaText = 'Π(M)';
     if (state.achReward.ach7.eq(new Decimal(1))) {
-         formulaText += ' × ln(P)';
+         formulaText += '×ln(P)';
      }
+     if (state.achReward.ach8.eq(new Decimal(1))) {formulaText = '(' + formulaText + ')^' + formatDecimal(state.pointExp)}
     dom.pointsFormula.textContent = formulaText;
 
     // 乘数：根据解锁状态控制整个框的显示

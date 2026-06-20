@@ -68,12 +68,12 @@ const ACHIEVEMENTS = [
         unlocked: false
     },
     {
-        id: 'hard_2^128',
-        name: '卡在2^128？',
+        id: '2^128',
+        name: '1/8双精度浮点数上限',
         description: '达到3.4e38 P',
         check: () => state.points.gte(new Decimal(2).pow(new Decimal(128))),
-        rewardDescription: '解锁指数',
-        reward: (state) => {},
+        rewardDescription: '解锁指数(1.1)',
+        reward: (state) => {state.achReward.ach8 = new Decimal(1)},
         unlocked: false
     },
 ];
@@ -140,6 +140,8 @@ const GROWTH_CONFIG = {
         if (state.achReward.ach7.gt(0)) {
             r = r.mul(state.points.ln().pow(state.achReward.ach7));
         }
+        // 指数
+        r = r.pow(state.pointExp.pow(state.achReward.ach8))
         return r;
     },
 

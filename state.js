@@ -14,7 +14,9 @@ const state = {
         ach3: new Decimal(1),
         ach6: new Decimal(1),
         ach7: new Decimal(0),
-    }
+        ach8: new Decimal(0),
+    },
+    pointExp: new Decimal(1.1),
 };
 
 // 检查所有发电机数量是否达到解锁阈值
@@ -63,6 +65,7 @@ function initState() {
         ach3: new Decimal(1),
         ach6: new Decimal(1),
         ach7: new Decimal(0),
+        ach8: new Decimal(0),
     };
 }
 
@@ -100,6 +103,7 @@ function serializeState() {
         })),
         achievements: state.achievements,
         achReward: state.achReward,
+        pointExp: state.pointExp,
     };
     
     return serializeValue(stateToSerialize);
@@ -141,6 +145,8 @@ function deserializeState(data) {
     state.peakPoints = deserialized.peakPoints instanceof Decimal ? deserialized.peakPoints : new Decimal(deserialized.peakPoints || 0);
     state.totalQuantityCount = deserialized.totalQuantityCount instanceof Decimal ? deserialized.totalQuantityCount : new Decimal(deserialized.totalQuantityCount || 0);
     state.gameStartTime = deserialized.gameStartTime || Date.now();
+    state.pointExp = deserialized.pointExp instanceof Decimal ? deserialized.pointExp : new Decimal(deserialized.pointExp || 1.1);
+
     
     // 还原升级
     if (deserialized.upgrades && Array.isArray(deserialized.upgrades)) {
@@ -171,16 +177,19 @@ function deserializeState(data) {
         const rawAch3 = deserialized.achReward.ach3;
         const rawAch6 = deserialized.achReward.ach6;
         const rawAch7 = deserialized.achReward.ach7;
+        const rawAch8 = deserialized.achReward.ach8;
         state.achReward = {
             ach3: rawAch3 instanceof Decimal ? rawAch3 : new Decimal(rawAch3 || 1),
             ach6: rawAch6 instanceof Decimal ? rawAch6 : new Decimal(rawAch6 || 1),
             ach7: rawAch7 instanceof Decimal ? rawAch7 : new Decimal(rawAch7 || 0),
+            ach8: rawAch8 instanceof Decimal ? rawAch8 : new Decimal(rawAch8 || 0),
         };
     } else {
         state.achReward = {
             ach3: new Decimal(1),
             ach6: new Decimal(1),
             ach7: new Decimal(0),
+            ach8: new Decimal(0),
         };
     }
 // 重新检查解锁阈值（可能因为升级数量变化）
@@ -226,6 +235,7 @@ function resetGame() {
         ach3: new Decimal(1),
         ach6: new Decimal(1),
         ach7: new Decimal(0),
+        ach8: new Decimal(0),
     };
 }
 
