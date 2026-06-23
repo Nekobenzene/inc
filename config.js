@@ -89,6 +89,19 @@ const ACHIEVEMENTS = [
             state.batchPurchaseUnlocked = true;
         },
     },
+    {
+        id: '2^256',
+        name: '现在是1/4',
+        description: '达到1.2e77 P',
+        check: () => state.points.gte(new Decimal(2).pow(new Decimal(256))),
+    },
+    {
+        id: 'e100',
+        name: '满分',
+        description: '达到e100 P',
+        check: () => state.points.gte(new Decimal(1e100)),
+        rewardDescription: '满分的喜悦'
+    },
 ];
 
 const GAME_CONFIG = {
