@@ -7,14 +7,12 @@ const ACHIEVEMENTS = [
         name: '第一步',
         description: '购入发电机1',
         check: () => state.generatorUpgrades[0].quantity.gte(1),
-        unlocked: false
     },
     {
         id: 'second',
         name: '二龙戏珠',
         description: '购入发电机2',
         check: () => state.generatorUpgrades[1].quantity.gte(1),
-        unlocked: false
     },
     {
         id: 'levelup',
@@ -25,21 +23,18 @@ const ACHIEVEMENTS = [
         reward: (state) => {
             state.achReward.ach3 = new Decimal(2)
         },
-        unlocked: false
     },
     {
         id: 'million',
         name: '百万富翁',
         description: '累计获得 1,000,000 点 P',
         check: () => state.totalPointsEarned.gte(1e6),
-        unlocked: false
     },
     {
         id: 'third',
         name: '三阳开泰',
         description: '购入发电机3',
         check: () => state.generatorUpgrades[2].quantity.gte(1),
-        unlocked: false
     },
     {
         id: 'full_multiple',
@@ -50,7 +45,6 @@ const ACHIEVEMENTS = [
         reward: (state) => {
             state.achReward.ach6 = new Decimal(0.9)
         },
-        unlocked: false
     },
     {
         id: 'luckforever',
@@ -61,20 +55,26 @@ const ACHIEVEMENTS = [
             for (const u of state.generatorUpgrades) s = s.add(u.level);
             return s.gte(9)
         },
-        rewardDescription: '分数微弱加成分数生产(ln(P))',
+        rewardDescription: '分数微弱加成分数生产(log2(P))(正加成生效)',
         reward: (state) => {
             state.achReward.ach7 = new Decimal(1)
         },
-        unlocked: false
     },
     {
         id: '2^128',
         name: '1/8双精度浮点数上限',
         description: '达到3.4e38 P',
         check: () => state.points.gte(new Decimal(2).pow(new Decimal(128))),
-        rewardDescription: '解锁指数(1.1)',
+        rewardDescription: '解锁指数(1.05)',
         reward: (state) => {state.achReward.ach8 = new Decimal(1)},
-        unlocked: false
+    },
+    {
+        id: '114514',
+        name: '1e45.14',
+        description: '达到1.38e45 P',
+        check: () => state.points.gte(new Decimal(10).pow(new Decimal(45.14))),
+        rewardDescription: '解锁挑战！',
+        reward: (state) => {state.challengeUnlocked = true},
     },
 ];
 
@@ -100,25 +100,25 @@ const GENERATOR_CONFIGS = [
     {
         costFn: (quantity, level) => new Decimal(10).mul(new Decimal(2).pow(quantity.add(new Decimal(level).mul(4)).mul(state.achReward.ach6))),
         maxQuantityFn: (level) => new Decimal(level).add(1).mul(10),
-        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(5).pow(level)).mul(state.achReward.ach3),
+        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.01).pow(quantity)).mul(new Decimal(5).pow(level)).mul(state.achReward.ach3),
         initial: { quantity: 0, level: 0, multiple: 1 }
     },
     {
         costFn: (quantity, level) => new Decimal(1000).mul(new Decimal(4).pow(quantity.add(new Decimal(level).mul(4)).mul(state.achReward.ach6))),
         maxQuantityFn: (level) => new Decimal(level).add(1).mul(15),
-        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.1).pow(quantity)).mul(new Decimal(8).pow(level)),
+        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.15).pow(quantity)).mul(new Decimal(8).pow(level)),
         initial: { quantity: 0, level: 0, multiple: 1 }
     },
     {
         costFn: (quantity, level) => new Decimal(10000000).mul(new Decimal(8).pow(quantity.add(new Decimal(level).mul(4)).mul(state.achReward.ach6))),
         maxQuantityFn: (level) => new Decimal(level).add(1).mul(20),
-        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.2).pow(quantity)).mul(new Decimal(15).pow(level)),
+        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.28).pow(quantity)).mul(new Decimal(15).pow(level)),
         initial: { quantity: 0, level: 0, multiple: 1 }
     },
     {
         costFn: (quantity, level) => new Decimal(1e13).mul(new Decimal(15).pow(quantity.add(new Decimal(level).mul(4)).mul(state.achReward.ach6))),
         maxQuantityFn: (level) => new Decimal(level).add(1).mul(30),
-        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.3).pow(quantity)).mul(new Decimal(25).pow(level)),
+        rateFn: (quantity, level) => new Decimal(quantity).mul(new Decimal(1.35).pow(quantity)).mul(new Decimal(25).pow(level)),
         initial: { quantity: 0, level: 0, multiple: 1 }
     }
 ];
@@ -137,32 +137,38 @@ const GROWTH_CONFIG = {
             r = r.mul(u.multiple);
         }
         // 成就奖励 7：ln(P) 因子
-        if (state.achReward.ach7.gt(0)) {
-            r = r.mul(state.points.ln().pow(state.achReward.ach7));
+        if (state.achReward.ach7.gt(0) && state.points.gt(new Decimal(Math.E))) {
+            r = r.mul(state.points.log(new Decimal(2)).pow(state.achReward.ach7));
         }
         // 指数
-        r = r.pow(state.pointExp.pow(state.achReward.ach8))
+        r = r.pow(state.pointExp.pow(state.achReward.ach8));
         return r;
     },
-
+    
     /**
      * 应用时间增量，更新点数和所有升级的 multiple
      * @param {Object} state - 全局状态对象
      * @param {number} deltaSeconds - 经过的秒数（浮点数）
      */
     applyGrowth: (state, deltaSeconds) => {
-        if (deltaSeconds <= 0) return;
+        state.speed = state.challengeReward.cha1
+        speed = state.speed
+        // 应用速度增减益
+        if (state.isInChallenge === 0 && Date.now() > state.challengeStartTime + 1) {
+            speed = state.speed.mul(new Decimal(0.97).pow(new Decimal(Date.now()).sub(new Decimal(state.challengeStartTime)).mul(new Decimal(0.001)).mul(state.developerSpeeduper)));
+        };
 
+        if (deltaSeconds <= 0) return;
         // 1. 更新每个升级的 multiple
         for (const u of state.generatorUpgrades) {
-            const increment = u.getRate().mul(deltaSeconds);
+            const increment = u.getRate().mul(deltaSeconds).mul(speed).mul(state.developerSpeeduper);
             u.multiple = u.multiple.add(increment);
             if (u.multiple.lt(0)) u.multiple = new Decimal(0);
         }
 
         // 2. 计算总速率并增加点数
         const rate = GROWTH_CONFIG.computeTotalRate(state);
-        const gained = rate.mul(deltaSeconds);
+        const gained = rate.mul(deltaSeconds).mul(speed).mul(state.developerSpeeduper);
         state.points = state.points.add(gained);
         state.totalPointsEarned = state.totalPointsEarned.add(gained);
         if (state.points.gt(state.peakPoints)) {
@@ -171,8 +177,24 @@ const GROWTH_CONFIG = {
 
         // 3. 检查升级解锁（根据点数阈值）
         checkUnlockAll();
+        
     }
 };
+
+// ---------- 挑战配置 ----------
+const CHALLENGES = [
+    {
+        id: 'challenge_1',
+        name: '时间就是金钱',
+        limitationDescription: '游戏速度每秒降低3%',
+        target: '达到 1e8 P',
+        reward: (state) => {
+            state.challengeReward.cha1 = new Decimal(3)
+        },
+        rewardDescription: '游戏加速 ×3',
+        check: (state) => state.points.gte(1e8)
+    },
+];
 
 // ---------- 统计配置 ----------
 const STATS_CONFIG = {
@@ -207,7 +229,7 @@ const UI_TEXTS = {
         buyLabel: '购入',
         upgradeLabel: '升级',
         cost: '花费: ',
-        upgradeCost: '→ 等级 +1',
+        upgradeCost: '重置M和发电机数量',
         namePrefix: '乘数',
         nameSuffix: '升级',
     },
@@ -221,6 +243,7 @@ const UI_TEXTS = {
         title: '统计',
     },
     settings: {
+        refresh: '刷新界面',
         title: '重置',
         save: '保存游戏',
         load: '读取存档',

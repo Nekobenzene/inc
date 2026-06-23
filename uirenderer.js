@@ -49,7 +49,7 @@ function renderMainUI() {
     dom.navPointsBadge.textContent = `${UI_TEXTS.nav.pointsBadge}${formatDecimal(state.points)}`;
     // 动态生成公式文本
     let formulaText = 'Π(M)';
-    if (state.achReward.ach7.eq(new Decimal(1))) {
+    if (state.achReward.ach7.eq(new Decimal(1)) && state.points.gt(new Decimal(Math.E))) {
          formulaText += '×ln(P)';
      }
      if (state.achReward.ach8.eq(new Decimal(1))) {formulaText = '(' + formulaText + ')^' + formatDecimal(state.pointExp)}
@@ -102,6 +102,93 @@ function renderMainUI() {
     }
 }
 
+// 更新挑战选项卡的可见性
+function updateChallengeTabVisibility() {
+    const challengeTab = document.querySelector('.game-tab[data-tab="challenges"]');
+    const challengeContent = document.getElementById('tab-challenges');
+    if (!challengeTab || !challengeContent) return;
+
+    const visible = state.challengeUnlocked;
+    challengeTab.style.display = visible ? '' : 'none';
+    challengeContent.style.display = visible ? '' : 'none';
+
+    // 如果当前处于挑战页面且未解锁，自动切回发电机页面
+    if (!visible) {
+        const activeContent = document.querySelector('.game-tab-content.active');
+        if (activeContent && activeContent.id === 'tab-challenges') {
+            document.querySelector('.game-tab[data-tab="generators"]')?.click();
+        }
+    }
+}
+
+// 渲染挑战列表
+function renderChallenges() {
+    const grid = document.getElementById('challenges-grid');
+    if (!grid) return;
+    const counter = document.getElementById('challenges-counter');
+    if (!counter) return;
+
+    const total = CHALLENGES.length;
+    let completedCount = 0;
+
+    // 确保网格中有足够的卡片元素（首次渲染时创建，后续复用）
+    while (grid.children.length < total) {
+        const card = document.createElement('button');
+        card.className = 'challenge-card pending';
+        card.dataset.index = grid.children.length;
+        // 一次性创建内部结构，后续只更新文本和类
+        card.innerHTML = `
+            <div class="challenge-name"></div>
+            <div class="challenge-limitation"></div>
+            <div class="challenge-target"></div>
+            <div class="challenge-reward"></div>
+            <div class="challenge-best"></div>
+        `;
+        grid.appendChild(card);
+    }
+
+    // 如果卡片过多（极少发生），移除多余的
+    while (grid.children.length > total) {
+        grid.removeChild(grid.lastChild);
+    }
+
+    // 遍历更新每个卡片
+    for (let i = 0; i < total; i++) {
+        const card = grid.children[i];
+        const ch = CHALLENGES[i];
+        const isComplete = state.challengeSpendTime[i] && state.challengeSpendTime[i].gt(-1);
+        if (isComplete) completedCount++;
+
+        // 计算状态
+        let statusClass;
+        let bestTime;
+        if (state.isInChallenge === i) {
+            statusClass = 'in-progress';
+            bestTime = '进行中...';
+        } else if (isComplete) {
+            statusClass = 'completed';
+            const time = state.challengeSpendTime[i];
+            bestTime = formatDecimal(time) + 's';
+        } else {
+            statusClass = 'pending';
+            bestTime = '未完成';
+        }
+
+        // 更新类名（保留卡片元素，仅切换类）
+        card.className = `challenge-card ${statusClass}`;
+        card.dataset.index = i;
+
+        // 更新内部文本（使用 querySelector 更健壮）
+        card.querySelector('.challenge-name').textContent = ch.name;
+        card.querySelector('.challenge-limitation').textContent = `限制：${ch.limitationDescription}`;
+        card.querySelector('.challenge-target').textContent = `目标：${ch.target}`;
+        card.querySelector('.challenge-reward').textContent = `奖励：${ch.rewardDescription}`;
+        card.querySelector('.challenge-best').textContent = `最快完成：${bestTime}`;
+    }
+
+    counter.textContent = `${completedCount} / ${total}`;
+}
+
 // 生成导航列表
 function renderNav() {
     const desktopList = document.getElementById('desktopNavList');
@@ -138,10 +225,16 @@ function renderAchievements() {
     if (!dom.achievementGrid) return;
     let html = '';
     let unlockedCount = 0;
-    for (const a of ACHIEVEMENTS) {
-        if (a.unlocked) unlockedCount++;
-        const statusText = a.unlocked ? UI_TEXTS.achievements.unlocked : UI_TEXTS.achievements.locked;
-        const cls = a.unlocked ? 'achievement-card unlocked' : 'achievement-card locked';
+    
+    for (let i = 0; i < ACHIEVEMENTS.length; i++) {
+        const a = ACHIEVEMENTS[i];
+        const unlocked = state.achievements[i];
+        
+        if (unlocked) unlockedCount++;
+        
+        const statusText = unlocked ? UI_TEXTS.achievements.unlocked : UI_TEXTS.achievements.locked;
+        const cls = unlocked ? 'achievement-card unlocked' : 'achievement-card locked';
+        
         html += `
             <div class="${cls}">
                 <div class="achievement-info">
@@ -153,7 +246,9 @@ function renderAchievements() {
             </div>
         `;
     }
+    
     dom.achievementGrid.innerHTML = html;
+    
     if (dom.achievementCounter) {
         dom.achievementCounter.textContent = UI_TEXTS.achievements.counterFormat
             .replace('{unlocked}', unlockedCount)
@@ -174,6 +269,10 @@ function renderStats() {
 
 // 全量渲染（刷新所有可见部分）
 function renderAll() {
+    renderNav();
     renderMainUI();
     renderAchievements();
+    updateChallengeTabVisibility();
+    renderStats();
+    renderChallenges();
 }

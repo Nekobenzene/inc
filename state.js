@@ -2,6 +2,8 @@
 
 // 状态对象（全局）
 const state = {
+    speed: new Decimal(1),
+    developerSpeeduper: new Decimal(1),
     points: new Decimal(GAME_CONFIG.startingPoints),
     totalPointsEarned: new Decimal(GAME_CONFIG.startingPoints),
     totalClicks: new Decimal(0),
@@ -16,7 +18,14 @@ const state = {
         ach7: new Decimal(0),
         ach8: new Decimal(0),
     },
-    pointExp: new Decimal(1.1),
+    pointExp: new Decimal(1.05),
+    challengeUnlocked: false,
+    challengeReward:{
+        cha1:new Decimal(1),
+    },
+    challengeSpendTime: [],
+    isInChallenge: -1,
+    challengeStartTime: 0,
 };
 
 // 检查所有发电机数量是否达到解锁阈值
@@ -56,16 +65,22 @@ function initState() {
     
     // 初始化成就状态（全部未解锁）
     state.achievements = ACHIEVEMENTS.map(() => false);
-    for (let i = 0; i < ACHIEVEMENTS.length; i++) {
-        ACHIEVEMENTS[i].unlocked = state.achievements[i];
-    }
-    
+
     // 重置成就奖励为默认值
     state.achReward = {
         ach3: new Decimal(1),
         ach6: new Decimal(1),
         ach7: new Decimal(0),
         ach8: new Decimal(0),
+    };
+    
+    // 初始化挑战
+    state.challengeUnlocked = false;
+    state.challengeSpendTime = CHALLENGES.map(() => new Decimal(-1));
+    state.isInChallenge = -1;
+    state.challengeStartTime = 0;
+    state.challengeReward = {
+        cha1: new Decimal(1)
     };
 }
 
@@ -89,6 +104,8 @@ function serializeState() {
     }
     
     const stateToSerialize = {
+        speed: state.speed,
+        developerSpeeduper: state.developerSpeeduper,
         points: state.points,
         totalPointsEarned: state.totalPointsEarned,
         totalClicks: state.totalClicks,
@@ -104,6 +121,11 @@ function serializeState() {
         achievements: state.achievements,
         achReward: state.achReward,
         pointExp: state.pointExp,
+        challengeUnlocked: state.challengeUnlocked,
+        challengeReward: state.challengeReward,
+        challengeSpendTime: state.challengeSpendTime,
+        isInChallenge: state.isInChallenge,
+        challengeStartTime: state.challengeStartTime,
     };
     
     return serializeValue(stateToSerialize);
@@ -139,14 +161,15 @@ function deserializeState(data) {
     const deserialized = deserializeValue(data);
     
     // 基本数值字段
+    state.speed = deserialized.speed instanceof Decimal ? deserialized.speed : new Decimal(deserialized.speed || 1);
+    state.developerSpeeduper = deserialized.developerSpeeduper instanceof Decimal ? deserialized.developerSpeeduper : new Decimal(deserialized.developerSpeeduper || 1);
     state.points = deserialized.points instanceof Decimal ? deserialized.points : new Decimal(deserialized.points || 0);
     state.totalPointsEarned = deserialized.totalPointsEarned instanceof Decimal ? deserialized.totalPointsEarned : new Decimal(deserialized.totalPointsEarned || 0);
     state.totalClicks = deserialized.totalClicks instanceof Decimal ? deserialized.totalClicks : new Decimal(deserialized.totalClicks || 0);
     state.peakPoints = deserialized.peakPoints instanceof Decimal ? deserialized.peakPoints : new Decimal(deserialized.peakPoints || 0);
     state.totalQuantityCount = deserialized.totalQuantityCount instanceof Decimal ? deserialized.totalQuantityCount : new Decimal(deserialized.totalQuantityCount || 0);
     state.gameStartTime = deserialized.gameStartTime || Date.now();
-    state.pointExp = deserialized.pointExp instanceof Decimal ? deserialized.pointExp : new Decimal(deserialized.pointExp || 1.1);
-
+    state.pointExp = deserialized.pointExp instanceof Decimal ? deserialized.pointExp : new Decimal(deserialized.pointExp || 1.05);
     
     // 还原升级
     if (deserialized.generatorUpgrades && Array.isArray(deserialized.generatorUpgrades)) {
@@ -167,10 +190,7 @@ function deserializeState(data) {
     } else {
         state.achievements = ACHIEVEMENTS.map(() => false);
     }
-    for (let i = 0; i < ACHIEVEMENTS.length; i++) {
-        ACHIEVEMENTS[i].unlocked = state.achievements[i];
-    }
-    
+
     // 还原成就奖励
     if (deserialized.achReward && typeof deserialized.achReward === 'object') {
         // 强制转换为 Decimal，防止数字类型
@@ -192,7 +212,36 @@ function deserializeState(data) {
             ach8: new Decimal(0),
         };
     }
-// 重新检查解锁阈值（可能因为升级数量变化）
+    
+    // 还原挑战奖励
+    if (deserialized.challengeReward && typeof deserialized.challengeReward === 'object') {
+        // 强制转换为 Decimal，防止数字类型
+        const rawCha1 = deserialized.challengeReward.cha1;
+        state.challengeReward = {
+            cha1: rawCha1 instanceof Decimal ? rawCha1 : new Decimal(rawCha1 || 1),
+        };
+    } else {
+        state.challengeReward = {
+            cha1: new Decimal(1),
+        };
+    }
+    
+    // 恢复挑战
+    if (typeof deserialized.challengeUnlocked === 'boolean') {
+        state.challengeUnlocked = deserialized.challengeUnlocked;
+    } else {
+        const achIndex = ACHIEVEMENTS.findIndex(a => a.id === '114514');
+        state.challengeUnlocked = achIndex !== -1 && state.achievements[achIndex];
+    }
+    state.challengeSpendTime = (data.challengeSpendTime || []).map(v => {
+        if (v === -1) return new Decimal(-1);
+        return new Decimal(v);
+    });
+    while (state.challengeSpendTime.length < CHALLENGES.length) {state.challengeSpendTime.push(new Decimal(-1));}
+    state.isInChallenge = data.isInChallenge ?? -1;
+    state.challengeStartTime = data.challengeStartTime || 0;
+
+    // 重新检查解锁阈值（可能因为升级数量变化）
     checkUnlockAll();
 }
 
@@ -229,7 +278,6 @@ function resetGame() {
     // 重新初始化升级和成就
     initState();
     // 确保成就全未解锁
-    for (const a of ACHIEVEMENTS) a.unlocked = false;
     for (let i = 0; i < state.achievements.length; i++) state.achievements[i] = false;
     state.achReward = {
         ach3: new Decimal(1),
@@ -237,6 +285,37 @@ function resetGame() {
         ach7: new Decimal(0),
         ach8: new Decimal(0),
     };
+    
+    // 重置挑战奖励
+    state.challengeReward = {
+        cha1:new Decimal(1),
+    };
+}
+
+// 挑战时的重置
+function resetForChallenge() {
+    // 重置分数
+    state.points = new Decimal(GAME_CONFIG.startingPoints);
+    state.totalQuantityCount = new Decimal(0);
+
+    // 重置发电机（数量、等级、倍数全归零/初始）
+    state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => ({
+        id: index,
+        quantity: new Decimal(config.initial.quantity),
+        level: new Decimal(config.initial.level),
+        multiple: new Decimal(config.initial.multiple),
+        config: config,
+        unlocked: false,
+        unlockThreshold: config.costFn(new Decimal(0), new Decimal(0)).div(10),
+        getCost() { return this.config.costFn(this.quantity, this.level); },
+        getMaxQuantity() { return this.config.maxQuantityFn(this.level); },
+        getRate() { return this.config.rateFn(this.quantity, this.level); },
+        isMaxed() { return this.quantity.gte(this.getMaxQuantity()); }
+    }));
+
+    // 重新检查解锁（初始应无解锁）
+    checkUnlockAll();
+
 }
 
 // 初始化 state（在加载存档前调用，或在重置后调用）

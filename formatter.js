@@ -1,7 +1,7 @@
 // formatter.js
 
 function formatDecimal(x) {
-    x.normalize();
+    x = new Decimal(x).normalize();
     if (x.sign === 0 || (x.mag === 0 && x.layer === 0)) return "0";
     if (Object.is(x.sign, -0) || x.sign === -0) return "0";
     if (x.isNan()) return "NaN";

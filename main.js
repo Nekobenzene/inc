@@ -25,9 +25,6 @@ function initApp() {
 
     // 启动游戏循环
     requestAnimationFrame(gameLoop);
-    
-    // 生成导航列表
-    renderNav();
 
     console.log('✅ 游戏已启动！');
 }
@@ -56,6 +53,11 @@ function gameLoop(now) {
     if (anyUnlocked) {
         renderAchievements();
     }
+
+    // 每次更新后检查挑战（如果在进行中）
+    if (state.isInChallenge !== -1) {
+        checkChallenge();  // 自动完成检测并退出
+        }
 
     // 渲染 UI（可添加节流，但此处简单全量刷新）
     renderMainUI();

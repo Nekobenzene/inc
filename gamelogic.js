@@ -32,14 +32,15 @@ function performGenerator(index) {
     }
 }
 
-// 检查成就（更新 unlocked 状态）
+// 检查成就
 function checkAchievements() {
     let anyUnlocked = false;
-    for (const a of ACHIEVEMENTS) {
-        if (!a.unlocked && a.check()) {
-            a.unlocked = true;
+    for (let i = 0; i < ACHIEVEMENTS.length; i++) {
+        const a = ACHIEVEMENTS[i];
+        if (!state.achievements[i] && a.check()) {
+            state.achievements[i] = true;
             anyUnlocked = true;
-            console.log(`成就解锁: ${a.icon} ${a.name}`);
+            console.log(`成就解锁: ${a.name}`);
             if (typeof a.reward === 'function') {
                 a.reward(state, a);
             }

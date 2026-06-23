@@ -56,70 +56,93 @@
                 <span id="points-formula" class="points-formula-part">Π(M)</span>
             </div>
 
-            <div class="divide-points-multiplers"></div>
-
-            <div class="multiplers-grid">
-                <span class="multiplers-item">M₁ = <span id="m1" class="multiplers-number-part">1</span></span>
-                <span class="multiplers-item">M₂ = <span id="m2" class="multiplers-number-part">1</span></span>
-                <span class="multiplers-item">M₃ = <span id="m3" class="multiplers-number-part">1</span></span>
-                <span class="multiplers-item">M₄ = <span id="m4" class="multiplers-number-part">1</span></span>
+            <!-- ===== 新增：游戏内选项卡（发电机 / 挑战） ===== -->
+            <div class="game-tabs-container">
+                <div class="game-tabs">
+                    <div class="game-tab active" data-tab="generators">发电机</div>
+                    <div class="game-tab" data-tab="challenges">挑战</div>
+                </div>
             </div>
 
-            <div class="multipler-generator-grid" id="generator-grid">
-                <!-- 升级 1 -->
-                <div class="multipler-generator-box" data-index="0">
-                    <div class="multipler-generator-info">
-                        <span class="multipler-generator-name">乘数发电机1</span>
-                        <span class="multipler-generator-quantity">数量：0 / 10</span>
-                        <span class="multipler-generator-level">等级: 0</span>
-                        <span class="multipler-generator-effect">dM₁/dt = 0.00</span>
-                    </div>
-                    <div class="multipler-generator-button">
-                        <span class="multipler-generator-button-label">购入</span>
-                        <span class="multipler-generator-cost">花费: 10</span>
-                    </div>
+            <div class="divide-common"></div>
+
+            <!-- ===== 发电机选项卡内容 ===== -->
+            <div class="game-tab-content active" id="tab-generators">
+
+                <div class="multiplers-grid">
+                    <span class="multiplers-item">M₁ = <span id="m1" class="multiplers-number-part">1</span></span>
+                    <span class="multiplers-item">M₂ = <span id="m2" class="multiplers-number-part">1</span></span>
+                    <span class="multiplers-item">M₃ = <span id="m3" class="multiplers-number-part">1</span></span>
+                    <span class="multiplers-item">M₄ = <span id="m4" class="multiplers-number-part">1</span></span>
                 </div>
 
-                <!-- 升级 2 -->
-                <div class="multipler-generator-box" data-index="1">
-                    <div class="multipler-generator-info">
-                        <span class="multipler-generator-name">乘数发电机2</span>
-                        <span class="multipler-generator-quantity">数量：0 / 15</span>
-                        <span class="multipler-generator-level">等级: 0</span>
-                        <span class="multipler-generator-effect">dM₂/dt = 0.00</span>
+                <div class="multipler-generator-grid" id="generator-grid">
+                    <!-- 升级 1 -->
+                    <div class="multipler-generator-box" data-index="0">
+                        <div class="multipler-generator-info">
+                            <span class="multipler-generator-name">乘数发电机1</span>
+                            <span class="multipler-generator-quantity">数量：0 / 10</span>
+                            <span class="multipler-generator-level">等级: 0</span>
+                            <span class="multipler-generator-effect">dM₁/dt = 0.00</span>
+                        </div>
+                        <div class="multipler-generator-button">
+                            <span class="multipler-generator-button-label">购入</span>
+                            <span class="multipler-generator-cost">花费: 10</span>
+                        </div>
                     </div>
-                    <div class="multipler-generator-button">
-                        <span class="multipler-generator-button-label">购入</span>
-                        <span class="multipler-generator-cost">花费: 1,000</span>
+
+                    <!-- 升级 2 -->
+                    <div class="multipler-generator-box" data-index="1">
+                        <div class="multipler-generator-info">
+                            <span class="multipler-generator-name">乘数发电机2</span>
+                            <span class="multipler-generator-quantity">数量：0 / 15</span>
+                            <span class="multipler-generator-level">等级: 0</span>
+                            <span class="multipler-generator-effect">dM₂/dt = 0.00</span>
+                        </div>
+                        <div class="multipler-generator-button">
+                            <span class="multipler-generator-button-label">购入</span>
+                            <span class="multipler-generator-cost">花费: 1,000</span>
+                        </div>
+                    </div>
+
+                    <!-- 升级 3 -->
+                    <div class="multipler-generator-box" data-index="2">
+                        <div class="multipler-generator-info">
+                            <span class="multipler-generator-name">乘数发电机3</span>
+                            <span class="multipler-generator-quantity">数量：0 / 20</span>
+                            <span class="multipler-generator-level">等级: 0</span>
+                            <span class="multipler-generator-effect">dM₃/dt = 0.00</span>
+                        </div>
+                        <div class="multipler-generator-button">
+                            <span class="multipler-generator-button-label">购入</span>
+                            <span class="multipler-generator-cost">花费: 10,000,000</span>
+                        </div>
+                    </div>
+
+                    <!-- 升级 4 -->
+                    <div class="multipler-generator-box" data-index="3">
+                        <div class="multipler-generator-info">
+                            <span class="multipler-generator-name">乘数发电机4</span>
+                            <span class="multipler-generator-quantity">数量：0 / 30</span>
+                            <span class="multipler-generator-level">等级: 0</span>
+                            <span class="multipler-generator-effect">dM₄/dt = 0.00</span>
+                        </div>
+                        <div class="multipler-generator-button">
+                            <span class="multipler-generator-button-label">购入</span>
+                            <span class="multipler-generator-cost">花费: 10,000,000,000,000</span>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 升级 3 -->
-                <div class="multipler-generator-box" data-index="2">
-                    <div class="multipler-generator-info">
-                        <span class="multipler-generator-name">乘数发电机3</span>
-                        <span class="multipler-generator-quantity">数量：0 / 20</span>
-                        <span class="multipler-generator-level">等级: 0</span>
-                        <span class="multipler-generator-effect">dM₃/dt = 0.00</span>
-                    </div>
-                    <div class="multipler-generator-button">
-                        <span class="multipler-generator-button-label">购入</span>
-                        <span class="multipler-generator-cost">花费: 10,000,000</span>
-                    </div>
+            <!-- ===== 挑战选项卡内容 ===== -->
+            <div class="game-tab-content" id="tab-challenges">
+                <div class="challenges-header">
+                    <span class="challenges-title">挑战列表</span>
+                    <span class="challenges-counter" id="challenges-counter">0 / 0</span>
                 </div>
-
-                <!-- 升级 4 -->
-                <div class="multipler-generator-box" data-index="3">
-                    <div class="multipler-generator-info">
-                        <span class="multipler-generator-name">乘数发电机4</span>
-                        <span class="multipler-generator-quantity">数量：0 / 30</span>
-                        <span class="multipler-generator-level">等级: 0</span>
-                        <span class="multipler-generator-effect">dM₄/dt = 0.00</span>
-                    </div>
-                    <div class="multipler-generator-button">
-                        <span class="multipler-generator-button-label">购入</span>
-                        <span class="multipler-generator-cost">花费: 10,000,000,000,000</span>
-                    </div>
+                <div class="challenges-grid" id="challenges-grid">
+                    <!-- 由 JS 动态渲染 -->
                 </div>
             </div>
         </div>
@@ -148,11 +171,19 @@
                     <span class="stat-value" id="stat-clicks">0</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-label">总等级</span>
-                    <span class="stat-value" id="stat-generator-totLevel">0</span>
+                    <span class="stat-label">发电机总等级</span>
+                    <span class="stat-value" id="stat-generatorTotalLevel">0</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-label">最高 P</span>
+                    <span class="stat-label">获得的总分数</span>
+                    <span class="stat-value" id="stat-pointsTotalEarned">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">发电机总数量</span>
+                    <span class="stat-value" id="stat-generatorQuantityCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">最高分</span>
                     <span class="stat-value" id="stat-peakPoints">0</span>
                 </div>
             </div>
@@ -161,9 +192,13 @@
         <!-- 设置页 -->
         <div class="page-view" data-page="settings">
             <div class="page-header">
-                <span class="page-title">重置</span>
+                <span class="page-title">设置</span>
             </div>
             <div class="settings-list">
+                <div class="settings-item">
+                    <span class="settings-label">刷新界面</span>
+                    <button class="settings-btn" id="btnRefresh">刷新</button>
+                </div>
                 <div class="settings-item">
                     <span class="settings-label">保存游戏</span>
                     <button class="settings-btn" id="btnSave">保存</button>

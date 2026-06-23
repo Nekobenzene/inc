@@ -389,7 +389,7 @@ body {
 }
 
 /* ========================================
-   原有游戏样式（保持不变）
+   游戏样式
    ======================================== */
 .points-text-part {
     font-size: 21px;
@@ -432,7 +432,7 @@ body {
     margin: 6px 0;
 }
 
-.divide-points-multiplers {
+.divide-common {
     width: 90%;
     height: 1px;
     background: linear-gradient(90deg, #00000000, #FFF5C0, #00000000);
@@ -552,9 +552,9 @@ body {
 }
 
 .multipler-generator-button.upgrade-mode {
-    border-color: #FF6B6B;
-    color: #FF6B6B;
-    background-color: #2a1a1a;
+    border-color: #E2FF00;
+    color: #E2FF00;
+    background-color: #2A1A1A;
 }
 
 .multipler-generator-button .multipler-generator-button-label {
@@ -813,4 +813,262 @@ body {
 
 #devStatus {
     min-width: 80px;
+}
+
+/* ========================================
+   游戏内选项卡 (发电机 / 挑战)
+   ======================================== */
+.game-tabs-container {
+    margin: 16px 0 8px;
+    display: flex;
+    justify-content: center;
+}
+
+.game-tabs {
+    display: flex;
+    background: #1a1a1a;
+    border-radius: 5px;
+    padding: 4px;
+    border: 1px solid #333;
+    gap: 4px;
+}
+
+.game-tab {
+    width: 70px;
+    text-align: center;  
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.game-tab:hover {
+    color: #fff;
+    background: #2a2a2a;
+}
+
+.game-tab.active {
+    background: #FFEE90;
+    color: #121212;
+    box-shadow: 0 2px 12px rgba(255, 215, 0, 0.2);
+}
+
+.game-tab-content {
+    display: none;
+    animation: fadeSlideIn 0.25s ease;
+}
+
+.game-tab-content.active {
+    display: block;
+}
+
+/* ========================================
+   挑战页面
+   ======================================== */
+.challenges-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 12px 4px 16px 4px;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 16px;
+}
+
+.challenges-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #FFD700;
+}
+
+.challenges-counter {
+    font-size: 1em;
+    color: #aaa;
+    background: #1e1e1e;
+    padding: 4px 16px;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.challenges-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ========================================
+   挑战页面
+   ======================================== */
+.challenges-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 12px 4px 16px 4px;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 16px;
+}
+
+.challenges-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #FFD700;
+}
+
+.challenges-counter {
+    font-size: 1em;
+    color: #aaa;
+    background: #1e1e1e;
+    padding: 4px 16px;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.challenges-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ========================================
+   挑战卡片 - 同时兼容 div 和 button
+   ======================================== */
+.challenge-card {
+    background: #151515;
+    border: 2px solid #444;
+    padding: 16px 18px;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-align: center;              /* 居中 */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;             /* flex 子元素水平居中 */
+    border-radius: 8px;
+    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+/* 状态：未开始（锁定） */
+.challenge-card.pending {
+    opacity: 0.6;
+    filter: grayscale(0.3);
+    border-color: #333;
+}
+
+/* 状态：进行中 */
+.challenge-card.in-progress {
+    border-color: #FFA500;
+    background: #1f1a0e;
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
+}
+
+/* 状态：已完成 */
+.challenge-card.completed {
+    border-color: #4CAF50;
+    background: #1a2a1a;
+    box-shadow: 0 0 25px rgba(76, 175, 80, 0.12);
+}
+
+/* 挑战名称 */
+.challenge-name {
+    font-size: 1.05em;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 4px;
+}
+
+/* 已完成状态下的名称变绿 */
+.challenge-card.completed .challenge-name {
+    color: #4CAF50;
+}
+
+/* 限制、目标、最佳时间（统一样式） */
+.challenge-limitation,
+.challenge-target,
+.challenge-best {
+    font-size: 0.8em;
+    color: #FFEB89;
+    line-height: 1.5;
+    margin-top: 2px;
+}
+
+
+/* 奖励描述 */
+.challenge-reward {
+    font-size: 0.8em;
+    color: #FFD700;
+    margin-top: 6px;
+}
+
+/* 状态标签 */
+.challenge-best {
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 3px 12px;
+    border-radius: 8px;
+    display: inline-block;
+    align-self: center;
+    background: #2a2a2a;
+    color: #999;
+}
+
+/* 各状态下状态标签的颜色 */
+.challenge-card.pending .challenge-best {
+    background: #2a2a2a;
+    color: #878787;
+}
+
+.challenge-card.in-progress .challenge-best {
+    background: #3a2a0e;
+    color: #FFCC70;
+}
+
+.challenge-card.completed .challenge-best {
+    background: #1a3a1a;
+    color: #A0FFA4;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .challenge-card:hover {
+        transform: scale(1.03);
+    }
+}
+
+.challenge-card.completed:active {
+    background-color: #3C633E;
+    transform: scale(0.97);
+    transition: background-color 0.05s linear, transform 0.05s ease-out;
+}
+.challenge-card.in-progress:active {
+    background-color: #5C461E;
+    transform: scale(0.97);
+    transition: background-color 0.05s linear, transform 0.05s ease-out;
+}
+.challenge-card.pending:active {
+    background-color: #444444;
+    transform: scale(0.97);
+    transition: background-color 0.05s linear, transform 0.05s ease-out;
 }
