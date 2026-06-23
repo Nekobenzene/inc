@@ -1,17 +1,13 @@
-// game-logic.js – 所有游戏规则和计算
+// game-logic.js
 
-// 计算总速率（所有乘数相乘）
 function computeTotalRate() {
     return GROWTH_CONFIG.computeTotalRate(state);
 }
 
-// 计算增长
 function applyGrowth(deltaSeconds) {
     GROWTH_CONFIG.applyGrowth(state, deltaSeconds);
 }
 
-// 执行购入（或升级）
-// 1
 function performSingleGenerator(index) {
     const u = state.generatorUpgrades[index];
     const maxQuantity = u.getMaxQuantity();
@@ -30,26 +26,25 @@ function performSingleGenerator(index) {
         return 'buy';
     }
 }
-// 5/10
+
 function performMultiGenerator(index, amount) {
     let bought = 0;
-    let upgraded = 0;
     const u = state.generatorUpgrades[index];
     const maxQuantity = u.getMaxQuantity();
 
     for (let i = 0; i < amount; i++) {
-        if (u.quantity.gte(maxQuantity)) {break}
+        if (u.quantity.gte(maxQuantity)) break;
         const result = performSingleGenerator(index);
-        if (result === 'buy') bought++;
-        else break;
+        if (result === 'buy') {
+            bought++;
+        } else {
+            break;
+        }
     }
 
-    if (bought > 0 || upgraded > 0) {
-        return upgraded > 0 ? 'upgrade' : 'buy';
-    }
-    return 'insufficient';
+    return bought > 0 ? 'buy' : 'insufficient';
 }
-// max
+
 function performMaxGenerator(index) {
     const u = state.generatorUpgrades[index];
     const maxQuantity = u.getMaxQuantity();
@@ -63,8 +58,8 @@ function performMaxGenerator(index) {
     }
 
     while (true) {
-        const maxQuantity = u.getMaxQuantity();
-        if (u.quantity.gte(maxQuantity)) break;
+        const currentMaxQuantity = u.getMaxQuantity();
+        if (u.quantity.gte(currentMaxQuantity)) break;
 
         const cost = u.getCost();
         if (state.points.lt(cost)) break;
@@ -77,32 +72,21 @@ function performMaxGenerator(index) {
 
     return bought > 0 ? 'buy' : 'insufficient';
 }
-// 执行
+
 function performGenerator(index) {
-    const u = state.generatorUpgrades[index];
     const mode = state.batchPurchaseUnlocked ? state.batchAmount : '1';
 
-    if (mode === '1') {
-        return performSingleGenerator(index);
-    }
-    if (mode === '5') {
-        return performMultiGenerator(index, 5);
-    }
-    if (mode === '10') {
-        return performMultiGenerator(index, 10);
-    }
-    if (mode === 'max') {
-        return performMaxGenerator(index);
-    }
+    if (mode === '1') return performSingleGenerator(index);
+    if (mode === '5') return performMultiGenerator(index, 5);
+    if (mode === '10') return performMultiGenerator(index, 10);
+    if (mode === 'max') return performMaxGenerator(index);
 
     return 'insufficient';
 }
 
-
-
-// 检查成就
 function checkAchievements() {
     let anyUnlocked = false;
+
     for (let i = 0; i < ACHIEVEMENTS.length; i++) {
         const a = ACHIEVEMENTS[i];
         if (!state.achievements[i] && a.check()) {
@@ -114,14 +98,18 @@ function checkAchievements() {
             }
         }
     }
-    renderAll();
+
+    if (anyUnlocked) {
+        renderAll();
+    }
+
     return anyUnlocked;
 }
 
-// 获取统计信息（供 UI 使用）
 function getStats() {
     let totalLevel = new Decimal(0);
     for (const u of state.generatorUpgrades) totalLevel = totalLevel.add(u.level);
+
     return {
         playtime: (Date.now() - state.gameStartTime) / 1000,
         clicks: state.totalClicks,
