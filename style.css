@@ -1072,3 +1072,59 @@ body {
     transform: scale(0.97);
     transition: background-color 0.05s linear, transform 0.05s ease-out;
 }
+
+/* ========================================
+   批量购买切换按钮
+   ======================================== */
+.batch-purchase-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 12px 0 16px;
+    flex-wrap: wrap;
+}
+
+.batch-label {
+    font-size: 0.95em;
+    color: #aaa;
+    font-weight: 600;
+}
+
+.batch-options {
+    display: flex;
+    gap: 6px;
+    background: #1a1a1a;
+    padding: 4px;
+    border-radius: 6px;
+    border: 1px solid #333;
+}
+
+.batch-option {
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 0.9em;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.batch-option:hover {
+    color: #ddd;
+    background: #2a2a2a;
+}
+
+.batch-option.active {
+    background: #E2FF00;
+    color: #121212;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.batch-option:active {
+    transform: scale(0.95);
+}

@@ -56,7 +56,7 @@
                 <span id="points-formula" class="points-formula-part">Π(M)</span>
             </div>
 
-            <!-- ===== 新增：游戏内选项卡（发电机 / 挑战） ===== -->
+            <!-- ===== 游戏内选项卡（发电机 / 挑战） ===== -->
             <div class="game-tabs-container">
                 <div class="game-tabs">
                     <div class="game-tab active" data-tab="generators">发电机</div>
@@ -76,8 +76,21 @@
                     <span class="multiplers-item">M₄ = <span id="m4" class="multiplers-number-part">1</span></span>
                 </div>
 
+                <div class="divide-common"></div>
+
+                <!-- ===== 批量购买切换 ===== -->
+                <div class="batch-purchase-container">
+                    <span class="batch-label">批量购买：</span>
+                    <div class="batch-options">
+                        <button class="batch-option active" data-amount="1">1</button>
+                        <button class="batch-option" data-amount="5">5</button>
+                        <button class="batch-option" data-amount="10">10</button>
+                        <button class="batch-option" data-amount="max">最大</button>
+                    </div>
+                </div>
+
                 <div class="multipler-generator-grid" id="generator-grid">
-                    <!-- 升级 1 -->
+                    <!-- 发电机 1 -->
                     <div class="multipler-generator-box" data-index="0">
                         <div class="multipler-generator-info">
                             <span class="multipler-generator-name">乘数发电机1</span>
@@ -91,7 +104,7 @@
                         </div>
                     </div>
 
-                    <!-- 升级 2 -->
+                    <!-- 发电机 2 -->
                     <div class="multipler-generator-box" data-index="1">
                         <div class="multipler-generator-info">
                             <span class="multipler-generator-name">乘数发电机2</span>
@@ -105,7 +118,7 @@
                         </div>
                     </div>
 
-                    <!-- 升级 3 -->
+                    <!-- 发电机 3 -->
                     <div class="multipler-generator-box" data-index="2">
                         <div class="multipler-generator-info">
                             <span class="multipler-generator-name">乘数发电机3</span>
@@ -119,7 +132,7 @@
                         </div>
                     </div>
 
-                    <!-- 升级 4 -->
+                    <!-- 发电机 4 -->
                     <div class="multipler-generator-box" data-index="3">
                         <div class="multipler-generator-info">
                             <span class="multipler-generator-name">乘数发电机4</span>

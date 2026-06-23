@@ -26,6 +26,17 @@ const state = {
     challengeSpendTime: [],
     isInChallenge: -1,
     challengeStartTime: 0,
+    batchPurchaseUnlocked: false,
+    batchAmount: '1',
+};
+
+// 统计成就和挑战数量
+function getAchievementCount(state) {
+    return state.achievements.filter(v => v === true).length;
+};
+
+function getCompletedChallengeCount(state) {
+    return state.challengeSpendTime.filter(t => t.gt(-1)).length;
 };
 
 // 检查所有发电机数量是否达到解锁阈值
@@ -82,6 +93,10 @@ function initState() {
     state.challengeReward = {
         cha1: new Decimal(1)
     };
+    
+    // 初始化批量购买
+    batchPurchaseUnlocked = false;
+    batchAmount = '1';
 }
 
 // 序列化
@@ -126,6 +141,8 @@ function serializeState() {
         challengeSpendTime: state.challengeSpendTime,
         isInChallenge: state.isInChallenge,
         challengeStartTime: state.challengeStartTime,
+        batchPurchaseUnlocked: state.batchPurchaseUnlocked,
+        batchAmount: state.batchAmount,
     };
     
     return serializeValue(stateToSerialize);
@@ -171,7 +188,7 @@ function deserializeState(data) {
     state.gameStartTime = deserialized.gameStartTime || Date.now();
     state.pointExp = deserialized.pointExp instanceof Decimal ? deserialized.pointExp : new Decimal(deserialized.pointExp || 1.05);
     
-    // 还原升级
+    // 还原发电机
     if (deserialized.generatorUpgrades && Array.isArray(deserialized.generatorUpgrades)) {
         for (let i = 0; i < state.generatorUpgrades.length && i < deserialized.generatorUpgrades.length; i++) {
             const u = deserialized.generatorUpgrades[i];
@@ -240,6 +257,10 @@ function deserializeState(data) {
     while (state.challengeSpendTime.length < CHALLENGES.length) {state.challengeSpendTime.push(new Decimal(-1));}
     state.isInChallenge = data.isInChallenge ?? -1;
     state.challengeStartTime = data.challengeStartTime || 0;
+
+    // 恢复批量购买
+    state.batchPurchaseUnlocked = !!deserialized.batchPurchaseUnlocked;
+    state.batchAmount = deserialized.batchAmount || '1';
 
     // 重新检查解锁阈值（可能因为升级数量变化）
     checkUnlockAll();

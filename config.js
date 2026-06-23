@@ -76,6 +76,16 @@ const ACHIEVEMENTS = [
         rewardDescription: '解锁挑战！',
         reward: (state) => {state.challengeUnlocked = true},
     },
+    {
+        id: 'challenge',
+        name: '有挑战性',
+        description: '完成一个挑战',
+        check: () => getCompletedChallengeCount(state) > 0,
+        rewardDescription: '解锁批量购买',
+        reward: (state) => {
+            state.batchPurchaseUnlocked = true
+        },
+    },
 ];
 
 // ---------- 游戏全局参数 ----------

@@ -154,6 +154,8 @@ function bindEvents() {
         if (!ref) continue;
         ref.btn.addEventListener('click', (e) => {
             e.stopPropagation();
+            state.totalClicks = state.totalClicks.add(1);
+
             const result = performGenerator(i);
             if (result === 'upgrade' || result === 'buy') {
                 renderAll();
@@ -296,5 +298,19 @@ function bindEvents() {
         const index = parseInt(card.dataset.index);
         if (isNaN(index)) return;
         toggleChallenge(index);  // 使用全局函数
+    });
+    
+    // 批量购买切换
+    document.querySelectorAll('.batch-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // 移除同组所有 active 类
+            const parent = this.closest('.batch-options');
+            parent.querySelectorAll('.batch-option').forEach(b => b.classList.remove('active'));
+            // 给当前按钮添加 active
+            this.classList.add('active');
+            state.batchAmount = this.dataset.amount; 
+            console.log('批量购买模式切换为:', this.dataset.amount);
+    });
 });
+    
 }

@@ -68,6 +68,18 @@ function renderMainUI() {
         }
     }
     
+    // 渲染批量购买
+    function renderBatchPurchase() {
+        const container = document.querySelector('.batch-purchase-container');
+        if (!container) return;
+
+        container.style.display = state.batchPurchaseUnlocked ? '' : 'none';
+
+        document.querySelectorAll('.batch-option').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.amount === state.batchAmount);
+        });
+    }
+    
     // 升级面板
     for (let i = 0; i < state.generatorUpgrades.length; i++) {
         const ref = dom.upgradeBoxes[i];
