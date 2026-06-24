@@ -110,7 +110,7 @@ const ACHIEVEMENTS = [
         name: '一半',
         description: '达到1.3e154 P',
         check: () => state.points.gte(new Decimal(2).pow(new Decimal(512))),
-        rewardDescription: '解锁声望!',
+        rewardDescription: '解锁声望!(还没写好)',
         reward: (state)  => {
         }
     },
