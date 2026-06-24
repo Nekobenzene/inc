@@ -54,7 +54,7 @@ const ACHIEVEMENTS = [
             for (const u of state.generatorUpgrades) s = s.add(u.level);
             return s.gte(9);
         },
-        rewardDescription: '分数微弱加成分数生产(log2(P))(正加成生效)',
+        rewardDescription: '分数微弱加成分数生产(log₂(P))(正加成生效)',
         reward: (state) => {
             state.achReward.ach7 = new Decimal(1);
         },

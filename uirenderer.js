@@ -61,14 +61,13 @@ function renderMainUI() {
     if (state.achReward.ach7.eq(new Decimal(1)) && state.points.gt(new Decimal(2))) {
         formulaText += '×log₂(P)';
         if (state.achReward.ach12.neq(new Decimal(1))) {
-            formulaText += '^';
-            formulaText += formatDecimal(state. achReward.ach12)
+            formulaText += `<sup> ${formatDecimal(state. achReward.ach12)}</sup>`;
         }
     }
     if (state.achReward.ach8.eq(new Decimal(1))) {
-        formulaText = '(' + formulaText + ')^' + formatDecimal(state.pointExp);
+        formulaText = '(' + formulaText + ')' + `<sup>${formatDecimal(state.pointExp)}</sup>`;
     }
-    dom.pointsFormula.textContent = formulaText;
+    dom.pointsFormula.innerHTML = formulaText;
 
     for (let i = 0; i < state.generatorUpgrades.length; i++) {
         const u = state.generatorUpgrades[i];
