@@ -19,6 +19,7 @@ const state = {
         ach6: new Decimal(1),
         ach7: new Decimal(0),
         ach8: new Decimal(0),
+        ach12: new Decimal(1),
     },
 
     pointExp: new Decimal(1.05),
@@ -114,6 +115,7 @@ function initState() {
         ach6: new Decimal(1),
         ach7: new Decimal(0),
         ach8: new Decimal(0),
+        ach12: new Decimal(1),
     };
 
     state.pointExp = new Decimal(1.05);
@@ -275,6 +277,7 @@ function deserializeState(data) {
             ach6: toDecimal(deserialized.achReward.ach6, 1),
             ach7: toDecimal(deserialized.achReward.ach7, 0),
             ach8: toDecimal(deserialized.achReward.ach8, 0),
+            ach12: toDecimal(deserialized.achReward.ach12, 1),
         };
     } else {
         state.achReward = {
@@ -282,6 +285,7 @@ function deserializeState(data) {
             ach6: new Decimal(1),
             ach7: new Decimal(0),
             ach8: new Decimal(0),
+            ach12: new Decimal(1),
         };
     }
 

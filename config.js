@@ -100,7 +100,10 @@ const ACHIEVEMENTS = [
         name: '满分',
         description: '达到e100 P',
         check: () => state.points.gte(new Decimal(1e100)),
-        rewardDescription: '满分的喜悦'
+        rewardDescription: '分数对数加成^3',
+        reward: (state)  => {
+            state.achReward.ach12 = new Decimal(3)
+        }
     },
 ];
 
@@ -126,7 +129,7 @@ const GENERATOR_CONFIGS = [
         rateFn: (quantity, level) => {
             const base = new Decimal(quantity).mul(new Decimal(1.01).pow(quantity)).mul(new Decimal(5).pow(level)).mul(state.achReward.ach3);
             if (state.isInChallenge === 2) {
-                return base.pow(new Decimal(0.7));
+                return base.pow(new Decimal(0.3));
             } else {
                 return base.pow(state.challengeReward.cha3);
             }
@@ -139,7 +142,7 @@ const GENERATOR_CONFIGS = [
         rateFn: (quantity, level) => {
             const base = new Decimal(quantity).mul(new Decimal(1.15).pow(quantity)).mul(new Decimal(8).pow(level)).mul(state.achReward.ach3);
             if (state.isInChallenge === 2) {
-                return base.pow(new Decimal(0.7));
+                return base.pow(new Decimal(0.3));
             } else {
                 return base.pow(state.challengeReward.cha3);
             }
@@ -152,7 +155,7 @@ const GENERATOR_CONFIGS = [
         rateFn: (quantity, level) => {
             const base = new Decimal(quantity).mul(new Decimal(1.28).pow(quantity)).mul(new Decimal(15).pow(level)).mul(state.achReward.ach3);
             if (state.isInChallenge === 2) {
-                return base.pow(new Decimal(0.7));
+                return base.pow(new Decimal(0.3));
             } else {
                 return base.pow(state.challengeReward.cha3);
             }
@@ -165,7 +168,7 @@ const GENERATOR_CONFIGS = [
         rateFn: (quantity, level) => {
             const base = new Decimal(quantity).mul(new Decimal(1.35).pow(quantity)).mul(new Decimal(25).pow(level)).mul(state.achReward.ach3);
             if (state.isInChallenge === 2) {
-                return base.pow(new Decimal(0.7));
+                return base.pow(new Decimal(0.3));
             } else {
                 return base.pow(state.challengeReward.cha3);
             }
@@ -184,7 +187,7 @@ const GROWTH_CONFIG = {
         }
 
         if (state.achReward.ach7.gt(0) && state.points.gt(new Decimal(Math.E))) {
-            r = r.mul(state.points.log(new Decimal(2)).pow(state.achReward.ach7));
+            r = r.mul((state.points.log(new Decimal(2)).pow(state.achReward.ach12)).pow(state.achReward.ach7));
         }
 
         r = r.pow(state.pointExp.pow(state.achReward.ach8));
@@ -243,24 +246,24 @@ const CHALLENGES = [
         id: 'challenge_2',
         name: '双人成行',
         limitationDescription: '后两个发电机被锁定',
-        target: '达到 1e8 P',
+        target: '达到2级发电机2',
         reward: (state) => {
             state.pointExp = state.pointExp.add(new Decimal(0.05));
             checkGeneratorUnlock();
         },
         rewardDescription: '指数提升0.05',
-        check: (state) => state.points.gte(1e8)
+        check: (state) => state.generatorUpgrades[1].level.gte(new Decimal(2))
     },
     {
         id: 'challenge_3',
         name: '极致压缩',
-        limitationDescription: '发电机效率变为^0.7',
-        target: '达到 1e8 P',
+        limitationDescription: '发电机效率变为^0.3',
+        target: '拥有2级发电机2',
         reward: (state) => {
             state.challengeReward.cha3 = new Decimal(1.1);
         },
         rewardDescription: '所有发电机效率^1.1',
-        check: (state) => state.points.gte(1e8)
+        check: (state) => state.generatorUpgrades[1].level.gte(new Decimal(2))
     },
 ];
 

@@ -60,6 +60,9 @@ function renderMainUI() {
     let formulaText = 'Π(M)';
     if (state.achReward.ach7.eq(new Decimal(1)) && state.points.gt(new Decimal(Math.E))) {
         formulaText += '×log₂(P)';
+        if (state.achReward.ach12.eq(new Decimal(3))) {
+            formulaText += '^3'
+        }
     }
     if (state.achReward.ach8.eq(new Decimal(1))) {
         formulaText = '(' + formulaText + ')^' + formatDecimal(state.pointExp);
