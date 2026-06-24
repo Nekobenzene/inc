@@ -28,6 +28,7 @@ const state = {
     challengeReward: {
         cha1: new Decimal(1),
         cha3: new Decimal(1),
+        cha4: new Decimal(1),
     },
     challengeSpendTime: [],
     isInChallenge: -1,
@@ -124,6 +125,7 @@ function initState() {
     state.challengeReward = {
         cha1: new Decimal(1),
         cha3: new Decimal(1),
+        cha4: new Decimal(1),
     };
     state.challengeSpendTime = CHALLENGES.map(() => new Decimal(-1));
     state.isInChallenge = -1;
@@ -293,11 +295,13 @@ function deserializeState(data) {
         state.challengeReward = {
             cha1: toDecimal(deserialized.challengeReward.cha1, 1),
             cha3: toDecimal(deserialized.challengeReward.cha3, 1),
+            cha4: toDecimal(deserialized.challengeReward.cha4, 1),
         };
     } else {
         state.challengeReward = {
             cha1: new Decimal(1),
             cha3: new Decimal(1),
+            cha4: new Decimal(1),
         };
     }
 

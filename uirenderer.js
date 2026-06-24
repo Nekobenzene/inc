@@ -58,7 +58,7 @@ function renderMainUI() {
     dom.navPointsBadge.textContent = `${UI_TEXTS.nav.pointsBadge}${formatDecimal(state.points)}`;
 
     let formulaText = 'Π(M)';
-    if (state.achReward.ach7.eq(new Decimal(1)) && state.points.gt(new Decimal(Math.E))) {
+    if (state.achReward.ach7.eq(new Decimal(1)) && state.points.gt(new Decimal(2))) {
         formulaText += '×log₂(P)';
         if (state.achReward.ach12.neq(new Decimal(1))) {
             formulaText += '^';
