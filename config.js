@@ -112,6 +112,7 @@ const ACHIEVEMENTS = [
         check: () => state.points.gte(new Decimal(2).pow(new Decimal(512))),
         rewardDescription: '解锁声望!(还没写好)',
         reward: (state)  => {
+            state.prestigeUnlocked = true;
         }
     },
 ];
@@ -270,7 +271,11 @@ const GROWTH_CONFIG = {
         if (state.points.gt(state.peakPoints)) {
             state.peakPoints = new Decimal(state.points);
         }
-
+        if (state.points.gt(state.peakPointsForPrestige)) {
+            state.peakPointsForPrestige = new Decimal(state.points);
+        }
+        
+        renderPrestigeButton();
         checkGeneratorUnlock();
     }
 };
@@ -322,6 +327,241 @@ const CHALLENGES = [
         check: (state) => state.generatorUpgrades[1].level.gte(new Decimal(2))
     },
 ];
+
+const NOTIFICATIONS = [
+    // 成就完成
+    {
+        id: 'notify_achievement1',
+        title: '里程碑达成',
+        message: '购入第一个发电机',
+        type: 'milestone',
+        duration: 1.5,
+        once: true,
+        condition: (state) => state.achievements[0],
+    },
+    {
+        id: 'notify_achievement2',
+        title: '里程碑达成',
+        message: '购入发电机2',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[1],
+    },
+    {
+        id: 'notify_achievement3',
+        title: '里程碑达成',
+        message: '升级第一个发电机',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[2],
+    },
+    {
+        id: 'notify_achievement4',
+        title: '里程碑达成',
+        message: '拥有1e6 P',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[3],
+    },
+    {
+        id: 'notify_achievement5',
+        title: '里程碑达成',
+        message: '购入发电机3',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[4],
+    },
+    {
+        id: 'notify_achievement6',
+        title: '里程碑达成',
+        message: '购入发电机4',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[5],
+    },
+    {
+        id: 'notify_achievement7',
+        title: '里程碑达成',
+        message: '所有发电机等级之和达到9',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[6],
+    },
+    {
+        id: 'notify_achievement8',
+        title: '里程碑达成',
+        message: '拥有2^128(3.4e38) P',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[7],
+    },
+    {
+        id: 'notify_achievement9',
+        title: '里程碑达成',
+        message: '拥有1e45.14(1.38e45) P',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[8],
+    },
+    {
+        id: 'notify_achievement10',
+        title: '里程碑达成',
+        message: '完成一个挑战',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[9],
+    },
+    {
+        id: 'notify_achievement11',
+        title: '里程碑达成',
+        message: '拥有2^256(1.2e77) P',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[10],
+    },
+    {
+        id: 'notify_achievement12',
+        title: '里程碑达成',
+        message: '拥有1e100 P',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[11],
+    },
+    {
+        id: 'notify_achievement13',
+        title: '里程碑达成',
+        message: '拥有2^512(1.3e154) P',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[12],
+    },
+    // 成就奖励
+    {
+        id: 'notify_achreward3',
+        title: '获得奖励',
+        message: '发电机1效率翻倍',
+        type: 'reward',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achReward.ach3.eq(new Decimal(2)),
+    },
+    {
+        id: 'notify_achreward6',
+        title: '获得奖励',
+        message: '所有发电机价格增长^0.9',
+        type: 'reward',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achReward.ach6.eq(new Decimal(0.9)),
+    },
+    {
+        id: 'notify_achreward7',
+        title: '获得奖励',
+        message: '分数生产有log₂P加成（仅正加成时生效）',
+        type: 'reward',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achReward.ach7.eq(new Decimal(1)),
+    },
+    {
+        id: 'notify_achreward8',
+        title: '获得奖励',
+        message: '分数受到^1.05的指数',
+        type: 'reward',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achReward.ach8.eq(new Decimal(1)),
+    },
+    {
+        id: 'notify_achreward12',
+        title: '获得奖励',
+        message: '成就7的加成^2.5更强',
+        type: 'reward',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achReward.ach12.eq(new Decimal(2.5)),
+    },
+    // 内容解锁
+    {
+        id: 'notify_first_generator_unlock',
+        title: '新内容解锁',
+        message: '你可以购买乘数发电机1了',
+        type: 'unlock',
+        duration: 1.5,
+        once: true,
+        condition: (state) => state.generatorUpgrades[0].unlocked,
+    },
+    {
+        id: 'notify_generator2_unlock',
+        title: '新内容解锁',
+        message: '你可以购买乘数发电机2了',
+        type: 'unlock',
+        duration: 1.5,
+        once: true,
+        condition: (state) => state.generatorUpgrades[1].unlocked,
+    },
+    {
+        id: 'notify_generator3_unlock',
+        title: '新内容解锁',
+        message: '你可以购买乘数发电机3了',
+        type: 'unlock',
+        duration: 1.5,
+        once: true,
+        condition: (state) => state.generatorUpgrades[2].unlocked,
+    },
+    {
+        id: 'notify_generator4_unlock',
+        title: '新内容解锁',
+        message: '你可以购买乘数发电机4了',
+        type: 'unlock',
+        duration: 1.5,
+        once: true,
+        condition: (state) => state.generatorUpgrades[3].unlocked,
+    },
+    {
+        id: 'notify_challenge_unlock',
+        title: '解锁功能',
+        message: '解锁挑战！',
+        type: 'unlock',
+        duration: 2,
+        once: true,
+        condition: (state) => state.challengeUnlocked,
+    },
+    {
+        id: 'notify_batchPurchase_unlock',
+        title: '解锁功能',
+        message: '解锁批量购买！',
+        type: 'unlock',
+        duration: 2,
+        once: true,
+        condition: (state) => state.batchPurchaseUnlocked,
+    },
+    {
+        id: 'notify_prestige_unlock',
+        title: '解锁功能',
+        message: '解锁声望功能！',
+        type: 'unlock',
+        duration: 2,
+        once: true,
+        condition: (state) => state.prestigeUnlocked,
+    },
+
+    ];
+
+
+
 
 const STATS_CONFIG = {
     fields: [

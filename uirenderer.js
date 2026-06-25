@@ -52,6 +52,22 @@ function renderBatchPurchase() {
     });
 }
 
+function renderPrestigeButton() {
+    const wrapper = document.querySelector('.prestige-button-wrapper');
+    if (!wrapper) return;
+    wrapper.style.display = state.prestigeUnlocked ? 'flex' : 'none';
+
+    const btn = wrapper.querySelector('.prestige-btn');
+    if (!btn) return;
+
+    const threshold = new Decimal(2).pow(new Decimal(512));
+    if (state.prestigeUnlocked && state.peakPointsForPrestige.lt(threshold)) {
+        btn.classList.add('locked');
+    } else {
+        btn.classList.remove('locked');
+    }
+}
+
 function renderMainUI() {
     dom.points.textContent = formatDecimal(state.points);
     dom.rate.textContent = formatDecimal(computeTotalRate());
@@ -122,8 +138,6 @@ function updateChallengeTabVisibility() {
     if (!challengeTab || !challengeContent) return;
 
     const visible = state.challengeUnlocked;
-    challengeTab.style.display = visible ? '' : '';
-    challengeContent.style.display = visible ? '' : '';
 
     if (!visible) {
         challengeTab.style.display = 'none';
@@ -193,6 +207,62 @@ function renderChallenges() {
     }
 
     counter.textContent = `${completedCount} / ${total}`;
+}
+
+function renderNotifications() {
+    const container = document.getElementById('notification-container');
+    if (!container) return;
+
+    const now = Date.now();
+    const exitDuration = 300;
+
+    for (const n of state.notificationQueue) {
+        if (!n.isExiting && now >= n.expiresAt) {
+            n.isExiting = true;
+            n.removeAt = now + exitDuration;
+        }
+    }
+
+    state.notificationQueue = state.notificationQueue.filter(n => {
+        return !n.removeAt || now < n.removeAt;
+    });
+
+    const visible = state.notificationQueue.slice(0, notificationManager.maxVisible);
+
+    const renderKey = JSON.stringify(
+        visible.map(n => ({
+            id: n.id,
+            exiting: n.isExiting,
+            title: n.title,
+            message: n.message,
+            type: n.type
+        }))
+    );
+
+    if (renderKey === notificationManager.lastRenderKey) return;
+    notificationManager.lastRenderKey = renderKey;
+
+    container.innerHTML = visible.map(n => `
+        <div class="notification-card notification-${n.type} ${n.isExiting ? 'notification-exit' : 'notification-enter'}" data-id="${n.id}">
+            <div class="notification-title">${n.title}</div>
+            <div class="notification-message">${n.message}</div>
+        </div>
+    `).join('');
+}
+function bindNotificationEvents() {
+    const container = document.getElementById('notification-container');
+    if (!container) return;
+
+    container.addEventListener('click', function(e) {
+        const card = e.target.closest('.notification-card');
+        if (!card) return;
+
+        const id = card.dataset.id;
+        if (!id) return;
+
+        notificationManager.removeNow(id);
+        renderNotifications();
+    });
 }
 
 function renderNav() {
@@ -278,4 +348,5 @@ function renderAll() {
     updateChallengeTabVisibility();
     renderStats();
     renderChallenges();
+    renderPrestigeButton();
 }

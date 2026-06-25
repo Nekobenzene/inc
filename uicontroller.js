@@ -260,4 +260,6 @@ function bindEvents() {
             console.log('批量购买模式切换为:', this.dataset.amount);
         });
     });
+    
+    bindNotificationEvents();
 }

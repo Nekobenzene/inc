@@ -1128,3 +1128,148 @@ body {
 .batch-option:active {
     transform: scale(0.95);
 }
+
+/* ========================================
+   声望按钮
+   ======================================== */
+.prestige-button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 10px;
+}
+
+.prestige-btn {
+    width: 80%;
+    max-width: 500px;
+    padding: 20px 0;
+    font-size: 2.2em;
+    font-weight: bold;
+    letter-spacing: 4px;
+    background: #1a1a1a;
+    border: 1px solid #FFD700;
+    border-radius: 8px;
+    cursor: default;
+    transition: all 0.2s ease;
+    user-select: none;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
+    text-transform: uppercase;
+}
+
+.prestige-btn.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .prestige-btn {
+        width: 90%;
+        font-size: 1.8em;
+        padding: 16px 0;
+    }
+}
+@media (hover: hover) and (pointer: fine) {
+    .prestige-btn:hover {
+        transform: scale(1.02);
+    }
+}
+
+.prestige-btn:active {
+    background-color: #444444;
+    transform: scale(0.98);
+    transition: background-color 0.05s linear, transform 0.05s ease-out;
+}
+
+/* ========================================
+    通知
+   ======================================== */
+
+.notification-container {
+    position: fixed;
+    top: 72px;
+    right: 16px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(360px, calc(100vw - 24px));
+    pointer-events: none;
+}
+
+.notification-card {
+    background: #151515;
+    border: 1px solid #444;
+    border-left: 4px solid #FFD700;
+    border-radius: 10px;
+    padding: 12px 14px;
+    text-align: left;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+    pointer-events: auto;
+}
+
+.notification-title {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #FFD700;
+    margin-bottom: 4px;
+}
+
+.notification-message {
+    font-size: 0.85em;
+    color: #ddd;
+    line-height: 1.5;
+}
+
+.notification-reward {
+    border-left-color: #FFD700;
+}
+
+.notification-unlock {
+    border-left-color: #4CAF50;
+}
+
+.notification-milestone {
+    border-left-color: #FFB74D;
+}
+
+.notification-enter {
+    animation: notificationSlideIn 0.25s ease;
+}
+
+.notification-exit {
+    animation: notificationFadeOut 0.3s ease forwards;
+}
+
+@keyframes notificationFadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(0) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(24px) translateY(-4px);
+    }
+}
+
+@keyframes notificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px) translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) translateY(0);
+    }
+}
+
+@media (max-width: 1023px) {
+    .notification-container {
+        top: 64px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+    }
+}

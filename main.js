@@ -42,6 +42,9 @@ function gameLoop(now) {
         renderAchievements();
     }
 
+    checkNotifications();
+
+
     if (state.isInChallenge !== -1) {
         checkChallenge();
     }
@@ -60,6 +63,8 @@ function gameLoop(now) {
             autoSaveTimer = 0;
         }
     }
+
+    renderNotifications();
 
     requestAnimationFrame(gameLoop);
 }

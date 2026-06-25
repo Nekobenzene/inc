@@ -146,6 +146,10 @@
                         </div>
                     </div>
                 </div>
+                <!-- 声望按钮 -->
+                <div class="prestige-button-wrapper">
+                    <button class="prestige-btn"></button>
+                </div>
             </div>
 
             <!-- ===== 挑战选项卡内容 ===== -->
@@ -245,12 +249,16 @@
         </div>
     </main>
 
+    <div id="notification-container" class="notification-container"></div>
+
+
     <!-- 脚本加载顺序：底层库 → 配置 → 工具 → 状态 → 逻辑 → UI → 控制器 → 应用 → 入口 -->
     <script src="break_eternity.js"></script>
     <script src="config.js"></script>
     <script src="formatter.js"></script>
     <script src="state.js"></script>
     <script src="gamelogic.js"></script>
+    <script src="notification.js"></script>
     <script src="uirenderer.js"></script>
     <script src="uicontroller.js"></script>
     <script src="main.js"></script>

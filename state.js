@@ -36,6 +36,12 @@ const state = {
 
     batchPurchaseUnlocked: false,
     batchAmount: '1',
+    
+    prestigeUnlocked: false,
+    peakPointsForPrestige: new Decimal(0),
+    
+    notificationHistory: {},
+    notificationQueue: [],
 };
 
 function getAchievementCount(state) {
@@ -133,6 +139,12 @@ function initState() {
 
     state.batchPurchaseUnlocked = false;
     state.batchAmount = '1';
+    
+    state.prestigeUnlocked = false;
+    state.peakPointsForPrestige = new Decimal(0);
+
+    state.notificationHistory = {};
+    state.notificationQueue = [];
 
     checkGeneratorUnlock();
 }
@@ -185,6 +197,11 @@ function serializeState() {
 
         batchPurchaseUnlocked: state.batchPurchaseUnlocked,
         batchAmount: state.batchAmount,
+        
+        prestigeUnlocked: state.prestigeUnlocked,
+        peakPointsForPrestige: state.peakPointsForPrestige,
+        
+        notificationHistory: state.notificationHistory,
     };
 
     return serializeValue(stateToSerialize);
@@ -308,7 +325,7 @@ function deserializeState(data) {
     if (typeof deserialized.challengeUnlocked === 'boolean') {
         state.challengeUnlocked = deserialized.challengeUnlocked;
     } else {
-        const achIndex = ACHIEVEMENTS.findIndex(a => a.id === '114514');
+        const achIndex = ACHIEVEMENTS.findIndex(a => a.id === 'achievement_9');
         state.challengeUnlocked = achIndex !== -1 && !!state.achievements[achIndex];
     }
 
@@ -329,6 +346,12 @@ function deserializeState(data) {
     state.batchAmount = ['1', '5', '10', 'max'].includes(deserialized.batchAmount)
         ? deserialized.batchAmount
         : '1';
+
+    state.prestigeUnlocked = !!deserialized.prestigeUnlocked;
+    state.peakPointsForPrestige = toDecimal(deserialized.peakPointsForPrestige, 0);
+
+    state.notificationHistory = deserialized.notificationHistory || {};
+    state.notificationQueue = []
 
     checkGeneratorUnlock();
 }
