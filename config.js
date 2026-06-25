@@ -361,7 +361,7 @@ const PRESTIGE_CONFIG = {
         const x = peakPointsForPrestige.log(new Decimal(10));
         const y = x.div(new Decimal(100)).max(new Decimal(1));
 
-        return y.log(new Decimal(200)).add(new Decimal(1)).log(new Decimal(200)).add(new Decimal(1)).pow(new Decimal(2));
+        return y.log(new Decimal(1000)).add(new Decimal(1)).log(new Decimal(1000)).add(new Decimal(1)).pow(new Decimal(2));
     }
 };
 
