@@ -110,7 +110,7 @@ const ACHIEVEMENTS = [
         name: '一半',
         description: '达到1.3e154 P',
         check: () => state.points.gte(new Decimal(2).pow(new Decimal(512))),
-        rewardDescription: '解锁声望!(还没写好)',
+        rewardDescription: '解锁声望!',
         reward: (state)  => {
             state.prestigeUnlocked = true;
         }
@@ -319,12 +319,12 @@ const CHALLENGES = [
         id: 'challenge_3',
         name: '通货膨胀',
         limitationDescription: '价格增长^1.5，成就6效果禁用',
-        target: '拥有4级发电机1',
+        target: '拥有10级发电机1',
         reward: (state) => {
             state.challengeReward.cha3 = new Decimal(0.9);
         },
         rewardDescription: '所有发电机价格^0.9',
-        check: (state) => state.generatorUpgrades[0].level.gte(new Decimal(94))
+        check: (state) => state.generatorUpgrades[0].level.gte(new Decimal(10))
     },
     {
         id: 'challenge_4',
@@ -361,7 +361,7 @@ const PRESTIGE_CONFIG = {
         const x = peakPointsForPrestige.log(new Decimal(10));
         const y = x.div(new Decimal(100)).max(new Decimal(1));
 
-        return y.log(new Decimal(1000)).add(new Decimal(1)).log(new Decimal(1000)).add(new Decimal(1)).pow(new Decimal(2));
+        return y.log(new Decimal(200)).add(new Decimal(1)).log(new Decimal(200)).add(new Decimal(1)).pow(new Decimal(2));
     }
 };
 
