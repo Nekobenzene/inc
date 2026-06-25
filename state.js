@@ -22,11 +22,13 @@ const state = {
         ach12: new Decimal(1),
     },
 
-    pointExp: new Decimal(1.05),
+    pointExp: new Decimal(1),
+    pointMult: new Decimal(1),
 
     challengeUnlocked: false,
     challengeReward: {
         cha1: new Decimal(1),
+        cha2: new Decimal(0),
         cha3: new Decimal(1),
         cha4: new Decimal(1),
     },
@@ -39,6 +41,9 @@ const state = {
     
     prestigeUnlocked: false,
     peakPointsForPrestige: new Decimal(0),
+    prestigePointsLimit: new Decimal(2).pow(new Decimal(512)),
+    prestigeMult: new Decimal(1),
+    prestigeExp: new Decimal(1),
     
     notificationHistory: {},
     notificationQueue: [],
@@ -125,11 +130,13 @@ function initState() {
         ach12: new Decimal(1),
     };
 
-    state.pointExp = new Decimal(1.05);
+    state.pointExp = new Decimal(1);
+    state.pointMult = new Decimal(1)
 
     state.challengeUnlocked = false;
     state.challengeReward = {
         cha1: new Decimal(1),
+        cha2: new Decimal(0),
         cha3: new Decimal(1),
         cha4: new Decimal(1),
     };
@@ -142,6 +149,9 @@ function initState() {
     
     state.prestigeUnlocked = false;
     state.peakPointsForPrestige = new Decimal(0);
+    state.prestigePointsLimit = new Decimal(2).pow(new Decimal(512));
+    state.prestigeMult = new Decimal(1);
+    state.prestigeExp = new Decimal(1);
 
     state.notificationHistory = {};
     state.notificationQueue = [];
@@ -187,7 +197,9 @@ function serializeState() {
 
         achievements: state.achievements,
         achReward: state.achReward,
+        
         pointExp: state.pointExp,
+        pointMult: state.pointMult,
 
         challengeUnlocked: state.challengeUnlocked,
         challengeReward: state.challengeReward,
@@ -200,6 +212,9 @@ function serializeState() {
         
         prestigeUnlocked: state.prestigeUnlocked,
         peakPointsForPrestige: state.peakPointsForPrestige,
+        prestigePointsLimit: state.prestigePointsLimit,
+        prestigeMult: state.prestigeMult,
+        prestigeExp: state.prestigeExp,
         
         notificationHistory: state.notificationHistory,
     };
@@ -256,7 +271,8 @@ function deserializeState(data) {
     state.peakPoints = toDecimal(deserialized.peakPoints, 0);
     state.totalQuantityCount = toDecimal(deserialized.totalQuantityCount, 0);
     state.gameStartTime = deserialized.gameStartTime || Date.now();
-    state.pointExp = toDecimal(deserialized.pointExp, 1.05);
+    state.pointExp = toDecimal(deserialized.pointExp, 1);
+    state.pointExp = toDecimal(deserialized.pointExp, 1);
 
     if (Array.isArray(deserialized.generatorUnlocked)) {
         state.generatorUnlocked = deserialized.generatorUnlocked.map(v => !!v);
@@ -311,12 +327,14 @@ function deserializeState(data) {
     if (deserialized.challengeReward && typeof deserialized.challengeReward === 'object') {
         state.challengeReward = {
             cha1: toDecimal(deserialized.challengeReward.cha1, 1),
+            cha2: toDecimal(deserialized.challengeReward.cha2, 0),
             cha3: toDecimal(deserialized.challengeReward.cha3, 1),
             cha4: toDecimal(deserialized.challengeReward.cha4, 1),
         };
     } else {
         state.challengeReward = {
             cha1: new Decimal(1),
+            cha2: new Decimal(0),
             cha3: new Decimal(1),
             cha4: new Decimal(1),
         };
@@ -349,6 +367,11 @@ function deserializeState(data) {
 
     state.prestigeUnlocked = !!deserialized.prestigeUnlocked;
     state.peakPointsForPrestige = toDecimal(deserialized.peakPointsForPrestige, 0);
+    state.prestigePointsLimit = deserialized.prestigePointsLimit
+        ? toDecimal(deserialized.prestigePointsLimit)
+        : new Decimal(2).pow(512);
+    state.prestigeMult = toDecimal(deserialized.prestigeMult, 1);
+    state.prestigeExp = toDecimal(deserialized.prestigeExp, 1);
 
     state.notificationHistory = deserialized.notificationHistory || {};
     state.notificationQueue = []

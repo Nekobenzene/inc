@@ -26,7 +26,6 @@ function performSingleGenerator(index) {
         return 'buy';
     }
 }
-
 function performMultiGenerator(index, amount) {
     let bought = 0;
     const u = state.generatorUpgrades[index];
@@ -44,7 +43,6 @@ function performMultiGenerator(index, amount) {
 
     return bought > 0 ? 'buy' : 'insufficient';
 }
-
 function performMaxGenerator(index) {
     const u = state.generatorUpgrades[index];
     const maxQuantity = u.getMaxQuantity();
@@ -72,7 +70,6 @@ function performMaxGenerator(index) {
 
     return bought > 0 ? 'buy' : 'insufficient';
 }
-
 function performGenerator(index) {
     const mode = state.batchPurchaseUnlocked ? state.batchAmount : '1';
 
@@ -82,6 +79,47 @@ function performGenerator(index) {
     if (mode === 'max') return performMaxGenerator(index);
 
     return 'insufficient';
+}
+
+function canPrestige() {
+    return state.prestigeUnlocked && state.peakPointsForPrestige.gte(state.prestigePointsLimit);
+}
+function getPrestigePreview() {
+    const peak = state.peakPointsForPrestige;
+    return {
+        newMult: PRESTIGE_CONFIG.multGainFn(peak),
+        newExp: PRESTIGE_CONFIG.expGainFn(peak),
+    };
+}
+function resetForPrestige() {
+    state.points = new Decimal(GAME_CONFIG.startingPoints);
+    state.peakPointsForPrestige = new Decimal(0);
+
+    state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => {
+        const g = createGeneratorUpgrade(config, index);
+        return g;
+    });
+
+    checkGeneratorUnlock();
+}
+function performPrestige() {
+    if (!canPrestige()) return false;
+
+    const peak = new Decimal(state.peakPointsForPrestige);
+    const preview = getPrestigePreview();
+
+    // 先记录下一次门槛
+    state.prestigePointsLimit = peak;
+
+    // 再更新声望加成
+    state.prestigeMult = preview.newMult;
+    state.prestigeExp = preview.newExp;
+
+    // 最后重置
+    resetForPrestige();
+
+    renderAll();
+    return true;
 }
 
 function checkAchievements() {

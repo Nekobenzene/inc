@@ -60,12 +60,16 @@ function renderPrestigeButton() {
     const btn = wrapper.querySelector('.prestige-btn');
     if (!btn) return;
 
-    const threshold = new Decimal(2).pow(new Decimal(512));
-    if (state.prestigeUnlocked && state.peakPointsForPrestige.lt(threshold)) {
-        btn.classList.add('locked');
-    } else {
-        btn.classList.remove('locked');
-    }
+    const preview = getPrestigePreview();
+    const can = canPrestige();
+
+    btn.classList.toggle('locked', !can);
+
+    btn.innerHTML = `
+        <div>声望</div>
+        <div style="font-size:0.45em; letter-spacing:0;">乘数:×${formatDecimal(state.prestigeMult)}→×${formatDecimal(preview.newMult)}</div>
+        <div style="font-size:0.45em; letter-spacing:0;">指数:×${formatDecimal(state.prestigeExp)}→×${formatDecimal(preview.newExp)}</div>
+    `;
 }
 
 function renderMainUI() {
@@ -73,16 +77,8 @@ function renderMainUI() {
     dom.rate.textContent = formatDecimal(computeTotalRate());
     dom.navPointsBadge.textContent = `${UI_TEXTS.nav.pointsBadge}${formatDecimal(state.points)}`;
 
-    let formulaText = 'Π(M)';
-    if (state.achReward.ach7.eq(new Decimal(1)) && state.points.gt(new Decimal(2))) {
-        formulaText += '×log₂(P)';
-        if (state.achReward.ach12.neq(new Decimal(1))) {
-            formulaText += `<sup> ${formatDecimal(state. achReward.ach12)}</sup>`;
-        }
-    }
-    if (state.achReward.ach8.eq(new Decimal(1))) {
-        formulaText = '(' + formulaText + ')' + `<sup>${formatDecimal(state.pointExp)}</sup>`;
-    }
+    let formulaText = '(Π(M)×Pm)'+`<sup>Pe</sup>`;
+
     dom.pointsFormula.innerHTML = formulaText;
 
     for (let i = 0; i < state.generatorUpgrades.length; i++) {
@@ -139,7 +135,10 @@ function updateChallengeTabVisibility() {
 
     const visible = state.challengeUnlocked;
 
-    if (!visible) {
+    if (visible) {
+        challengeTab.style.display = '';
+        challengeContent.style.display = '';
+    } else {
         challengeTab.style.display = 'none';
         challengeContent.style.display = 'none';
 

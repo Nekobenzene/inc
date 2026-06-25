@@ -54,7 +54,7 @@ const ACHIEVEMENTS = [
             for (const u of state.generatorUpgrades) s = s.add(u.level);
             return s.gte(9);
         },
-        rewardDescription: '分数微弱加成分数生产(log₂(P))(正加成生效)',
+        rewardDescription: 'Pm乘以(log₂(P))(正加成生效)',
         reward: (state) => {
             state.achReward.ach7 = new Decimal(1);
         },
@@ -64,9 +64,9 @@ const ACHIEVEMENTS = [
         name: '1/8双精度浮点数上限',
         description: '达到3.4e38 P',
         check: () => state.points.gte(new Decimal(2).pow(new Decimal(128))),
-        rewardDescription: '解锁指数(1.05)',
+        rewardDescription: 'Pe增加0.05',
         reward: (state) => {
-            state.achReward.ach8 = new Decimal(1);
+            state.achReward.ach8 = new Decimal(0.05);
         },
     },
     {
@@ -100,7 +100,7 @@ const ACHIEVEMENTS = [
         name: '满分',
         description: '达到e100 P',
         check: () => state.points.gte(new Decimal(1e100)),
-        rewardDescription: '分数对数加成^2.5',
+        rewardDescription: '成就8加成为^2.5更强',
         reward: (state)  => {
             state.achReward.ach12 = new Decimal(2.5)
         }
@@ -227,16 +227,21 @@ const COUNT = GENERATOR_CONFIGS.length;
 
 const GROWTH_CONFIG = {
     computeTotalRate: (state) => {
+        // 发电机
         let r = new Decimal(1);
         for (const u of state.generatorUpgrades) {
             r = r.mul(u.multiple);
         }
-
-        if (state.achReward.ach7.gt(0) && state.points.gt(new Decimal(2))) {
-            r = r.mul((state.points.log(new Decimal(2)).pow(state.achReward.ach12)).pow(state.achReward.ach7));
-        }
-
-        r = r.pow(state.pointExp.pow(state.achReward.ach8));
+        // Pm
+        if (state.points.gt(new Decimal(2))) {
+            state.pointMult = (state.points.log(new Decimal(2)).pow(state.achReward.ach12)).pow(state.achReward.ach7);
+        } else {state.pointMult = new Decimal(1)}
+        state.pointMult = state.pointMult.mul(state.prestigeMult)
+        // Pe
+        state.pointExp = state.achReward.ach8.add(state.challengeReward.cha2).add(new Decimal(1)).mul(state.prestigeExp)
+        // 输出
+        r = r.mul(state.pointMult);
+        r = r.pow(state.pointExp);
         return r;
     },
 
@@ -298,7 +303,7 @@ const CHALLENGES = [
         limitationDescription: '后两个发电机被锁定',
         target: '达到2级发电机2',
         reward: (state) => {
-            state.pointExp = state.pointExp.add(new Decimal(0.05));
+            state.challengeReward.cha2 = state.challengeReward.cha2.add(new Decimal(0.05));
             checkGeneratorUnlock();
         },
         rewardDescription: '指数提升0.05',
@@ -327,6 +332,32 @@ const CHALLENGES = [
         check: (state) => state.generatorUpgrades[1].level.gte(new Decimal(2))
     },
 ];
+
+const PRESTIGE_CONFIG = {
+    baseRequirement: new Decimal(2).pow(512),
+
+    multGainFn: (peakPointsForPrestige) => {
+        if (peakPointsForPrestige.lte(PRESTIGE_CONFIG.baseRequirement)) {
+            return new Decimal(1);
+        }
+
+        const x = peakPointsForPrestige.log10();
+        const y = x.div(154).max(1);
+
+        return y.log10().add(1).pow(1.35);
+    },
+
+    expGainFn: (peakPointsForPrestige) => {
+        if (peakPointsForPrestige.lte(PRESTIGE_CONFIG.baseRequirement)) {
+            return new Decimal(1);
+        }
+
+        const x = peakPointsForPrestige.log10();
+        const y = x.div(154).max(1);
+
+        return y.log10().add(1).log10().mul(0.22).add(1);
+    }
+};
 
 const NOTIFICATIONS = [
     // 成就完成
@@ -469,7 +500,7 @@ const NOTIFICATIONS = [
     {
         id: 'notify_achreward7',
         title: '获得奖励',
-        message: '分数生产有log₂P加成（仅正加成时生效）',
+        message: '以log₂P加成Pm（仅正加成时生效）',
         type: 'reward',
         duration: 2,
         once: true,
@@ -478,7 +509,7 @@ const NOTIFICATIONS = [
     {
         id: 'notify_achreward8',
         title: '获得奖励',
-        message: '分数受到^1.05的指数',
+        message: '指数增加0.05',
         type: 'reward',
         duration: 2,
         once: true,
@@ -559,9 +590,6 @@ const NOTIFICATIONS = [
     },
 
     ];
-
-
-
 
 const STATS_CONFIG = {
     fields: [

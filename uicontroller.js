@@ -154,6 +154,12 @@ function bindEvents() {
         }
     });
 
+    const prestigeBtn = document.querySelector('.prestige-btn');
+    prestigeBtn?.addEventListener('click', () => {
+        if (!canPrestige()) return;
+        performPrestige();
+    });
+
     navigateTo('game');
 
     const devUnlockBtn = document.getElementById('devUnlockBtn');
