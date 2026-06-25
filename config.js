@@ -115,6 +115,12 @@ const ACHIEVEMENTS = [
             state.prestigeUnlocked = true;
         }
     },
+    {
+        id: 'achievement_14',
+        name: '声望还是转生？',
+        description: '执行一次声望',
+        check: () => state.prestigePointsLimit.gt(new Decimal(2).pow(new Decimal(512))),
+    },
 ];
 
 const GAME_CONFIG = {
@@ -334,17 +340,17 @@ const CHALLENGES = [
 ];
 
 const PRESTIGE_CONFIG = {
-    baseRequirement: new Decimal(2).pow(512),
+    baseRequirement: new Decimal(2).pow(new Decimal(512)),
 
     multGainFn: (peakPointsForPrestige) => {
         if (peakPointsForPrestige.lte(PRESTIGE_CONFIG.baseRequirement)) {
             return new Decimal(1);
         }
 
-        const x = peakPointsForPrestige.log10();
-        const y = x.div(154).max(1);
+        const x = peakPointsForPrestige.log(new Decimal(2));
+        const y = x.div(new Decimal(256)).max(new Decimal(1));
 
-        return y.log10().add(1).pow(1.35);
+        return y.add(new Decimal(1)).pow(new Decimal(3));
     },
 
     expGainFn: (peakPointsForPrestige) => {
@@ -352,10 +358,10 @@ const PRESTIGE_CONFIG = {
             return new Decimal(1);
         }
 
-        const x = peakPointsForPrestige.log10();
-        const y = x.div(154).max(1);
+        const x = peakPointsForPrestige.log(new Decimal(10));
+        const y = x.div(new Decimal(100)).max(new Decimal(1));
 
-        return y.log10().add(1).log10().mul(0.22).add(1);
+        return y.log(new Decimal(1000)).add(new Decimal(1)).log(new Decimal(1000)).add(new Decimal(1)).pow(new Decimal(2));
     }
 };
 
@@ -477,6 +483,15 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[12],
+    },
+    {
+        id: 'notify_achievement14',
+        title: '里程碑达成',
+        message: '执行了一次声望',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[13],
     },
     // 成就奖励
     {

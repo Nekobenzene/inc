@@ -59,7 +59,7 @@ function gameLoop(now) {
     if (GAME_CONFIG.autoSaveInterval > 0) {
         autoSaveTimer += delta;
         if (autoSaveTimer >= GAME_CONFIG.autoSaveInterval) {
-            saveGame();
+            // saveGame();
             autoSaveTimer = 0;
         }
     }
