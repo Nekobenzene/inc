@@ -321,9 +321,9 @@ const CHALLENGES = [
         limitationDescription: '价格增长^1.5，成就6效果禁用',
         target: '拥有10级发电机1',
         reward: (state) => {
-            state.challengeReward.cha3 = new Decimal(0.9);
+            state.challengeReward.cha3 = new Decimal(0.95);
         },
-        rewardDescription: '所有发电机价格^0.9',
+        rewardDescription: '所有发电机价格^0.95',
         check: (state) => state.generatorUpgrades[0].level.gte(new Decimal(10))
     },
     {
