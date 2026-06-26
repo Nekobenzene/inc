@@ -121,6 +121,12 @@ const ACHIEVEMENTS = [
         description: '执行一次声望',
         check: () => state.prestigePointsLimit.gt(new Decimal(2).pow(new Decimal(512))),
     },
+    {
+        id: 'achievement_15',
+        name: '无限',
+        description: '拥有1.79e308 P',
+        check: () => state.Points.gte(new Decimal(2).pow(new Decimal(1024))),
+    },
 ];
 
 const GAME_CONFIG = {
@@ -132,7 +138,7 @@ const GAME_CONFIG = {
 };
 
 const NAV_PAGES = [
-    { id: 'game', label: '游戏' },
+    { id: 'game', label: '生产' },
     { id: 'achievements', label: '成就' },
     { id: 'stats', label: '统计' },
     { id: 'settings', label: '设置' },
@@ -350,7 +356,7 @@ const PRESTIGE_CONFIG = {
         const x = peakPointsForPrestige.log(new Decimal(2));
         const y = x.div(new Decimal(256)).max(new Decimal(1));
 
-        return y.add(new Decimal(1)).pow(new Decimal(3));
+        return y.add(new Decimal(1)).pow(new Decimal(5));
     },
 
     expGainFn: (peakPointsForPrestige) => {
@@ -361,7 +367,7 @@ const PRESTIGE_CONFIG = {
         const x = peakPointsForPrestige.log(new Decimal(10));
         const y = x.div(new Decimal(100)).max(new Decimal(1));
 
-        return y.log(new Decimal(1000)).add(new Decimal(1)).log(new Decimal(1000)).add(new Decimal(1)).pow(new Decimal(2));
+        return y.log(new Decimal(1000)).add(new Decimal(1)).log(new Decimal(1000)).add(new Decimal(1)).pow(new Decimal(3));
     }
 };
 
@@ -492,6 +498,15 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[13],
+    },
+    {
+        id: 'notify_achievement15',
+        title: '里程碑达成',
+        message: '拥有2^1024(1.79e308 P)',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[14],
     },
     // 成就奖励
     {
