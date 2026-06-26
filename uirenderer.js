@@ -102,10 +102,10 @@ function renderMainUI() {
 
         if (u.unlocked) {
             ref.box.style.display = '';
-            const cost = u.getCost();
             const maxQuantity = u.getMaxQuantity();
-            const isMaxed = u.quantity.gte(maxQuantity);
-            const canAfford = state.points.gte(cost);
+            const preview = getGeneratorPurchasePreview(i);
+            const isMaxed = preview.action === 'upgrade';
+            const canAfford = preview.canAfford;
 
             ref.quantitySpan.textContent = `${UI_TEXTS.generatorUpgrades.quantity}${formatDecimal(u.quantity)}${UI_TEXTS.generatorUpgrades.maxQuantity}${formatDecimal(maxQuantity)}`;
             ref.levelSpan.textContent = `${UI_TEXTS.generatorUpgrades.level}${formatDecimal(u.level)}`;
@@ -119,7 +119,10 @@ function renderMainUI() {
             } else {
                 ref.btn.classList.remove('upgrade-mode');
                 ref.labelSpan.textContent = UI_TEXTS.generatorUpgrades.buyLabel;
-                ref.costSpan.textContent = `${UI_TEXTS.generatorUpgrades.cost}${formatDecimal(cost)}`;
+
+                const displayCost = preview.displayCost ?? new Decimal('0');
+                ref.costSpan.textContent = `${UI_TEXTS.generatorUpgrades.cost}${formatDecimal(displayCost)}`;
+
                 ref.btn.classList.toggle('locked', !canAfford);
             }
         } else {

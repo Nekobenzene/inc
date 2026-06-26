@@ -8,6 +8,94 @@ function applyGrowth(deltaSeconds) {
     GROWTH_CONFIG.applyGrowth(state, deltaSeconds);
 }
 
+
+function getGeneratorPurchasePreview(index) {
+    const u = state.generatorUpgrades[index];
+    const mode = state.batchPurchaseUnlocked ? state.batchAmount : '1';
+    const maxQuantity = u.getMaxQuantity();
+
+    // 已满数量，下一次操作是“升级”
+    if (u.quantity.gte(maxQuantity)) {
+        return {
+            action: 'upgrade',
+            displayCost: null,
+            canAfford: true,
+            buyCount: 0,
+        };
+    }
+
+    // 单买
+    if (mode === '1') {
+        const cost = u.getCost();
+        return {
+            action: 'buy',
+            displayCost: cost,
+            canAfford: state.points.gte(cost),
+            buyCount: state.points.gte(cost) ? 1 : 0,
+        };
+    }
+
+    // 批量 5 / 10
+    if (mode === '5' || mode === '10') {
+        const targetAmount = Number(mode);
+        let tempQuantity = new Decimal(u.quantity);
+        let totalCost = new Decimal('0');
+        let buyCount = 0;
+
+        for (let i = 0; i < targetAmount; i++) {
+            if (tempQuantity.gte(maxQuantity)) break;
+
+            const cost = u.config.costFn(tempQuantity, u.level);
+
+            totalCost = totalCost.add(cost);
+            tempQuantity = tempQuantity.add(1);
+            buyCount++;
+        }
+
+        return {
+            action: 'buy',
+            displayCost: totalCost,
+            // 必须能支付“本次批量实际总价”才可用
+            canAfford: buyCount > 0 && state.points.gte(totalCost),
+            buyCount,
+        };
+    }
+
+    // 最大购买
+    if (mode === 'max') {
+        let tempQuantity = new Decimal(u.quantity);
+        let tempPoints = new Decimal(state.points);
+        let totalCost = new Decimal('0');
+        let buyCount = 0;
+
+        while (true) {
+            const currentMaxQuantity = u.config.maxQuantityFn(u.level);
+            if (tempQuantity.gte(currentMaxQuantity)) break;
+
+            const cost = u.config.costFn(tempQuantity, u.level);
+            if (tempPoints.lt(cost)) break;
+
+            tempPoints = tempPoints.sub(cost);
+            totalCost = totalCost.add(cost);
+            tempQuantity = tempQuantity.add(1);
+            buyCount++;
+        }
+
+        return {
+            action: 'buy',
+            displayCost: totalCost,
+            canAfford: buyCount > 0,
+            buyCount,
+        };
+    }
+
+    return {
+        action: 'buy',
+        displayCost: u.getCost(),
+        canAfford: state.points.gte(u.getCost()),
+        buyCount: 0,
+    };
+}
 function performSingleGenerator(index) {
     const u = state.generatorUpgrades[index];
     const maxQuantity = u.getMaxQuantity();
