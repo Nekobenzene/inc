@@ -13,16 +13,16 @@ function performSingleGenerator(index) {
     const maxQuantity = u.getMaxQuantity();
 
     if (u.quantity.gte(maxQuantity)) {
-        u.level = u.level.add(1);
-        u.quantity = new Decimal(0);
-        u.multiple = new Decimal(1);
+        u.level = u.level.add(new Decimal('1'));
+        u.quantity = new Decimal('0');
+        u.multiple = new Decimal('1');
         return 'upgrade';
     } else {
         const cost = u.getCost();
         if (state.points.lt(cost)) return 'insufficient';
         state.points = state.points.sub(cost);
         u.quantity = u.quantity.add(1);
-        state.totalQuantityCount = state.totalQuantityCount.add(1);
+        state.totalQuantityCount = state.totalQuantityCount.add(new Decimal('1'));
         return 'buy';
     }
 }
@@ -49,9 +49,9 @@ function performMaxGenerator(index) {
     let bought = 0;
 
     if (u.quantity.gte(maxQuantity)) {
-        u.level = u.level.add(1);
-        u.quantity = new Decimal(0);
-        u.multiple = new Decimal(1);
+        u.level = u.level.add(new Decimal('1'));
+        u.quantity = new Decimal('0');
+        u.multiple = new Decimal('1');
         return 'upgrade';
     }
 
@@ -93,7 +93,7 @@ function getPrestigePreview() {
 }
 function resetForPrestige() {
     state.points = new Decimal(GAME_CONFIG.startingPoints);
-    state.peakPointsForPrestige = new Decimal(0);
+    state.peakPointsForPrestige = new Decimal('0');
 
     state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => {
         const g = createGeneratorUpgrade(config, index);
@@ -145,7 +145,7 @@ function checkAchievements() {
 }
 
 function getStats() {
-    let totalLevel = new Decimal(0);
+    let totalLevel = new Decimal('0');
     for (const u of state.generatorUpgrades) totalLevel = totalLevel.add(u.level);
 
     return {

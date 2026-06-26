@@ -1,13 +1,13 @@
 // state.js — 游戏状态、存档、重置、挑战重置
 
 const state = {
-    speed: new Decimal(1),
-    developerSpeeduper: new Decimal(1),
+    speed: new Decimal('1'),
+    developerSpeeduper: new Decimal('1'),
     points: new Decimal(GAME_CONFIG.startingPoints),
     totalPointsEarned: new Decimal(GAME_CONFIG.startingPoints),
-    totalClicks: new Decimal(0),
+    totalClicks: new Decimal('0'),
     peakPoints: new Decimal(GAME_CONFIG.startingPoints),
-    totalQuantityCount: new Decimal(0),
+    totalQuantityCount: new Decimal('0'),
     gameStartTime: Date.now(),
 
     generatorUpgrades: [],
@@ -15,22 +15,22 @@ const state = {
 
     achievements: [],
     achReward: {
-        ach3: new Decimal(1),
-        ach6: new Decimal(1),
-        ach7: new Decimal(0),
-        ach8: new Decimal(0),
-        ach12: new Decimal(1),
+        ach3: new Decimal('1'),
+        ach6: new Decimal('1'),
+        ach7: new Decimal('0'),
+        ach8: new Decimal('0'),
+        ach12: new Decimal('1'),
     },
 
-    pointExp: new Decimal(1),
-    pointMult: new Decimal(1),
+    pointExp: new Decimal('1'),
+    pointMult: new Decimal('1'),
 
     challengeUnlocked: false,
     challengeReward: {
-        cha1: new Decimal(1),
-        cha2: new Decimal(0),
-        cha3: new Decimal(1),
-        cha4: new Decimal(1),
+        cha1: new Decimal('1'),
+        cha2: new Decimal('0'),
+        cha3: new Decimal('1'),
+        cha4: new Decimal('1'),
     },
     challengeSpendTime: [],
     isInChallenge: -1,
@@ -40,10 +40,10 @@ const state = {
     batchAmount: '1',
     
     prestigeUnlocked: false,
-    peakPointsForPrestige: new Decimal(0),
-    prestigePointsLimit: new Decimal(2).pow(new Decimal(512)),
-    prestigeMult: new Decimal(1),
-    prestigeExp: new Decimal(1),
+    peakPointsForPrestige: new Decimal('0'),
+    prestigePointsLimit: new Decimal('2').pow(new Decimal('512')),
+    prestigeMult: new Decimal('1'),
+    prestigeExp: new Decimal('1'),
     
     notificationHistory: {},
     notificationQueue: [],
@@ -65,7 +65,7 @@ function createGeneratorUpgrade(config, index) {
         multiple: new Decimal(config.initial.multiple),
         config: config,
         unlocked: false,
-        unlockThreshold: config.costFn(new Decimal(0), new Decimal(0)).div(10),
+        unlockThreshold: config.costFn(new Decimal('0'), new Decimal('0')).div(new Decimal('10')),
         getCost() {
             return this.config.costFn(this.quantity, this.level);
         },
@@ -109,13 +109,13 @@ function checkGeneratorUnlock() {
 }
 
 function initState() {
-    state.speed = new Decimal(1);
-    state.developerSpeeduper = new Decimal(1);
+    state.speed = new Decimal('1');
+    state.developerSpeeduper = new Decimal('1');
     state.points = new Decimal(GAME_CONFIG.startingPoints);
     state.totalPointsEarned = new Decimal(GAME_CONFIG.startingPoints);
-    state.totalClicks = new Decimal(0);
+    state.totalClicks = new Decimal('0');
     state.peakPoints = new Decimal(GAME_CONFIG.startingPoints);
-    state.totalQuantityCount = new Decimal(0);
+    state.totalQuantityCount = new Decimal('0');
     state.gameStartTime = Date.now();
 
     state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => createGeneratorUpgrade(config, index));
@@ -123,24 +123,24 @@ function initState() {
 
     state.achievements = ACHIEVEMENTS.map(() => false);
     state.achReward = {
-        ach3: new Decimal(1),
-        ach6: new Decimal(1),
-        ach7: new Decimal(0),
-        ach8: new Decimal(0),
-        ach12: new Decimal(1),
+        ach3: new Decimal('1'),
+        ach6: new Decimal('1'),
+        ach7: new Decimal('0'),
+        ach8: new Decimal('0'),
+        ach12: new Decimal('1'),
     };
 
-    state.pointExp = new Decimal(1);
-    state.pointMult = new Decimal(1)
+    state.pointExp = new Decimal('1');
+    state.pointMult = new Decimal('1')
 
     state.challengeUnlocked = false;
     state.challengeReward = {
-        cha1: new Decimal(1),
-        cha2: new Decimal(0),
-        cha3: new Decimal(1),
-        cha4: new Decimal(1),
+        cha1: new Decimal('1'),
+        cha2: new Decimal('0'),
+        cha3: new Decimal('1'),
+        cha4: new Decimal('1'),
     };
-    state.challengeSpendTime = CHALLENGES.map(() => new Decimal(-1));
+    state.challengeSpendTime = CHALLENGES.map(() => new Decimal('-1'));
     state.isInChallenge = -1;
     state.challengeStartTime = 0;
 
@@ -148,10 +148,10 @@ function initState() {
     state.batchAmount = '1';
     
     state.prestigeUnlocked = false;
-    state.peakPointsForPrestige = new Decimal(0);
-    state.prestigePointsLimit = new Decimal(2).pow(new Decimal(512));
-    state.prestigeMult = new Decimal(1);
-    state.prestigeExp = new Decimal(1);
+    state.peakPointsForPrestige = new Decimal('0');
+    state.prestigePointsLimit = new Decimal('2').pow(new Decimal('512'));
+    state.prestigeMult = new Decimal('1');
+    state.prestigeExp = new Decimal('1');
 
     state.notificationHistory = {};
     state.notificationQueue = [];
@@ -404,7 +404,7 @@ function resetGame() {
 
 function resetForChallenge() {
     state.points = new Decimal(GAME_CONFIG.startingPoints);
-    state.totalQuantityCount = new Decimal(0);
+    state.totalQuantityCount = new Decimal('0');
 
     state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => createGeneratorUpgrade(config, index));
 

@@ -5,44 +5,44 @@ const ACHIEVEMENTS = [
         id: 'achievement_1',
         name: '第一步',
         description: '购入发电机1',
-        check: () => state.generatorUpgrades[0].quantity.gte(1),
+        check: () => state.generatorUpgrades[0].quantity.gte(new Decimal('1')),
     },
     {
         id: 'achievement_2',
         name: '二龙戏珠',
         description: '购入发电机2',
-        check: () => state.generatorUpgrades[1].quantity.gte(1),
+        check: () => state.generatorUpgrades[1].quantity.gte(new Decimal('1')),
     },
     {
         id: 'achievement_3',
         name: '我重生了?',
         description: '升级发电机1',
-        check: () => state.generatorUpgrades[0].level.gte(1),
+        check: () => state.generatorUpgrades[0].level.gte(new Decimal('1')),
         rewardDescription: '发电机1效率×2',
         reward: (state) => {
-            state.achReward.ach3 = new Decimal(2);
+            state.achReward.ach3 = new Decimal('2');
         },
     },
     {
         id: 'achievement_4',
         name: '百万富翁',
         description: '累计获得 1,000,000 点 P',
-        check: () => state.totalPointsEarned.gte(1e6),
+        check: () => state.totalPointsEarned.gte(new Decimal('1e6')),
     },
     {
         id: 'achievement_5',
         name: '三阳开泰',
         description: '购入发电机3',
-        check: () => state.generatorUpgrades[2].quantity.gte(1),
+        check: () => state.generatorUpgrades[2].quantity.gte(new Decimal('1')),
     },
     {
         id: 'achievement_6',
         name: '没有更多了',
         description: '购入发电机4',
         rewardDescription: '发电机购入增长减缓(^0.9)',
-        check: () => state.generatorUpgrades[3].quantity.gte(1),
+        check: () => state.generatorUpgrades[3].quantity.gte(new Decimal('1')),
         reward: (state) => {
-            state.achReward.ach6 = new Decimal(0.9);
+            state.achReward.ach6 = new Decimal('0.9');
         },
     },
     {
@@ -50,30 +50,30 @@ const ACHIEVEMENTS = [
         name: '中式祝福',
         description: '达发电机共9级',
         check: () => {
-            let s = new Decimal(0);
+            let s = new Decimal('0');
             for (const u of state.generatorUpgrades) s = s.add(u.level);
-            return s.gte(9);
+            return s.gte(new Decimal('9'));
         },
         rewardDescription: 'Pm乘以(log₂(P))(正加成生效)',
         reward: (state) => {
-            state.achReward.ach7 = new Decimal(1);
+            state.achReward.ach7 = new Decimal('1');
         },
     },
     {
         id: 'achievement_8',
         name: '1/8双精度浮点数上限',
         description: '达到3.4e38 P',
-        check: () => state.points.gte(new Decimal(2).pow(new Decimal(128))),
+        check: () => state.points.gte(new Decimal('2').pow(new Decimal('128'))),
         rewardDescription: 'Pe增加0.05',
         reward: (state) => {
-            state.achReward.ach8 = new Decimal(0.05);
+            state.achReward.ach8 = new Decimal('0.05');
         },
     },
     {
         id: 'achievement_9',
         name: '1e45.14',
         description: '达到1.38e45 P',
-        check: () => state.points.gte(new Decimal(10).pow(new Decimal(45.14))),
+        check: () => state.points.gte(new Decimal('10').pow(new Decimal('45.14'))),
         rewardDescription: '解锁挑战!',
         reward: (state) => {
             state.challengeUnlocked = true;
@@ -93,23 +93,23 @@ const ACHIEVEMENTS = [
         id: 'achievement_11',
         name: '现在是1/4',
         description: '达到1.2e77 P',
-        check: () => state.points.gte(new Decimal(2).pow(new Decimal(256))),
+        check: () => state.points.gte(new Decimal('2').pow(new Decimal('256'))),
     },
     {
         id: 'achievement_12',
         name: '满分',
         description: '达到e100 P',
-        check: () => state.points.gte(new Decimal(1e100)),
+        check: () => state.points.gte(new Decimal('1e100')),
         rewardDescription: '成就8加成为^2.5更强',
         reward: (state)  => {
-            state.achReward.ach12 = new Decimal(2.5)
+            state.achReward.ach12 = new Decimal('2.5')
         }
     },
     {
         id: 'achievement_13',
         name: '一半',
         description: '达到1.3e154 P',
-        check: () => state.points.gte(new Decimal(2).pow(new Decimal(512))),
+        check: () => state.points.gte(new Decimal('2').pow(new Decimal('512'))),
         rewardDescription: '解锁声望!',
         reward: (state)  => {
             state.prestigeUnlocked = true;
@@ -119,13 +119,13 @@ const ACHIEVEMENTS = [
         id: 'achievement_14',
         name: '声望还是转生？',
         description: '执行一次声望',
-        check: () => state.prestigePointsLimit.gt(new Decimal(2).pow(new Decimal(512))),
+        check: () => state.prestigePointsLimit.gt(new Decimal('2').pow(new Decimal('512'))),
     },
     {
         id: 'achievement_15',
         name: '无限',
         description: '拥有1.79e308 P',
-        check: () => state.Points.gte(new Decimal(2).pow(new Decimal(1024))),
+        check: () => state.points.gte(new Decimal('2').pow(new Decimal('1024'))),
     },
 ];
 
@@ -147,91 +147,91 @@ const NAV_PAGES = [
 const GENERATOR_CONFIGS = [
     {
         costFn: (quantity, level) => {
-            let costInc = new Decimal(2)
+            let costInc = new Decimal('2')
             if (state.isInChallenge === 2) {
-                costInc = costInc.pow(new Decimal(1.5))
+                costInc = costInc.pow(new Decimal('1.5'))
             } else {
                 costInc = costInc.pow(state.achReward.ach6);
             };
-            const cost = new Decimal(10).mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(4)))).pow(state.challengeReward.cha3)
+            const cost = new Decimal('10').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha3)
             return cost
         },
-        maxQuantityFn: (level) => new Decimal(level).add(1).mul(10),
+        maxQuantityFn: (level) => new Decimal(level).add(new Decimal('1')).mul(new Decimal('10')),
         rateFn: (quantity, level) => {
-            const base = new Decimal(quantity).mul(new Decimal(1.01).pow(quantity)).mul(new Decimal(5).pow(level)).mul(state.achReward.ach3);
+            const base = new Decimal(quantity).mul(new Decimal('1.01').pow(quantity)).mul(new Decimal('5').pow(level)).mul(state.achReward.ach3);
             if (state.isInChallenge === 3) {
-                return base.pow(new Decimal(0.3));
+                return base.pow(new Decimal('0.3'));
             } else {
                 return base.pow(state.challengeReward.cha4);
             }
         },
-        initial: { quantity: 0, level: 0, multiple: 1 }
+        initial: { quantity: new Decimal('0'), level: new Decimal('1'), multiple: new Decimal('1') }
     },
     {
         costFn: (quantity, level) => {
-            let costInc = new Decimal(4)
+            let costInc = new Decimal('4')
             if (state.isInChallenge === 2) {
-                costInc = costInc.pow(new Decimal(1.5))
+                costInc = costInc.pow(new Decimal('1.5'))
             } else {
                 costInc = costInc.pow(state.achReward.ach6);
             };
-            const cost = new Decimal(1000).mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(4)))).pow(state.challengeReward.cha3)
+            const cost = new Decimal('1000').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha3)
             return cost
         },
-        maxQuantityFn: (level) => new Decimal(level).add(1).mul(15),
+        maxQuantityFn: (level) => new Decimal(level).add(new Decimal('1')).mul(new Decimal('15')),
         rateFn: (quantity, level) => {
-            const base = new Decimal(quantity).mul(new Decimal(1.15).pow(quantity)).mul(new Decimal(8).pow(level)).mul(state.achReward.ach3);
+            const base = new Decimal(quantity).mul(new Decimal('1.15').pow(quantity)).mul(new Decimal('8').pow(level)).mul(state.achReward.ach3);
             if (state.isInChallenge === 3) {
-                return base.pow(new Decimal(0.3));
+                return base.pow(new Decimal('0.3'));
             } else {
                 return base.pow(state.challengeReward.cha4);
             }
         },
-        initial: { quantity: 0, level: 0, multiple: 1 }
+        initial: { quantity: new Decimal('0'), level: new Decimal('0'), multiple: new Decimal('1')}
     },
     {
         costFn: (quantity, level) => {
-            let costInc = new Decimal(8)
+            let costInc = new Decimal('8')
             if (state.isInChallenge === 2) {
-                costInc = costInc.pow(new Decimal(1.5))
+                costInc = costInc.pow(new Decimal('1.5'))
             } else {
                 costInc = costInc.pow(state.achReward.ach6);
             };
-            const cost = new Decimal(1e7).mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(4)))).pow(state.challengeReward.cha3)
+            const cost = new Decimal('1e7').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha3)
             return cost
         },
-        maxQuantityFn: (level) => new Decimal(level).add(1).mul(20),
+        maxQuantityFn: (level) => new Decimal(level).add(new Decimal('1')).mul(new Decimal('20')),
         rateFn: (quantity, level) => {
-            const base = new Decimal(quantity).mul(new Decimal(1.28).pow(quantity)).mul(new Decimal(15).pow(level)).mul(state.achReward.ach3);
+            const base = new Decimal(quantity).mul(new Decimal('1.28').pow(quantity)).mul(new Decimal('15').pow(level)).mul(state.achReward.ach3);
             if (state.isInChallenge === 3) {
-                return base.pow(new Decimal(0.3));
+                return base.pow(new Decimal('0.3'));
             } else {
                 return base.pow(state.challengeReward.cha4);
             }
         },
-        initial: { quantity: 0, level: 0, multiple: 1 }
+        initial: { quantity: new Decimal('0'), level: new Decimal('0'), multiple: new Decimal('1')}
     },
     {
         costFn: (quantity, level) => {
-            let costInc = new Decimal(15)
+            let costInc = new Decimal('15')
             if (state.isInChallenge === 2) {
-                costInc = costInc.pow(new Decimal(1.5))
+                costInc = costInc.pow(new Decimal('1.5'))
             } else {
                 costInc = costInc.pow(state.achReward.ach6);
             };
-            const cost = new Decimal(1e13).mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(4)))).pow(state.challengeReward.cha3)
+            const cost = new Decimal('1e13').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha3)
             return cost
         },
-        maxQuantityFn: (level) => new Decimal(level).add(1).mul(30),
+        maxQuantityFn: (level) => new Decimal(level).add(new Decimal('1')).mul(new Decimal('30')),
         rateFn: (quantity, level) => {
-            const base = new Decimal(quantity).mul(new Decimal(1.35).pow(quantity)).mul(new Decimal(25).pow(level)).mul(state.achReward.ach3);
+            const base = new Decimal(quantity).mul(new Decimal('1.35').pow(quantity)).mul(new Decimal('25').pow(level)).mul(state.achReward.ach3);
             if (state.isInChallenge === 3) {
-                return base.pow(new Decimal(0.3));
+                return base.pow(new Decimal('0.3'));
             } else {
                 return base.pow(state.challengeReward.cha4);
             }
         },
-        initial: { quantity: 0, level: 0, multiple: 1 }
+        initial: { quantity: new Decimal('0'), level: new Decimal('0'), multiple: new Decimal('1')}
     }
 ];
 
@@ -240,17 +240,17 @@ const COUNT = GENERATOR_CONFIGS.length;
 const GROWTH_CONFIG = {
     computeTotalRate: (state) => {
         // 发电机
-        let r = new Decimal(1);
+        let r = new Decimal('1');
         for (const u of state.generatorUpgrades) {
             r = r.mul(u.multiple);
         }
         // Pm
-        if (state.points.gt(new Decimal(2))) {
-            state.pointMult = (state.points.log(new Decimal(2)).pow(state.achReward.ach12)).pow(state.achReward.ach7);
-        } else {state.pointMult = new Decimal(1)}
+        if (state.points.gt(new Decimal('2'))) {
+            state.pointMult = (state.points.log(new Decimal('2')).pow(state.achReward.ach12)).pow(state.achReward.ach7);
+        } else {state.pointMult = new Decimal('1')}
         state.pointMult = state.pointMult.mul(state.prestigeMult)
         // Pe
-        state.pointExp = state.achReward.ach8.add(state.challengeReward.cha2).add(new Decimal(1)).mul(state.prestigeExp)
+        state.pointExp = state.achReward.ach8.add(state.challengeReward.cha2).add(new Decimal('1')).mul(state.prestigeExp)
         // 输出
         r = r.mul(state.pointMult);
         r = r.pow(state.pointExp);
@@ -263,10 +263,10 @@ const GROWTH_CONFIG = {
 
         if (state.isInChallenge === 0) {
             speed = state.speed.mul(
-                new Decimal(0.97).pow(
+                new Decimal('0.97').pow(
                     new Decimal(Date.now())
                         .sub(new Decimal(state.challengeStartTime))
-                        .mul(new Decimal(0.001))
+                        .mul(new Decimal('0.001'))
                         .mul(state.developerSpeeduper)
                 )
             );
@@ -277,7 +277,7 @@ const GROWTH_CONFIG = {
         for (const u of state.generatorUpgrades) {
             const increment = u.getRate().mul(deltaSeconds).mul(speed).mul(state.developerSpeeduper);
             u.multiple = u.multiple.add(increment);
-            if (u.multiple.lt(0)) u.multiple = new Decimal(0);
+            if (u.multiple.lt(new Decimal('0'))) u.multiple = new Decimal('0');
         }
 
         const rate = GROWTH_CONFIG.computeTotalRate(state);
@@ -304,10 +304,10 @@ const CHALLENGES = [
         limitationDescription: '游戏速度每秒降低3%',
         target: '达到 1e8 P',
         reward: (state) => {
-            state.challengeReward.cha1 = new Decimal(5);
+            state.challengeReward.cha1 = new Decimal('5');
         },
         rewardDescription: '游戏加速 ×5',
-        check: (state) => state.points.gte(new Decimal(1e8))
+        check: (state) => state.points.gte(new Decimal('1e8'))
     },
     {
         id: 'challenge_2',
@@ -315,11 +315,11 @@ const CHALLENGES = [
         limitationDescription: '后两个发电机被锁定',
         target: '达到2级发电机2',
         reward: (state) => {
-            state.challengeReward.cha2 = state.challengeReward.cha2.add(new Decimal(0.05));
+            state.challengeReward.cha2 = state.challengeReward.cha2.add(new Decimal('0.05'));
             checkGeneratorUnlock();
         },
         rewardDescription: '指数提升0.05',
-        check: (state) => state.generatorUpgrades[1].level.gte(new Decimal(2))
+        check: (state) => state.generatorUpgrades[1].level.gte(new Decimal('2'))
     },
     {
         id: 'challenge_3',
@@ -327,10 +327,10 @@ const CHALLENGES = [
         limitationDescription: '价格增长^1.5，成就6效果禁用',
         target: '拥有10级发电机1',
         reward: (state) => {
-            state.challengeReward.cha3 = new Decimal(0.95);
+            state.challengeReward.cha3 = new Decimal('0.95');
         },
         rewardDescription: '所有发电机价格^0.95',
-        check: (state) => state.generatorUpgrades[0].level.gte(new Decimal(10))
+        check: (state) => state.generatorUpgrades[0].level.gte(new Decimal('10'))
     },
     {
         id: 'challenge_4',
@@ -338,36 +338,36 @@ const CHALLENGES = [
         limitationDescription: '发电机效率变为^0.3',
         target: '拥有2级发电机2',
         reward: (state) => {
-            state.challengeReward.cha4 = new Decimal(1.1);
+            state.challengeReward.cha4 = new Decimal('1.1');
         },
         rewardDescription: '所有发电机效率^1.1',
-        check: (state) => state.generatorUpgrades[1].level.gte(new Decimal(2))
+        check: (state) => state.generatorUpgrades[1].level.gte(new Decimal('2'))
     },
 ];
 
 const PRESTIGE_CONFIG = {
-    baseRequirement: new Decimal(2).pow(new Decimal(512)),
+    baseRequirement: new Decimal('2').pow(new Decimal('512')),
 
     multGainFn: (peakPointsForPrestige) => {
         if (peakPointsForPrestige.lte(PRESTIGE_CONFIG.baseRequirement)) {
-            return new Decimal(1);
+            return new Decimal('1');
         }
 
-        const x = peakPointsForPrestige.log(new Decimal(2));
-        const y = x.div(new Decimal(256)).max(new Decimal(1));
+        const x = peakPointsForPrestige.log(new Decimal('2'));
+        const y = x.div(new Decimal('256')).max(new Decimal('1'));
 
-        return y.add(new Decimal(1)).pow(new Decimal(5));
+        return y.add(new Decimal('1')).pow(new Decimal('5'));
     },
 
     expGainFn: (peakPointsForPrestige) => {
         if (peakPointsForPrestige.lte(PRESTIGE_CONFIG.baseRequirement)) {
-            return new Decimal(1);
+            return new Decimal('1');
         }
 
-        const x = peakPointsForPrestige.log(new Decimal(10));
-        const y = x.div(new Decimal(100)).max(new Decimal(1));
+        const x = peakPointsForPrestige.log(new Decimal('10'));
+        const y = x.div(new Decimal('100')).max(new Decimal('1'));
 
-        return y.log(new Decimal(1000)).add(new Decimal(1)).log(new Decimal(1000)).add(new Decimal(1)).pow(new Decimal(3));
+        return y.log(new Decimal('1000')).add(new Decimal('1')).log(new Decimal('1000')).add(new Decimal('1')).pow(new Decimal('3'));
     }
 };
 
@@ -516,7 +516,7 @@ const NOTIFICATIONS = [
         type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achReward.ach3.eq(new Decimal(2)),
+        condition: (state) => state.achReward.ach3.eq(new Decimal('2')),
     },
     {
         id: 'notify_achreward6',
@@ -525,7 +525,7 @@ const NOTIFICATIONS = [
         type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achReward.ach6.eq(new Decimal(0.9)),
+        condition: (state) => state.achReward.ach6.eq(new Decimal('0.9')),
     },
     {
         id: 'notify_achreward7',
@@ -534,7 +534,7 @@ const NOTIFICATIONS = [
         type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achReward.ach7.eq(new Decimal(1)),
+        condition: (state) => state.achReward.ach7.eq(new Decimal('1')),
     },
     {
         id: 'notify_achreward8',
@@ -543,7 +543,7 @@ const NOTIFICATIONS = [
         type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achReward.ach8.eq(new Decimal(1)),
+        condition: (state) => state.achReward.ach8.eq(new Decimal('1')),
     },
     {
         id: 'notify_achreward12',
@@ -552,7 +552,7 @@ const NOTIFICATIONS = [
         type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achReward.ach12.eq(new Decimal(2.5)),
+        condition: (state) => state.achReward.ach12.eq(new Decimal('2.5')),
     },
     // 内容解锁
     {
