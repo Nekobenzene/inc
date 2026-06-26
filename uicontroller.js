@@ -62,6 +62,14 @@ function exitChallenge(index) {
                 challenge.reward(state);
             }
         }
+
+        notificationManager.push({
+            id: `challenge_complete_${index}_${Date.now()}`,
+            title: '挑战完成',
+            message: `你完成了挑战：${challenge.name}`,
+            type: 'milestone',
+            duration: 2,
+        });
     }
 
     state.isInChallenge = -1;

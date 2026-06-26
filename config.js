@@ -508,6 +508,43 @@ const NOTIFICATIONS = [
         once: true,
         condition: (state) => state.achievements[14],
     },
+    // 挑战奖励
+    {
+        id: 'notify_challenge1',
+        title: '挑战成功',
+        message: '拥有2^1024(1.79e308 P)',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[14],
+    },
+    {
+        id: 'notify_achievement15',
+        title: '里程碑达成',
+        message: '拥有2^1024(1.79e308 P)',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[14],
+    },
+    {
+        id: 'notify_achievement15',
+        title: '里程碑达成',
+        message: '拥有2^1024(1.79e308 P)',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[14],
+    },
+    {
+        id: 'notify_achievement15',
+        title: '里程碑达成',
+        message: '拥有2^1024(1.79e308 P)',
+        type: 'milestone',
+        duration: 2,
+        once: true,
+        condition: (state) => state.achievements[14],
+    },
     // 成就奖励
     {
         id: 'notify_achreward3',
