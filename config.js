@@ -165,7 +165,7 @@ const GENERATOR_CONFIGS = [
                 return base.pow(state.challengeReward.cha4);
             }
         },
-        initial: { quantity: new Decimal('0'), level: new Decimal('1'), multiple: new Decimal('1') }
+        initial: { quantity: new Decimal('0'), level: new Decimal('0'), multiple: new Decimal('1') }
     },
     {
         costFn: (quantity, level) => {
@@ -512,38 +512,38 @@ const NOTIFICATIONS = [
     {
         id: 'notify_challenge1',
         title: '挑战成功',
-        message: '拥有2^1024(1.79e308 P)',
-        type: 'milestone',
+        message: '游戏速度×5',
+        type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achievements[14],
+        condition: (state) => state.challengeReward.cha1.eq(new Decimal('5')),
     },
     {
-        id: 'notify_achievement15',
-        title: '里程碑达成',
-        message: '拥有2^1024(1.79e308 P)',
-        type: 'milestone',
+        id: 'notify_challenge2',
+        title: '挑战成功',
+        message: 'Pe提升0.05',
+        type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achievements[14],
+        condition: (state) => state.challengeReward.cha2.eq(new Decimal('0.05')),
     },
     {
-        id: 'notify_achievement15',
-        title: '里程碑达成',
-        message: '拥有2^1024(1.79e308 P)',
-        type: 'milestone',
+        id: 'notify_challenge3',
+        title: '挑战成功',
+        message: '发电机价格增速＾0.95',
+        type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achievements[14],
+        condition: (state) => state.challengeReward.cha3.eq(new Decimal('0.95')),
     },
     {
-        id: 'notify_achievement15',
-        title: '里程碑达成',
-        message: '拥有2^1024(1.79e308 P)',
-        type: 'milestone',
+        id: 'notify_challenge4',
+        title: '挑战成功',
+        message: '发电机效率＾1.1',
+        type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.achievements[14],
+        condition: (state) => state.challengeReward.cha4.eq(new Decimal('1.1')),
     },
     // 成就奖励
     {
