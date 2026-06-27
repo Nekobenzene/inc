@@ -1351,3 +1351,36 @@ body {
         box-shadow: 0 0 80px rgba(0,255,255,0);
     }
 }
+
+.quiet-infinity-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 12px;
+    width: 100%;
+    align-items: center;
+}
+
+.quiet-infinity-button {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    padding: 8px 22px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #00FFFF;
+    background: #151515;
+    border: 1px solid #00FFFF;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: none;
+    animation: none;
+    transition: background-color 0.15s ease, transform 0.05s ease;
+}
+
+.quiet-infinity-button:hover {
+    background: #1d1d1d;
+}
+
+.quiet-infinity-button:active {
+    transform: scale(0.98);
+}

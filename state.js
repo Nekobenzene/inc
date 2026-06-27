@@ -1,5 +1,3 @@
-// state.js
-
 const state = {
     speed: new Decimal('1'),
     developerSpeeduper: new Decimal('1'),
@@ -49,6 +47,7 @@ const state = {
     notificationQueue: [],
     
     isFirstInfinity: true,
+    currentInfinityIsFirst: false,
     isInfinityReached: false,
     isInfinityBroken: false,
     isInfinityResetting: false,
@@ -162,6 +161,7 @@ function initState() {
     state.notificationQueue = [];
 
     state.isFirstInfinity = true;
+    state.currentInfinityIsFirst = false;
     state.isInfinityReached = false;
     state.isInfinityBroken = false;
     state.isInfinityResetting = false;
@@ -230,6 +230,7 @@ function serializeState() {
         notificationHistory: state.notificationHistory,
         
         isFirstInfinity: state.isFirstInfinity,
+        currentInfinityIsFirst: state.currentInfinityIsFirst,
         isInfinityReached: state.isInfinityReached,
         isInfinityBroken: state.isInfinityBroken,
         isInfinityResetting: state.isInfinityResetting,
@@ -393,6 +394,7 @@ function deserializeState(data) {
     state.notificationQueue = [];
 
     state.isFirstInfinity = deserialized.isFirstInfinity !== undefined ? !!deserialized.isFirstInfinity : true;
+    state.currentInfinityIsFirst = !!deserialized.currentInfinityIsFirst;
     state.isInfinityReached = !!deserialized.isInfinityReached;
     state.isInfinityBroken = !!deserialized.isInfinityBroken;
     state.isInfinityResetting = !!deserialized.isInfinityResetting;

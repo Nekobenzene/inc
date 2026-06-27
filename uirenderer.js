@@ -74,9 +74,23 @@ function renderPrestigeButton() {
 
 function renderInfinityOverlay() {
     const overlay = document.getElementById('infinity-overlay');
-    if (!overlay) return;
+    const quietWrapper = document.getElementById('quiet-infinity-wrapper');
 
-    overlay.style.display = state.isInfinityReached ? 'flex' : 'none';
+    if (!overlay || !quietWrapper) return;
+
+    if (!state.isInfinityReached) {
+        overlay.style.display = 'none';
+        quietWrapper.style.display = 'none';
+        return;
+    }
+
+    if (state.currentInfinityIsFirst) {
+        overlay.style.display = 'flex';
+        quietWrapper.style.display = 'none';
+    } else {
+        overlay.style.display = 'none';
+        quietWrapper.style.display = 'flex';
+    }
 }
 
 function renderMainUI() {

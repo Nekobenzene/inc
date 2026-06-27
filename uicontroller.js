@@ -180,6 +180,12 @@ function bindEvents() {
         playInfinityResetSequence();
     });
 
+    const quietInfinityBtn = document.getElementById('quiet-infinity-button');
+    quietInfinityBtn?.addEventListener('click', () => {
+        if (!state.isInfinityReached) return;
+        performInfinityReset();
+    });
+
     navigateTo('game');
 
     const devUnlockBtn = document.getElementById('devUnlockBtn');

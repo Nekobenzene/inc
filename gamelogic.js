@@ -109,6 +109,7 @@ function triggerInfinity() {
     const isFirstTime = state.isFirstInfinity;
 
     state.isInfinityReached = true;
+    state.currentInfinityIsFirst = isFirstTime;
     state.points = new Decimal(Decimal.dInf);
 
     if (isFirstTime) {
@@ -117,8 +118,6 @@ function triggerInfinity() {
         state.isFirstInfinity = false;
     } else {
         stopInfinityTextEffect();
-        const btn = document.getElementById('infinity-button');
-        if (btn) btn.textContent = '归零';
     }
 
     renderAll();
@@ -137,7 +136,6 @@ function performInfinityReset() {
     state.generatorUnlocked = GENERATOR_CONFIGS.map(() => false);
     const oldAchievements = state.achievements.slice();
     state.achievements = ACHIEVEMENTS.map((a, index) => {
-        // 如果成就是 stage 2 且已经解锁，保留它
         if (a.stage === 2 && oldAchievements[index] === true) {
             return true;
         }
@@ -173,7 +171,6 @@ function performInfinityReset() {
     const oldNotificationHistory = { ...state.notificationHistory };
     state.notificationHistory = {};
     for (const [key, value] of Object.entries(oldNotificationHistory)) {
-        // 查找对应的通知配置
         const notifConfig = NOTIFICATIONS.find(n => n.id === key);
         if (notifConfig && notifConfig.stage === 2) {
             state.notificationHistory[key] = value;
@@ -186,6 +183,7 @@ function performInfinityReset() {
     state.isInfinityBroken = false;
     state.isInfinityResetting = false;
     state.isFirstInfinity = false;
+    state.currentInfinityIsFirst = false;
 
     stopInfinityTextEffect();
     checkGeneratorUnlock();
