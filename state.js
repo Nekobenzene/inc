@@ -1,4 +1,4 @@
-// state.js — 游戏状态、存档、重置、挑战重置
+// state.js 'Äî Ê∏∏ÊàèÁä∂ÊÄÅ"ÄÅÂ≠òʰ£"ÄÅÈáçÁΩÆ"ÄÅÊåëÊàòÈáçÁΩÆ
 
 const state = {
     speed: new Decimal('1'),
@@ -47,6 +47,11 @@ const state = {
     
     notificationHistory: {},
     notificationQueue: [],
+    
+    isFirstInfinity: true,
+    isInfinityReached: false,
+    isInfinityBroken: false,
+    rebootCount: new Decimal('0'),
 };
 
 function getAchievementCount(state) {
@@ -81,7 +86,6 @@ function createGeneratorUpgrade(config, index) {
     };
 }
 
-// 永久解锁 + 挑战内临时锁定
 function checkGeneratorUnlock() {
     for (let i = 0; i < state.generatorUpgrades.length; i++) {
         const u = state.generatorUpgrades[i];
@@ -99,7 +103,7 @@ function checkGeneratorUnlock() {
             state.generatorUnlocked[i] = true;
         }
 
-        // challenge_2 的索引是 1：后两个发电机临时锁定
+        // challenge_2 的索引是 1:后两个发电机临时锁定
         if (state.isInChallenge === 1 && i >= 2) {
             u.unlocked = false;
         } else {
@@ -131,7 +135,7 @@ function initState() {
     };
 
     state.pointExp = new Decimal('1');
-    state.pointMult = new Decimal('1')
+    state.pointMult = new Decimal('1');
 
     state.challengeUnlocked = false;
     state.challengeReward = {
@@ -155,6 +159,11 @@ function initState() {
 
     state.notificationHistory = {};
     state.notificationQueue = [];
+
+    state.isFirstInfinity = true;
+    state.isInfinityReached = false;
+    state.isInfinityBroken = false;
+    state.rebootCount = new Decimal('0');
 
     checkGeneratorUnlock();
 }
@@ -217,6 +226,11 @@ function serializeState() {
         prestigeExp: state.prestigeExp,
         
         notificationHistory: state.notificationHistory,
+        
+        isFirstInfinity: state.isFirstInfinity,
+        isInfinityReached: state.isInfinityReached,
+        isInfinityBroken: state.isInfinityBroken,
+        rebootCount: state.rebootCount,
     };
 
     return serializeValue(stateToSerialize);
@@ -260,7 +274,6 @@ function deserializeState(data) {
 
     const deserialized = deserializeValue(data);
 
-    // 先保证基础结构存在
     state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => createGeneratorUpgrade(config, index));
 
     state.speed = toDecimal(deserialized.speed, 1);
@@ -272,7 +285,7 @@ function deserializeState(data) {
     state.totalQuantityCount = toDecimal(deserialized.totalQuantityCount, 0);
     state.gameStartTime = deserialized.gameStartTime || Date.now();
     state.pointExp = toDecimal(deserialized.pointExp, 1);
-    state.pointExp = toDecimal(deserialized.pointExp, 1);
+    state.pointMult = toDecimal(deserialized.pointMult, 1);
 
     if (Array.isArray(deserialized.generatorUnlocked)) {
         state.generatorUnlocked = deserialized.generatorUnlocked.map(v => !!v);
@@ -374,7 +387,16 @@ function deserializeState(data) {
     state.prestigeExp = toDecimal(deserialized.prestigeExp, 1);
 
     state.notificationHistory = deserialized.notificationHistory || {};
-    state.notificationQueue = []
+    state.notificationQueue = [];
+
+    state.isFirstInfinity = deserialized.isFirstInfinity !== undefined ? !!deserialized.isFirstInfinity : true;
+    state.isInfinityReached = !!deserialized.isInfinityReached;
+    state.isInfinityBroken = !!deserialized.isInfinityBroken;
+    state.rebootCount = toDecimal(deserialized.rebootCount, 0);
+
+    if (state.isInfinityReached) {
+        state.points = new Decimal(Decimal.dInf);
+    }
 
     checkGeneratorUnlock();
 }

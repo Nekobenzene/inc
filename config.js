@@ -124,8 +124,8 @@ const ACHIEVEMENTS = [
     {
         id: 'achievement_15',
         name: '无限',
-        description: '拥有1.79e308 P',
-        check: () => state.points.gte(new Decimal('2').pow(new Decimal('1024'))),
+        description: '执行一次归零',
+        check: () => state.rebootCount.gte(new Decimal('1')),
     },
 ];
 
@@ -502,7 +502,7 @@ const NOTIFICATIONS = [
     {
         id: 'notify_achievement15',
         title: '里程碑达成',
-        message: '拥有2^1024(1.79e308 P)',
+        message: '拥有2^1024(1.79e308 P)并执行一次归零',
         type: 'milestone',
         duration: 2,
         once: true,
@@ -733,6 +733,13 @@ const PERFORMANCE_CONFIG = {
     maxUpdatesPerFrame: 10,
     debounceUI: true,
     uiUpdateInterval: 0.05,
+};
+
+const INFINITY_CONFIG = {
+    requirement: new Decimal('2').pow(new Decimal('1024')),
+    themeColor: '#00FFFF',
+    flashDuration: 1000,
+    garbleInterval: 120,
 };
 
 const DEVELOPER_PASSWORD = '';

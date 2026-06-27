@@ -1,5 +1,16 @@
 // game-logic.js
 
+let infinityTextTimer = null;
+let infinityFlashTimer = null;
+let infinityGarbleState = false;
+
+let infinityUpdateTimer = null;   // 用于 10ms 更新乱码
+let infinitySwitchTimer = null;   // 用于切换模式（归零/乱码）
+let isGarbleMode = false;         // 当前是否处于乱码显示状态
+let currentGarbleLength = 2;      // 当前乱码长度
+
+
+
 function computeTotalRate() {
     return GROWTH_CONFIG.computeTotalRate(state);
 }
@@ -8,13 +19,122 @@ function applyGrowth(deltaSeconds) {
     GROWTH_CONFIG.applyGrowth(state, deltaSeconds);
 }
 
+function canTriggerInfinity() {
+    return !state.isInfinityReached && state.points.gte(INFINITY_CONFIG.requirement);
+}
+
+function startInfinityFlash() {
+    document.body.classList.add('infinity-flash');
+
+    if (infinityFlashTimer) {
+        clearTimeout(infinityFlashTimer);
+    }
+
+    infinityFlashTimer = setTimeout(() => {
+        document.body.classList.remove('infinity-flash');
+        infinityFlashTimer = null;
+    }, INFINITY_CONFIG.flashDuration);
+}
+function randomInfinityGarbleText(length = 2) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.?!:;…~_-/@*+()<>{}[]=%&$|\♀♂#¥£¢€^∞∑∈≡⊥∏↔:=¬⊕￠Ψf∥≮≯∝∠∽≌∵∴∫∬∭∯∰∮∶∷∟∧∨∩∪⌒⊿△Δ½⅓¼⅛¾⅜℅≒⊂⊃⊆⊇∃∃!∅⊙∉⇒⇔∂∀※╳卐卍♩♪♫♬¶‖♯♭◈◎™©®⊙⊕Ψ㊣Θ¤￥¥＄$￡£€₩†‡§〓﹂﹄︺︻︼☉〒〝〞〡〢〣〤〥〦゜﹋﹐︰￢￤‐〇﹫ˉ¨—⁺¹²³⁻⁴⁵⁶⁽ ⁾⁷⁸⁹ⁿˣ⁰ʸ₊₁₂₃₋₄₅₆₍ ₎₇₈₉ₙₓ₀ᵧαβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
+    let text = '';
+    for (let i = 0; i < length; i++) {
+        text += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return text;
+}
+function startInfinityTextEffect() {
+    stopInfinityTextEffect();
+
+    const btn = document.getElementById('infinity-button');
+    if (!btn) return;
+
+    btn.textContent = '归零';
+    isGarbleMode = false;
+
+    // 乱码更新函数：每 10ms 刷新，随机长度 + 随机字符
+    function updateGarble() {
+        if (!state.isInfinityReached || !btn) return;
+        if (isGarbleMode) {
+            const len = Math.floor(Math.random() * 10) + 1;   // 1~10 随机
+            btn.textContent = randomInfinityGarbleText(len);
+        }
+    }
+
+    // 切换“归零” ↔ “乱码”
+    function switchMode() {
+        if (!state.isInfinityReached) {
+            stopInfinityTextEffect();
+            return;
+        }
+
+        isGarbleMode = !isGarbleMode;
+
+        if (isGarbleMode) {
+            // 进入乱码模式：立即生成一次乱码，启动 10ms 更新
+            const len = Math.floor(Math.random() * 10) + 1;
+            btn.textContent = randomInfinityGarbleText(len);
+            if (infinityUpdateTimer) clearInterval(infinityUpdateTimer);
+            infinityUpdateTimer = setInterval(updateGarble, 10);
+        } else {
+            // 退出乱码：显示“归零”，停止 10ms 更新
+            btn.textContent = '归零';
+            if (infinityUpdateTimer) {
+                clearInterval(infinityUpdateTimer);
+                infinityUpdateTimer = null;
+            }
+        }
+
+        // 随机下一次切换间隔（50~300ms）
+        const nextDelay = Math.floor(Math.random() * 250) + 50;
+        infinitySwitchTimer = setTimeout(switchMode, nextDelay);
+    }
+
+    // 第一次切换（初始为“归零”，所以第一次进入乱码）
+    const initialDelay = Math.floor(Math.random() * 600) + 100;
+    infinitySwitchTimer = setTimeout(switchMode, initialDelay);
+}
+function stopInfinityTextEffect() {
+    if (infinitySwitchTimer) {
+        clearTimeout(infinitySwitchTimer);
+        infinitySwitchTimer = null;
+    }
+    if (infinityUpdateTimer) {
+        clearInterval(infinityUpdateTimer);
+        infinityUpdateTimer = null;
+    }
+    isGarbleMode = false;
+    const btn = document.getElementById('infinity-button');
+    if (btn) btn.textContent = '归零';
+}
+
+function triggerInfinity() {
+    if (!canTriggerInfinity()) return false;
+
+    const isFirstTime = state.isFirstInfinity;
+
+    state.isInfinityReached = true;
+    state.points = new Decimal(Decimal.dInf);
+
+    if (isFirstTime) {
+        startInfinityFlash();
+        startInfinityTextEffect();
+        state.isFirstInfinity = false;
+    } else {
+        stopInfinityTextEffect();
+        const btn = document.getElementById('infinity-button');
+        if (btn) btn.textContent = '归零';
+    }
+
+    renderAll();
+    return true;
+}
 
 function getGeneratorPurchasePreview(index) {
     const u = state.generatorUpgrades[index];
     const mode = state.batchPurchaseUnlocked ? state.batchAmount : '1';
     const maxQuantity = u.getMaxQuantity();
 
-    // 已满数量，下一次操作是“升级”
     if (u.quantity.gte(maxQuantity)) {
         return {
             action: 'upgrade',
@@ -24,7 +144,6 @@ function getGeneratorPurchasePreview(index) {
         };
     }
 
-    // 单买
     if (mode === '1') {
         const cost = u.getCost();
         return {
@@ -35,7 +154,6 @@ function getGeneratorPurchasePreview(index) {
         };
     }
 
-    // 批量 5 / 10
     if (mode === '5' || mode === '10') {
         const targetAmount = Number(mode);
         let tempQuantity = new Decimal(u.quantity);
@@ -55,13 +173,11 @@ function getGeneratorPurchasePreview(index) {
         return {
             action: 'buy',
             displayCost: totalCost,
-            // 必须能支付“本次批量实际总价”才可用
             canAfford: buyCount > 0 && state.points.gte(totalCost),
             buyCount,
         };
     }
 
-    // 最大购买
     if (mode === 'max') {
         let tempQuantity = new Decimal(u.quantity);
         let tempPoints = new Decimal(state.points);
@@ -96,6 +212,7 @@ function getGeneratorPurchasePreview(index) {
         buyCount: 0,
     };
 }
+
 function performSingleGenerator(index) {
     const u = state.generatorUpgrades[index];
     const maxQuantity = u.getMaxQuantity();
@@ -114,6 +231,7 @@ function performSingleGenerator(index) {
         return 'buy';
     }
 }
+
 function performMultiGenerator(index, amount) {
     let bought = 0;
     const u = state.generatorUpgrades[index];
@@ -131,6 +249,7 @@ function performMultiGenerator(index, amount) {
 
     return bought > 0 ? 'buy' : 'insufficient';
 }
+
 function performMaxGenerator(index) {
     const u = state.generatorUpgrades[index];
     const maxQuantity = u.getMaxQuantity();
@@ -158,6 +277,7 @@ function performMaxGenerator(index) {
 
     return bought > 0 ? 'buy' : 'insufficient';
 }
+
 function performGenerator(index) {
     const mode = state.batchPurchaseUnlocked ? state.batchAmount : '1';
 
@@ -172,6 +292,7 @@ function performGenerator(index) {
 function canPrestige() {
     return state.prestigeUnlocked && state.peakPointsForPrestige.gte(state.prestigePointsLimit);
 }
+
 function getPrestigePreview() {
     const peak = state.peakPointsForPrestige;
     return {
@@ -179,6 +300,7 @@ function getPrestigePreview() {
         newExp: PRESTIGE_CONFIG.expGainFn(peak),
     };
 }
+
 function resetForPrestige() {
     state.points = new Decimal(GAME_CONFIG.startingPoints);
     state.peakPointsForPrestige = new Decimal('0');
@@ -190,20 +312,17 @@ function resetForPrestige() {
 
     checkGeneratorUnlock();
 }
+
 function performPrestige() {
     if (!canPrestige()) return false;
 
     const peak = new Decimal(state.peakPointsForPrestige);
     const preview = getPrestigePreview();
 
-    // 先记录下一次门槛
     state.prestigePointsLimit = peak;
-
-    // 再更新声望加成
     state.prestigeMult = preview.newMult;
     state.prestigeExp = preview.newExp;
 
-    // 最后重置
     resetForPrestige();
 
     renderAll();

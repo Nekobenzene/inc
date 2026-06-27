@@ -31,22 +31,27 @@ function gameLoop(now) {
     let delta = Math.min((now - lastTimestamp) / 1000, GAME_CONFIG.maxDeltaTime);
     lastTimestamp = now;
 
-    accumulatedTime += delta;
-    while (accumulatedTime >= GAME_CONFIG.updateInterval) {
-        applyGrowth(GAME_CONFIG.updateInterval);
-        accumulatedTime -= GAME_CONFIG.updateInterval;
-    }
+    if (!state.isInfinityReached) {
+        accumulatedTime += delta;
+        while (accumulatedTime >= GAME_CONFIG.updateInterval) {
+            applyGrowth(GAME_CONFIG.updateInterval);
+            accumulatedTime -= GAME_CONFIG.updateInterval;
+        }
 
-    const anyUnlocked = checkAchievements();
-    if (anyUnlocked) {
-        renderAchievements();
-    }
+        if (canTriggerInfinity()) {
+            triggerInfinity();
+        }
 
-    checkNotifications();
+        const anyUnlocked = checkAchievements();
+        if (anyUnlocked) {
+            renderAchievements();
+        }
 
+        checkNotifications();
 
-    if (state.isInChallenge !== -1) {
-        checkChallenge();
+        if (state.isInChallenge !== -1) {
+            checkChallenge();
+        }
     }
 
     renderMainUI();

@@ -67,18 +67,27 @@ function renderPrestigeButton() {
 
     btn.innerHTML = `
         <div>声望</div>
-        <div style="font-size:0.45em; letter-spacing:0;">乘数:×${formatDecimal(state.prestigeMult)}→×${formatDecimal(preview.newMult)}</div>
-        <div style="font-size:0.45em; letter-spacing:0;">指数:×${formatDecimal(state.prestigeExp)}→×${formatDecimal(preview.newExp)}</div>
+        <div style="font-size:0.45em; letter-spacing:0;">倍率: ×${formatDecimal(state.prestigeMult)} → ×${formatDecimal(preview.newMult)}</div>
+        <div style="font-size:0.45em; letter-spacing:0;">指数: ×${formatDecimal(state.prestigeExp)} → ×${formatDecimal(preview.newExp)}</div>
     `;
 }
 
+function renderInfinityOverlay() {
+    const overlay = document.getElementById('infinity-overlay');
+    if (!overlay) return;
+
+    overlay.style.display = state.isInfinityReached ? 'flex' : 'none';
+}
+
 function renderMainUI() {
-    dom.points.textContent = formatDecimal(state.points);
-    dom.rate.textContent = formatDecimal(computeTotalRate());
-    dom.navPointsBadge.textContent = `${UI_TEXTS.nav.pointsBadge}${formatDecimal(state.points)}`;
+    const pointText = state.isInfinityReached ? 'infinity' : formatDecimal(state.points);
+    const rateText = state.isInfinityReached ? '0' : formatDecimal(computeTotalRate());
+
+    dom.points.textContent = pointText;
+    dom.rate.textContent = rateText;
+    dom.navPointsBadge.textContent = `${UI_TEXTS.nav.pointsBadge}${pointText}`;
 
     let formulaText = '(Π(M)×Pm)'+`<sup>Pe</sup>`;
-
     dom.pointsFormula.innerHTML = formulaText;
 
     for (let i = 0; i < state.generatorUpgrades.length; i++) {
@@ -129,6 +138,8 @@ function renderMainUI() {
             ref.box.style.display = 'none';
         }
     }
+
+    renderInfinityOverlay();
 }
 
 function updateChallengeTabVisibility() {
@@ -251,6 +262,7 @@ function renderNotifications() {
         </div>
     `).join('');
 }
+
 function bindNotificationEvents() {
     const container = document.getElementById('notification-container');
     if (!container) return;
@@ -335,6 +347,9 @@ function renderAchievements() {
 
 function renderStats() {
     const stats = getStats();
+    if (!stats) return;
+    if (!dom.statsFields) return;
+
     for (const field of STATS_CONFIG.fields) {
         const el = dom.statsFields[field.id];
         if (el) {
@@ -351,4 +366,5 @@ function renderAll() {
     renderStats();
     renderChallenges();
     renderPrestigeButton();
+    renderInfinityOverlay();
 }

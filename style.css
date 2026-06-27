@@ -1274,3 +1274,58 @@ body {
         width: auto;
     }
 }
+
+
+/* ========================================
+   Infinity
+   ======================================== */
+
+.infinity-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 255, 255, 0.08);
+    backdrop-filter: blur(2px);
+}
+
+.infinity-button {
+    min-width: 320px;
+    min-height: 120px;
+    padding: 24px 40px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00FFFF;
+    background: #071a1a;
+    border: 2px solid #00FFFF;
+    border-radius: 12px;
+    box-shadow: 0 0 24px rgba(0,255,255,0.6);
+    cursor: pointer;
+    animation: infinityPulse 0.8s infinite alternate;
+    letter-spacing: 4px;
+}
+
+@keyframes infinityPulse {
+    from {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(0,255,255,0.4);
+    }
+    to {
+        transform: scale(1.08);
+        box-shadow: 0 0 30px rgba(0,255,255,1);
+    }
+}
+
+.infinity-flash {
+    animation: infinityFlash 1s ease;
+}
+
+@keyframes infinityFlash {
+    0%   { background-color: #121212; }
+    20%  { background-color: #00FFFF; }
+    40%  { background-color: #121212; }
+    60%  { background-color: #00FFFF; }
+    100% { background-color: #121212; }
+}

@@ -66,7 +66,7 @@ function exitChallenge(index) {
         notificationManager.push({
             id: `challenge_complete_${index}_${Date.now()}`,
             title: '挑战完成',
-            message: `你完成了挑战：${challenge.name}`,
+            message: `你完成了挑战:${challenge.name}`,
             type: 'milestone',
             duration: 2,
         });
@@ -83,6 +83,8 @@ function exitChallenge(index) {
 function toggleChallenge(index) {
     const challenge = CHALLENGES[index];
     if (!challenge) return;
+
+    if (state.isInfinityReached) return;
 
     if (state.isInChallenge === index) {
         exitChallenge(index);
@@ -120,6 +122,9 @@ function bindEvents() {
         if (!ref) continue;
         ref.btn.addEventListener('click', (e) => {
             e.stopPropagation();
+
+            if (state.isInfinityReached) return;
+
             state.totalClicks = state.totalClicks.add(1);
 
             const result = performGenerator(i);
@@ -164,8 +169,14 @@ function bindEvents() {
 
     const prestigeBtn = document.querySelector('.prestige-btn');
     prestigeBtn?.addEventListener('click', () => {
+        if (state.isInfinityReached) return;
         if (!canPrestige()) return;
         performPrestige();
+    });
+
+    const infinityBtn = document.getElementById('infinity-button');
+    infinityBtn?.addEventListener('click', () => {
+        console.log('Infinity button clicked');
     });
 
     navigateTo('game');
@@ -267,6 +278,8 @@ function bindEvents() {
 
     document.querySelectorAll('.batch-option').forEach(btn => {
         btn.addEventListener('click', function() {
+            if (state.isInfinityReached) return;
+
             const parent = this.closest('.batch-options');
             parent.querySelectorAll('.batch-option').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
