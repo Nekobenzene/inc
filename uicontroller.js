@@ -176,7 +176,8 @@ function bindEvents() {
 
     const infinityBtn = document.getElementById('infinity-button');
     infinityBtn?.addEventListener('click', () => {
-        console.log('Infinity button clicked');
+        if (!state.isInfinityReached) return;
+        playInfinityResetSequence();
     });
 
     navigateTo('game');

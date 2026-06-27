@@ -1,4 +1,4 @@
-// state.js 'Äî Ê∏∏ÊàèÁä∂ÊÄÅ"ÄÅÂ≠òʰ£"ÄÅÈáçÁΩÆ"ÄÅÊåëÊàòÈáçÁΩÆ
+// state.js
 
 const state = {
     speed: new Decimal('1'),
@@ -51,6 +51,7 @@ const state = {
     isFirstInfinity: true,
     isInfinityReached: false,
     isInfinityBroken: false,
+    isInfinityResetting: false,
     rebootCount: new Decimal('0'),
 };
 
@@ -163,6 +164,7 @@ function initState() {
     state.isFirstInfinity = true;
     state.isInfinityReached = false;
     state.isInfinityBroken = false;
+    state.isInfinityResetting = false;
     state.rebootCount = new Decimal('0');
 
     checkGeneratorUnlock();
@@ -230,6 +232,7 @@ function serializeState() {
         isFirstInfinity: state.isFirstInfinity,
         isInfinityReached: state.isInfinityReached,
         isInfinityBroken: state.isInfinityBroken,
+        isInfinityResetting: state.isInfinityResetting,
         rebootCount: state.rebootCount,
     };
 
@@ -392,6 +395,7 @@ function deserializeState(data) {
     state.isFirstInfinity = deserialized.isFirstInfinity !== undefined ? !!deserialized.isFirstInfinity : true;
     state.isInfinityReached = !!deserialized.isInfinityReached;
     state.isInfinityBroken = !!deserialized.isInfinityBroken;
+    state.isInfinityResetting = !!deserialized.isInfinityResetting;
     state.rebootCount = toDecimal(deserialized.rebootCount, 0);
 
     if (state.isInfinityReached) {

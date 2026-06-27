@@ -1329,3 +1329,25 @@ body {
     60%  { background-color: #00FFFF; }
     100% { background-color: #121212; }
 }
+
+.infinity-button.shrinking {
+    animation: infinityShrink 0.8s ease forwards !important;
+}
+
+@keyframes infinityShrink {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 24px rgba(0,255,255,0.6);
+    }
+    70% {
+        transform: scale(0.25);
+        opacity: 0.95;
+        box-shadow: 0 0 40px rgba(0,255,255,1);
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+        box-shadow: 0 0 80px rgba(0,255,255,0);
+    }
+}

@@ -5,11 +5,9 @@ let infinityFlashTimer = null;
 let infinityGarbleState = false;
 
 let infinityUpdateTimer = null;   // 用于 10ms 更新乱码
-let infinitySwitchTimer = null;   // 用于切换模式（归零/乱码）
+let infinitySwitchTimer = null;   // 用于切换模式(归零/乱码)
 let isGarbleMode = false;         // 当前是否处于乱码显示状态
 let currentGarbleLength = 2;      // 当前乱码长度
-
-
 
 function computeTotalRate() {
     return GROWTH_CONFIG.computeTotalRate(state);
@@ -35,14 +33,16 @@ function startInfinityFlash() {
         infinityFlashTimer = null;
     }, INFINITY_CONFIG.flashDuration);
 }
+
 function randomInfinityGarbleText(length = 2) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.?!:;…~_-/@*+()<>{}[]=%&$|\♀♂#¥£¢€^∞∑∈≡⊥∏↔:=¬⊕￠Ψf∥≮≯∝∠∽≌∵∴∫∬∭∯∰∮∶∷∟∧∨∩∪⌒⊿△Δ½⅓¼⅛¾⅜℅≒⊂⊃⊆⊇∃∃!∅⊙∉⇒⇔∂∀※╳卐卍♩♪♫♬¶‖♯♭◈◎™©®⊙⊕Ψ㊣Θ¤￥¥＄$￡£€₩†‡§〓﹂﹄︺︻︼☉〒〝〞〡〢〣〤〥〦゜﹋﹐︰￢￤‐〇﹫ˉ¨—⁺¹²³⁻⁴⁵⁶⁽ ⁾⁷⁸⁹ⁿˣ⁰ʸ₊₁₂₃₋₄₅₆₍ ₎₇₈₉ₙₓ₀ᵧαβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.?!:;…~_-/@*+()<>{}[]=%&$|\\♀♂#¥£¢€^∞∑∈≡⊥∏↔:=¬⊕¢Ψf∥≮≯∝∠∽≌∵∴∫∬∭∯∰∮∶∷∟∧∨∩∪⌒⊿△Δ½⅓¼⅛¾⅜℅≒⊂⊃⊆⊇∃∃!∅⊙∉⇒⇔∂∀※╳卐卍♩♪♫♬¶‖♯♭◈◎™©®⊙⊕Ψ㊣Θ¤¥¥$$££€₩†‡§〓﹂﹄︺︻︼☉〒〝〞〡〢〣〤〥〦゜﹋﹐︰¬¦‐〇﹫ˉ¨—⁺¹²³⁻⁴⁵⁶⁽ ⁾⁷⁸⁹ⁿˣ⁰ʸ₊₁₂₃₋₄₅₆₍ ₎₇₈₉ₙₓ₀ᵧαβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
     let text = '';
     for (let i = 0; i < length; i++) {
         text += chars[Math.floor(Math.random() * chars.length)];
     }
     return text;
 }
+
 function startInfinityTextEffect() {
     stopInfinityTextEffect();
 
@@ -52,16 +52,14 @@ function startInfinityTextEffect() {
     btn.textContent = '归零';
     isGarbleMode = false;
 
-    // 乱码更新函数：每 10ms 刷新，随机长度 + 随机字符
     function updateGarble() {
         if (!state.isInfinityReached || !btn) return;
         if (isGarbleMode) {
-            const len = Math.floor(Math.random() * 10) + 1;   // 1~10 随机
+            const len = Math.floor(Math.random() * 10) + 1;
             btn.textContent = randomInfinityGarbleText(len);
         }
     }
 
-    // 切换“归零” ↔ “乱码”
     function switchMode() {
         if (!state.isInfinityReached) {
             stopInfinityTextEffect();
@@ -71,13 +69,11 @@ function startInfinityTextEffect() {
         isGarbleMode = !isGarbleMode;
 
         if (isGarbleMode) {
-            // 进入乱码模式：立即生成一次乱码，启动 10ms 更新
             const len = Math.floor(Math.random() * 10) + 1;
             btn.textContent = randomInfinityGarbleText(len);
             if (infinityUpdateTimer) clearInterval(infinityUpdateTimer);
             infinityUpdateTimer = setInterval(updateGarble, 10);
         } else {
-            // 退出乱码：显示“归零”，停止 10ms 更新
             btn.textContent = '归零';
             if (infinityUpdateTimer) {
                 clearInterval(infinityUpdateTimer);
@@ -85,15 +81,14 @@ function startInfinityTextEffect() {
             }
         }
 
-        // 随机下一次切换间隔（50~300ms）
         const nextDelay = Math.floor(Math.random() * 250) + 50;
         infinitySwitchTimer = setTimeout(switchMode, nextDelay);
     }
 
-    // 第一次切换（初始为“归零”，所以第一次进入乱码）
     const initialDelay = Math.floor(Math.random() * 600) + 100;
     infinitySwitchTimer = setTimeout(switchMode, initialDelay);
 }
+
 function stopInfinityTextEffect() {
     if (infinitySwitchTimer) {
         clearTimeout(infinitySwitchTimer);
@@ -128,6 +123,66 @@ function triggerInfinity() {
 
     renderAll();
     return true;
+}
+
+/**
+ * 第二步：执行归零后的真正重置
+ * 方案要求重置：点数、发电机、挑战、声望 [2]
+ * 这里直接使用 initState() 做全重置，再保留 rebootCount +1
+ */
+function performInfinityReset() {
+    const newRebootCount = new Decimal(state.rebootCount).add(new Decimal('1'));
+
+    initState();
+
+    state.rebootCount = newRebootCount;
+    state.isInfinityReached = false;
+    state.isInfinityBroken = false;
+    state.isInfinityResetting = false;
+    state.isFirstInfinity = false;
+
+    stopInfinityTextEffect();
+    checkGeneratorUnlock();
+    renderAll();
+}
+
+/**
+ * 第二步：点击归零按钮后的完整表现流程 [2]
+ * 1. 按钮缩小
+ * 2. 触发 #00FFFF 闪光
+ * 3. Overlay 消失
+ * 4. 执行重置
+ */
+function playInfinityResetSequence() {
+    if (!state.isInfinityReached) return;
+    if (state.isInfinityResetting) return;
+
+    state.isInfinityResetting = true;
+
+    const btn = document.getElementById('infinity-button');
+    const overlay = document.getElementById('infinity-overlay');
+
+    if (!btn || !overlay) {
+        state.isInfinityResetting = false;
+        return;
+    }
+
+    stopInfinityTextEffect();
+
+    btn.classList.add('shrinking');
+    btn.disabled = true;
+
+    setTimeout(() => {
+        startInfinityFlash();
+
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            btn.classList.remove('shrinking');
+            btn.disabled = false;
+
+            performInfinityReset();
+        }, 300);
+    }, 800);
 }
 
 function getGeneratorPurchasePreview(index) {
