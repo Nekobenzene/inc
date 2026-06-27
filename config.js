@@ -6,12 +6,14 @@ const ACHIEVEMENTS = [
         name: '第一步',
         description: '购入发电机1',
         check: () => state.generatorUpgrades[0].quantity.gte(new Decimal('1')),
+        stage: 1,
     },
     {
         id: 'achievement_2',
         name: '二龙戏珠',
         description: '购入发电机2',
         check: () => state.generatorUpgrades[1].quantity.gte(new Decimal('1')),
+        stage: 1,
     },
     {
         id: 'achievement_3',
@@ -22,18 +24,21 @@ const ACHIEVEMENTS = [
         reward: (state) => {
             state.achReward.ach3 = new Decimal('2');
         },
+        stage: 1,
     },
     {
         id: 'achievement_4',
         name: '百万富翁',
         description: '累计获得 1,000,000 点 P',
         check: () => state.totalPointsEarned.gte(new Decimal('1e6')),
+        stage: 1,
     },
     {
         id: 'achievement_5',
         name: '三阳开泰',
         description: '购入发电机3',
         check: () => state.generatorUpgrades[2].quantity.gte(new Decimal('1')),
+        stage: 1,
     },
     {
         id: 'achievement_6',
@@ -44,6 +49,7 @@ const ACHIEVEMENTS = [
         reward: (state) => {
             state.achReward.ach6 = new Decimal('0.9');
         },
+        stage: 1,
     },
     {
         id: 'achievement_7',
@@ -58,6 +64,7 @@ const ACHIEVEMENTS = [
         reward: (state) => {
             state.achReward.ach7 = new Decimal('1');
         },
+        stage: 1,
     },
     {
         id: 'achievement_8',
@@ -68,6 +75,7 @@ const ACHIEVEMENTS = [
         reward: (state) => {
             state.achReward.ach8 = new Decimal('0.05');
         },
+        stage: 1,
     },
     {
         id: 'achievement_9',
@@ -78,6 +86,7 @@ const ACHIEVEMENTS = [
         reward: (state) => {
             state.challengeUnlocked = true;
         },
+        stage: 1,
     },
     {
         id: 'achievement_10',
@@ -88,12 +97,14 @@ const ACHIEVEMENTS = [
         reward: (state) => {
             state.batchPurchaseUnlocked = true;
         },
+        stage: 1,
     },
     {
         id: 'achievement_11',
         name: '现在是1/4',
         description: '达到1.2e77 P',
         check: () => state.points.gte(new Decimal('2').pow(new Decimal('256'))),
+        stage: 1,
     },
     {
         id: 'achievement_12',
@@ -103,7 +114,8 @@ const ACHIEVEMENTS = [
         rewardDescription: '成就8加成为^2.5更强',
         reward: (state)  => {
             state.achReward.ach12 = new Decimal('2.5')
-        }
+        },
+        stage: 1,
     },
     {
         id: 'achievement_13',
@@ -113,19 +125,22 @@ const ACHIEVEMENTS = [
         rewardDescription: '解锁声望!',
         reward: (state)  => {
             state.prestigeUnlocked = true;
-        }
+        },
+        stage: 1,
     },
     {
         id: 'achievement_14',
         name: '声望还是转生？',
         description: '执行一次声望',
         check: () => state.prestigePointsLimit.gt(new Decimal('2').pow(new Decimal('512'))),
+        stage: 1,
     },
     {
         id: 'achievement_15',
         name: '无限',
         description: '执行一次归零',
         check: () => state.rebootCount.gte(new Decimal('1')),
+        stage: 2,
     },
 ];
 
@@ -381,6 +396,7 @@ const NOTIFICATIONS = [
         duration: 1.5,
         once: true,
         condition: (state) => state.achievements[0],
+        stage: 1,
     },
     {
         id: 'notify_achievement2',
@@ -390,6 +406,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[1],
+        stage: 1,
     },
     {
         id: 'notify_achievement3',
@@ -399,6 +416,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[2],
+        stage: 1,
     },
     {
         id: 'notify_achievement4',
@@ -408,6 +426,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[3],
+        stage: 1,
     },
     {
         id: 'notify_achievement5',
@@ -417,7 +436,8 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[4],
-    },
+         stage: 1,
+   },
     {
         id: 'notify_achievement6',
         title: '里程碑达成',
@@ -426,6 +446,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[5],
+        stage: 1,
     },
     {
         id: 'notify_achievement7',
@@ -435,6 +456,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[6],
+        stage: 1,
     },
     {
         id: 'notify_achievement8',
@@ -444,6 +466,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[7],
+        stage: 1,
     },
     {
         id: 'notify_achievement9',
@@ -453,6 +476,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[8],
+        stage: 1,
     },
     {
         id: 'notify_achievement10',
@@ -462,6 +486,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[9],
+        stage: 1,
     },
     {
         id: 'notify_achievement11',
@@ -471,6 +496,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[10],
+        stage: 1,
     },
     {
         id: 'notify_achievement12',
@@ -480,6 +506,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[11],
+        stage: 1,
     },
     {
         id: 'notify_achievement13',
@@ -489,6 +516,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[12],
+        stage: 1,
     },
     {
         id: 'notify_achievement14',
@@ -498,6 +526,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[13],
+        stage: 1,
     },
     {
         id: 'notify_achievement15',
@@ -507,6 +536,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achievements[14],
+        stage: 2,
     },
     // 挑战奖励
     {
@@ -517,6 +547,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.challengeReward.cha1.eq(new Decimal('5')),
+        stage: 1,
     },
     {
         id: 'notify_challenge2',
@@ -526,6 +557,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.challengeReward.cha2.eq(new Decimal('0.05')),
+        stage: 1,
     },
     {
         id: 'notify_challenge3',
@@ -535,6 +567,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.challengeReward.cha3.eq(new Decimal('0.95')),
+        stage: 1,
     },
     {
         id: 'notify_challenge4',
@@ -544,6 +577,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.challengeReward.cha4.eq(new Decimal('1.1')),
+        stage: 1,
     },
     // 成就奖励
     {
@@ -554,6 +588,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achReward.ach3.eq(new Decimal('2')),
+        stage: 1,
     },
     {
         id: 'notify_achreward6',
@@ -563,6 +598,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achReward.ach6.eq(new Decimal('0.9')),
+        stage: 1,
     },
     {
         id: 'notify_achreward7',
@@ -572,6 +608,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achReward.ach7.eq(new Decimal('1')),
+        stage: 1,
     },
     {
         id: 'notify_achreward8',
@@ -581,6 +618,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achReward.ach8.eq(new Decimal('1')),
+        stage: 1,
     },
     {
         id: 'notify_achreward12',
@@ -590,6 +628,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.achReward.ach12.eq(new Decimal('2.5')),
+        stage: 1,
     },
     // 内容解锁
     {
@@ -600,6 +639,7 @@ const NOTIFICATIONS = [
         duration: 1.5,
         once: true,
         condition: (state) => state.generatorUpgrades[0].unlocked,
+        stage: 1,
     },
     {
         id: 'notify_generator2_unlock',
@@ -609,6 +649,7 @@ const NOTIFICATIONS = [
         duration: 1.5,
         once: true,
         condition: (state) => state.generatorUpgrades[1].unlocked,
+        stage: 1,
     },
     {
         id: 'notify_generator3_unlock',
@@ -618,6 +659,7 @@ const NOTIFICATIONS = [
         duration: 1.5,
         once: true,
         condition: (state) => state.generatorUpgrades[2].unlocked,
+        stage: 1,
     },
     {
         id: 'notify_generator4_unlock',
@@ -627,6 +669,7 @@ const NOTIFICATIONS = [
         duration: 1.5,
         once: true,
         condition: (state) => state.generatorUpgrades[3].unlocked,
+        stage: 1,
     },
     {
         id: 'notify_challenge_unlock',
@@ -636,6 +679,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.challengeUnlocked,
+        stage: 1,
     },
     {
         id: 'notify_batchPurchase_unlock',
@@ -645,6 +689,7 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.batchPurchaseUnlocked,
+        stage: 1,
     },
     {
         id: 'notify_prestige_unlock',
@@ -654,9 +699,10 @@ const NOTIFICATIONS = [
         duration: 2,
         once: true,
         condition: (state) => state.prestigeUnlocked,
+        stage: 1,
     },
 
-    ];
+];
 
 const STATS_CONFIG = {
     fields: [

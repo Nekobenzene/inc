@@ -125,17 +125,63 @@ function triggerInfinity() {
     return true;
 }
 
-/**
- * 第二步：执行归零后的真正重置
- * 方案要求重置：点数、发电机、挑战、声望 [2]
- * 这里直接使用 initState() 做全重置，再保留 rebootCount +1
- */
 function performInfinityReset() {
-    const newRebootCount = new Decimal(state.rebootCount).add(new Decimal('1'));
+    state.speed = new Decimal('1');
+    state.points = new Decimal(GAME_CONFIG.startingPoints);
+    state.totalPointsEarned = new Decimal(GAME_CONFIG.startingPoints);
+    state.totalClicks = new Decimal('0');
+    state.peakPoints = new Decimal(GAME_CONFIG.startingPoints);
+    state.totalQuantityCount = new Decimal('0');
+    state.gameStartTime = Date.now();
+    state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => createGeneratorUpgrade(config, index));
+    state.generatorUnlocked = GENERATOR_CONFIGS.map(() => false);
+    const oldAchievements = state.achievements.slice();
+    state.achievements = ACHIEVEMENTS.map((a, index) => {
+        // 如果成就是 stage 2 且已经解锁，保留它
+        if (a.stage === 2 && oldAchievements[index] === true) {
+            return true;
+        }
+        return false;
+    });
+    state.achReward = {
+        ach3: new Decimal('1'),
+        ach6: new Decimal('1'),
+        ach7: new Decimal('0'),
+        ach8: new Decimal('0'),
+        ach12: new Decimal('1'),
+    };
+    state.pointExp = new Decimal('1');
+    state.pointMult = new Decimal('1');
+    state.challengeUnlocked = false;
+    state.challengeReward = {
+        cha1: new Decimal('1'),
+        cha2: new Decimal('0'),
+        cha3: new Decimal('1'),
+        cha4: new Decimal('1'),
+    };
+    state.challengeSpendTime = CHALLENGES.map(() => new Decimal('-1'));
+    state.isInChallenge = -1;
+    state.challengeStartTime = 0;
+    state.batchPurchaseUnlocked = false;
+    state.batchAmount = '1';
+    state.prestigeUnlocked = false;
+    state.peakPointsForPrestige = new Decimal('0');
+    state.prestigePointsLimit = new Decimal('2').pow(new Decimal('512'));
+    state.prestigeMult = new Decimal('1');
+    state.prestigeExp = new Decimal('1');
 
-    initState();
+    const oldNotificationHistory = { ...state.notificationHistory };
+    state.notificationHistory = {};
+    for (const [key, value] of Object.entries(oldNotificationHistory)) {
+        // 查找对应的通知配置
+        const notifConfig = NOTIFICATIONS.find(n => n.id === key);
+        if (notifConfig && notifConfig.stage === 2) {
+            state.notificationHistory[key] = value;
+        }
+    }
+    state.notificationQueue = [];
 
-    state.rebootCount = newRebootCount;
+    state.rebootCount = new Decimal(state.rebootCount).add(new Decimal('1'));
     state.isInfinityReached = false;
     state.isInfinityBroken = false;
     state.isInfinityResetting = false;
@@ -146,13 +192,6 @@ function performInfinityReset() {
     renderAll();
 }
 
-/**
- * 第二步：点击归零按钮后的完整表现流程 [2]
- * 1. 按钮缩小
- * 2. 触发 #00FFFF 闪光
- * 3. Overlay 消失
- * 4. 执行重置
- */
 function playInfinityResetSequence() {
     if (!state.isInfinityReached) return;
     if (state.isInfinityResetting) return;
