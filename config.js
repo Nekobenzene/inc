@@ -307,6 +307,9 @@ const GROWTH_CONFIG = {
         if (state.points.gt(state.peakPointsForPrestige)) {
             state.peakPointsForPrestige = new Decimal(state.points);
         }
+        if (!state.isInfinityReached) {
+            state.peakPointsForReboot = Decimal.max(state.peakPointsForReboot, state.points);
+        }
         
         renderPrestigeButton();
         checkGeneratorUnlock();
@@ -787,6 +790,9 @@ const INFINITY_CONFIG = {
     themeColor: '#00FFFF',
     flashDuration: 1000,
     garbleInterval: 120,
+    axiomsGainFn: (peakPoints) => {
+        return new Decimal(1);
+    }
 };
 
 const DEVELOPER_PASSWORD = '';

@@ -126,7 +126,8 @@ function triggerInfinity() {
 
 function performInfinityReset() {
     
-    state.axioms = state.axioms.add(1);
+    axiomsGain = INFINITY_CONFIG.axiomsGainFn(state)
+    state.axioms = state.axioms.add(axiomsGain);
 
     state.speed = new Decimal('1');
     state.points = new Decimal(GAME_CONFIG.startingPoints);

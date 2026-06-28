@@ -78,25 +78,31 @@ function renderPrestigeButton() {
 function renderInfinityOverlay() {
     const overlay = document.getElementById('infinity-overlay');
     const quietWrapper = document.getElementById('quiet-infinity-wrapper');
-    const infinityQuietWrapper = document.getElementById('infinity-quiet-infinity-wrapper');
 
-    if (!overlay || !quietWrapper) return;
-
-    if (!state.isInfinityReached) {
-        overlay.style.display = 'none';
-        quietWrapper.style.display = 'none';
-        if (infinityQuietWrapper) infinityQuietWrapper.style.display = 'none';
-        return;
-    }
-
-    if (state.currentInfinityIsFirst) {
+    // ----- 大按钮（首次无限特效）-----
+    if (state.isInfinityReached && state.currentInfinityIsFirst) {
         overlay.style.display = 'flex';
-        quietWrapper.style.display = 'none';
-        if (infinityQuietWrapper) infinityQuietWrapper.style.display = 'none';
     } else {
         overlay.style.display = 'none';
+    }
+
+    // ----- 常驻三行按钮（首次归零后出现）-----
+    if (state.rebootCount.gt(0)) {
         quietWrapper.style.display = 'flex';
-        if (infinityQuietWrapper) infinityQuietWrapper.style.display = 'flex';
+        const btn = document.getElementById('quiet-infinity-button');
+        if (btn) {
+            const peak = state.peakPointsForReboot;
+            const axiomsGain = INFINITY_CONFIG.axiomsGainFn(peak);
+            btn.innerHTML = `
+                <div class="qi-title">归零</div>
+                <div class="qi-peak">P最高：<span class="qi-peak-value">${formatDecimal(peak)}</span></div>
+                <div class="qi-gain">归零后获得<span class="qi-gain-value">${formatDecimal(axiomsGain)}</span>公理</div>
+            `;
+            // 根据是否达到无限切换锁定样式
+            btn.classList.toggle('locked', !state.isInfinityReached);
+        }
+    } else {
+        quietWrapper.style.display = 'none';
     }
 }
 

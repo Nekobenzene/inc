@@ -1385,6 +1385,40 @@ body {
     transform: scale(0.98);
 }
 
+.quiet-infinity-button.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.qi-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00FFFF;
+}
+
+.qi-peak {
+    color: #ffffff;
+    font-size: 0.8rem;
+}
+
+.qi-peak-value {
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.qi-gain {
+    color: #ffffff;
+    font-size: 0.8rem;
+}
+
+.qi-gain-value {
+    color: #00FFFF;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
 
 
 .axioms-text-part {

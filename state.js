@@ -52,7 +52,7 @@ const state = {
     isInfinityBroken: false,
     isInfinityResetting: false,
     rebootCount: new Decimal('0'),
-    
+    peakPointsForReboot: new Decimal('0'),
     axioms: new Decimal('0')
 };
 
@@ -168,7 +168,7 @@ function initState() {
     state.isInfinityBroken = false;
     state.isInfinityResetting = false;
     state.rebootCount = new Decimal('0');
-
+    peakPointsForReboot = new Decimal('0');
     state.axioms = new Decimal('0')
 
     checkGeneratorUnlock();
@@ -239,7 +239,7 @@ function serializeState() {
         isInfinityBroken: state.isInfinityBroken,
         isInfinityResetting: state.isInfinityResetting,
         rebootCount: state.rebootCount,
-        
+        peakPointsForReboot: state.peakPointsForReboot,
         axioms: state.axioms
     };
 
@@ -405,6 +405,7 @@ function deserializeState(data) {
     state.isInfinityBroken = !!deserialized.isInfinityBroken;
     state.isInfinityResetting = !!deserialized.isInfinityResetting;
     state.rebootCount = toDecimal(deserialized.rebootCount, 0);
+    state.peakPointsForReboot = toDecimal(deserialized.peakPointsForReboot, 0);
 
     if (state.isInfinityReached) {
         state.points = new Decimal(Decimal.dInf);
