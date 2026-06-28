@@ -107,10 +107,11 @@ function renderInfinityOverlay() {
 }
 
 function renderMainUI() {
-    const pointText = state.isInfinityReached ? 'infinity' : formatDecimal(state.points);
+    const pointText = state.isInfinityReached ? 'Infinity' : formatDecimal(state.points);
     const rateText = state.isInfinityReached ? '0' : formatDecimal(computeTotalRate());
 
     dom.points.textContent = pointText;
+    dom.infinityPoints.textContent = pointText;
     dom.rate.textContent = rateText;
     dom.navPointsBadge.textContent = `${UI_TEXTS.nav.pointsBadge}${pointText}`;
 
@@ -168,11 +169,7 @@ function renderMainUI() {
 
     renderInfinityOverlay();
     
-    const infinityPoints = document.getElementById('infinity-points');
     const infinityAxioms = document.getElementById('infinity-axioms');
-    if (infinityPoints) {
-        infinityPoints.textContent = formatDecimal(state.points);
-    }
     if (infinityAxioms) {
         infinityAxioms.textContent = formatDecimal(state.axioms);
     }

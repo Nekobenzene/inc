@@ -107,10 +107,14 @@ function triggerInfinity() {
     if (!canTriggerInfinity()) return false;
 
     const isFirstTime = state.isFirstInfinity;
+    const req = INFINITY_CONFIG.requirement;   // 2^1024
 
     state.isInfinityReached = true;
     state.currentInfinityIsFirst = isFirstTime;
-    state.points = new Decimal(Decimal.dInf);
+    state.points = new Decimal(req);
+    state.peakPoints = new Decimal(req);
+    state.peakPointsForPrestige = new Decimal(req);
+    state.peakPointsForReboot = new Decimal(req);
 
     if (isFirstTime) {
         startInfinityFlash();
