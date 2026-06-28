@@ -154,6 +154,7 @@ const GAME_CONFIG = {
 
 const NAV_PAGES = [
     { id: 'game', label: '生产' },
+    { id: 'infinity', label: '无限' },
     { id: 'achievements', label: '成就' },
     { id: 'stats', label: '统计' },
     { id: 'settings', label: '设置' },

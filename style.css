@@ -1384,3 +1384,17 @@ body {
 .quiet-infinity-button:active {
     transform: scale(0.98);
 }
+
+
+
+.axioms-text-part {
+    font-size: 21px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.axioms-number-part {
+    font-size: 21px;
+    color: #00FFFF;
+    font-weight: bold;
+}

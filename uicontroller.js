@@ -295,5 +295,15 @@ function bindEvents() {
         });
     });
     
+    const infinityQuietBtn = document.getElementById('infinity-quiet-infinity-button');
+    if (infinityQuietBtn) {
+        infinityQuietBtn.addEventListener('click', () => {
+            if (!state.isInfinityReached) return;
+            performInfinityReset();
+            // 重置后刷新UI
+            renderAll();
+        });
+    }
+    
     bindNotificationEvents();
 }

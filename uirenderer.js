@@ -4,6 +4,7 @@ const dom = {};
 
 function cacheDom() {
     dom.points = document.getElementById('points');
+    dom.infinityPoints = document.getElementById('infinity-points')
     dom.rate = document.getElementById('point-rate');
     dom.pointsFormula = document.getElementById('points-formula');
     dom.navPointsBadge = document.getElementById('navPointsBadge');
@@ -30,6 +31,8 @@ function cacheDom() {
             costSpan: box.querySelector('.multipler-generator-cost')
         };
     }
+
+    dom.infinityAxioms = document.getElementById('infinity-axioms')
 
     dom.achievementGrid = document.getElementById('achievement-grid');
     dom.achievementCounter = document.getElementById('achievement-counter');
@@ -75,21 +78,25 @@ function renderPrestigeButton() {
 function renderInfinityOverlay() {
     const overlay = document.getElementById('infinity-overlay');
     const quietWrapper = document.getElementById('quiet-infinity-wrapper');
+    const infinityQuietWrapper = document.getElementById('infinity-quiet-infinity-wrapper');
 
     if (!overlay || !quietWrapper) return;
 
     if (!state.isInfinityReached) {
         overlay.style.display = 'none';
         quietWrapper.style.display = 'none';
+        if (infinityQuietWrapper) infinityQuietWrapper.style.display = 'none';
         return;
     }
 
     if (state.currentInfinityIsFirst) {
         overlay.style.display = 'flex';
         quietWrapper.style.display = 'none';
+        if (infinityQuietWrapper) infinityQuietWrapper.style.display = 'none';
     } else {
         overlay.style.display = 'none';
         quietWrapper.style.display = 'flex';
+        if (infinityQuietWrapper) infinityQuietWrapper.style.display = 'flex';
     }
 }
 
@@ -154,6 +161,15 @@ function renderMainUI() {
     }
 
     renderInfinityOverlay();
+    
+    const infinityPoints = document.getElementById('infinity-points');
+    const infinityAxioms = document.getElementById('infinity-axioms');
+    if (infinityPoints) {
+        infinityPoints.textContent = formatDecimal(state.points);
+    }
+    if (infinityAxioms) {
+        infinityAxioms.textContent = formatDecimal(state.axioms);
+    }
 }
 
 function updateChallengeTabVisibility() {
@@ -301,6 +317,9 @@ function renderNav() {
     sideList.innerHTML = '';
 
     NAV_PAGES.forEach(page => {
+        if (page.id === 'infinity' && state.rebootCount.lte(0)) {
+            return;
+        }
         const desktopItem = document.createElement('li');
         desktopItem.className = 'desktop-nav-item';
         desktopItem.dataset.page = page.id;

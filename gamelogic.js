@@ -125,6 +125,9 @@ function triggerInfinity() {
 }
 
 function performInfinityReset() {
+    
+    state.axioms = state.axioms.add(1);
+
     state.speed = new Decimal('1');
     state.points = new Decimal(GAME_CONFIG.startingPoints);
     state.totalPointsEarned = new Decimal(GAME_CONFIG.startingPoints);

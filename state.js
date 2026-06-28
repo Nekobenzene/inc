@@ -52,6 +52,8 @@ const state = {
     isInfinityBroken: false,
     isInfinityResetting: false,
     rebootCount: new Decimal('0'),
+    
+    axioms: new Decimal('0')
 };
 
 function getAchievementCount(state) {
@@ -167,6 +169,8 @@ function initState() {
     state.isInfinityResetting = false;
     state.rebootCount = new Decimal('0');
 
+    state.axioms = new Decimal('0')
+
     checkGeneratorUnlock();
 }
 
@@ -235,6 +239,8 @@ function serializeState() {
         isInfinityBroken: state.isInfinityBroken,
         isInfinityResetting: state.isInfinityResetting,
         rebootCount: state.rebootCount,
+        
+        axioms: state.axioms
     };
 
     return serializeValue(stateToSerialize);
@@ -403,6 +409,8 @@ function deserializeState(data) {
     if (state.isInfinityReached) {
         state.points = new Decimal(Decimal.dInf);
     }
+
+    state.axioms = toDecimal(deserialized.axioms, 0);
 
     checkGeneratorUnlock();
 }
