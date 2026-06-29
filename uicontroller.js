@@ -303,6 +303,22 @@ function bindEvents() {
             renderAll();
         });
     });
+    
+    // 无限页选项卡切换
+    document.querySelectorAll('.infinity-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabName = this.dataset.infinityTab;
+
+            // 切换选项卡按钮激活状态
+            document.querySelectorAll('.infinity-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            // 切换内容显示
+            document.querySelectorAll('.infinity-tab-content').forEach(content => content.classList.remove('active'));
+            const targetContent = document.getElementById('infinity-tab-' + tabName);
+            if (targetContent) targetContent.classList.add('active');
+        });
+    });
 
     bindNotificationEvents();
 }

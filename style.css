@@ -17,7 +17,7 @@ body {
    桌面导航栏 (≥1024px)
    ======================================== */
 .desktop-nav {
-    display: none; /* 默认隐藏，由媒体查询控制显示 */
+    display: none;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -68,11 +68,6 @@ body {
     -webkit-tap-highlight-color: transparent;
     position: relative;
     white-space: nowrap;
-}
-
-.desktop-nav-list li:hover {
-    background: #2a2a2a;
-    color: #fff;
 }
 
 .desktop-nav-list li.active {
@@ -254,11 +249,6 @@ body {
     user-select: none;
 }
 
-.side-nav-list li:hover {
-    background: #252525;
-    color: #fff;
-}
-
 .side-nav-list li.active {
     background: #1e1a0e;
     color: #FFD700;
@@ -306,13 +296,13 @@ body {
 /* 桌面端：≥1024px */
 @media (min-width: 1024px) {
     .desktop-nav {
-        display: flex; /* 显示桌面导航 */
+        display: flex;
     }
 
     .menu-toggle,
     .menu-overlay,
     .side-nav {
-        display: none !important; /* 隐藏移动端组件 */
+        display: none !important;
     }
 
     .page-container {
@@ -335,7 +325,7 @@ body {
     }
 
     .page-container {
-        padding-top: 60px; /* 给汉堡菜单留空间 */
+        padding-top: 60px;
         padding-left: 12px;
         padding-right: 12px;
         padding-bottom: 30px;
@@ -435,7 +425,7 @@ body {
 .divide-common {
     width: 90%;
     height: 1px;
-    background: linear-gradient(90deg, #00000000, #FFF5C0, #00000000);
+    background: linear-gradient(90deg, #00000000, #FFD700, #00000000);
     margin: 12px auto;
 }
 
@@ -567,17 +557,6 @@ body {
     color: #d0b080;
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .multipler-generator-button:hover {
-        background-color: #444444;
-        transform: scale(1.05);
-    }
-    .multipler-generator-button.upgrade-mode:hover {
-        background-color: #3a2222;
-        transform: scale(1.05);
-    }
-}
-
 .multipler-generator-button:active {
     background-color: #444444;
     transform: scale(0.95);
@@ -601,10 +580,10 @@ body {
 
 .achievement-card {
     width: 100%;
-    aspect-ratio: 1 / 1;               /* 正方形 */
+    aspect-ratio: 1 / 1;
     background: #151515;
-    border: 3px solid #444;            /* 未解锁边框颜色（暗灰色） */
-    border-radius: 20px;               /* 圆角 */
+    border: 3px solid #444;
+    border-radius: 20px;
     padding: 12px 8px;
     display: flex;
     flex-direction: column;
@@ -613,29 +592,25 @@ body {
     text-align: center;
     transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
     box-sizing: border-box;
-    min-height: unset;                 /* 移除原有最小高度 */
+    min-height: unset;
 }
 
-/* 已解锁：绿色边框 + 浅绿背景 */
 .achievement-card.unlocked {
     border-color: #4CAF50;
     background: #1a2a1a;
     box-shadow: 0 0 25px rgba(76, 175, 80, 0.15);
 }
 
-/* 未解锁：灰色边框，轻微半透明 */
 .achievement-card.locked {
     border-color: #333;
     opacity: 0.6;
     filter: grayscale(0.3);
 }
 
-/* 隐藏状态文字（“已解锁”/“未解锁”） */
 .achievement-status {
     display: none;
 }
 
-/* 成就名称 */
 .achievement-name {
     font-size: 0.95em;
     font-weight: 600;
@@ -644,12 +619,10 @@ body {
     margin-bottom: 4px;
 }
 
-/* 已解锁的成就名称变为绿色 */
 .achievement-card.unlocked .achievement-name {
     color: #4CAF50;
 }
 
-/* 成就描述 */
 .achievement-desc {
     font-size: 0.7em;
     color: #aaa;
@@ -657,12 +630,10 @@ body {
     line-height: 1.4;
 }
 
-/* 已解锁的描述略微变亮 */
 .achievement-card.unlocked .achievement-desc {
     color: #ccc;
 }
 
-/* 成就奖励 */
 .achievement-reward {
     font-size: 0.7em;
     color: #FFD700;
@@ -674,7 +645,6 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     }
 }
-
 
 /* ========================================
    统计页面
@@ -744,17 +714,9 @@ body {
     touch-action: manipulation;
 }
 
-.settings-btn:hover {
-    background: #3a3a3a;
-}
-
 .settings-btn.danger {
     border-color: #FF6B6B;
     color: #FF6B6B;
-}
-
-.settings-btn.danger:hover {
-    background: #2a1a1a;
 }
 
 .settings-btn:active {
@@ -835,7 +797,7 @@ body {
 
 .game-tab {
     width: 70px;
-    text-align: center;  
+    text-align: center;
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 0.95em;
@@ -845,11 +807,6 @@ body {
     transition: all 0.2s ease;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-}
-
-.game-tab:hover {
-    color: #fff;
-    background: #2a2a2a;
 }
 
 .game-tab.active {
@@ -907,46 +864,7 @@ body {
 }
 
 /* ========================================
-   挑战页面
-   ======================================== */
-.challenges-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 12px 4px 16px 4px;
-    border-bottom: 1px solid #2a2a2a;
-    margin-bottom: 16px;
-}
-
-.challenges-title {
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #FFD700;
-}
-
-.challenges-counter {
-    font-size: 1em;
-    color: #aaa;
-    background: #1e1e1e;
-    padding: 4px 16px;
-    border-radius: 8px;
-    border: 1px solid #444;
-}
-
-.challenges-grid {
-    display: grid;
-    gap: 16px;
-    grid-template-columns: 1fr;
-}
-
-@media (min-width: 768px) {
-    .challenges-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* ========================================
-   挑战卡片 - 同时兼容 div 和 button
+   挑战卡片
    ======================================== */
 .challenge-card {
     background: #151515;
@@ -955,11 +873,11 @@ body {
     margin: 0;
     font: inherit;
     color: inherit;
-    text-align: center;              /* 居中 */
+    text-align: center;
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;             /* flex 子元素水平居中 */
+    align-items: center;
     border-radius: 8px;
     transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
     cursor: pointer;
@@ -970,28 +888,24 @@ body {
     user-select: none;
 }
 
-/* 状态：未开始（锁定） */
 .challenge-card.pending {
     opacity: 0.6;
     filter: grayscale(0.3);
     border-color: #333;
 }
 
-/* 状态：进行中 */
 .challenge-card.in-progress {
     border-color: #FFA500;
     background: #1f1a0e;
     box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
 }
 
-/* 状态：已完成 */
 .challenge-card.completed {
     border-color: #4CAF50;
     background: #1a2a1a;
     box-shadow: 0 0 25px rgba(76, 175, 80, 0.12);
 }
 
-/* 挑战名称 */
 .challenge-name {
     font-size: 1.05em;
     font-weight: 600;
@@ -999,12 +913,10 @@ body {
     margin-bottom: 4px;
 }
 
-/* 已完成状态下的名称变绿 */
 .challenge-card.completed .challenge-name {
     color: #4CAF50;
 }
 
-/* 限制、目标、最佳时间（统一样式） */
 .challenge-limitation,
 .challenge-target,
 .challenge-best {
@@ -1014,15 +926,12 @@ body {
     margin-top: 2px;
 }
 
-
-/* 奖励描述 */
 .challenge-reward {
     font-size: 0.8em;
     color: #FFD700;
     margin-top: 6px;
 }
 
-/* 状态标签 */
 .challenge-best {
     font-size: 0.75em;
     font-weight: 600;
@@ -1035,7 +944,6 @@ body {
     color: #999;
 }
 
-/* 各状态下状态标签的颜色 */
 .challenge-card.pending .challenge-best {
     background: #2a2a2a;
     color: #878787;
@@ -1049,12 +957,6 @@ body {
 .challenge-card.completed .challenge-best {
     background: #1a3a1a;
     color: #A0FFA4;
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .challenge-card:hover {
-        transform: scale(1.03);
-    }
 }
 
 .challenge-card.completed:active {
@@ -1114,11 +1016,6 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-.batch-option:hover {
-    color: #ddd;
-    background: #2a2a2a;
-}
-
 .batch-option.active {
     background: #E2FF00;
     color: #121212;
@@ -1162,19 +1059,11 @@ body {
     pointer-events: none;
 }
 
-
-
-/* 移动端适配 */
 @media (max-width: 768px) {
     .prestige-btn {
         width: 90%;
         font-size: 1.8em;
         padding: 16px 0;
-    }
-}
-@media (hover: hover) and (pointer: fine) {
-    .prestige-btn:hover {
-        transform: scale(1.02);
     }
 }
 
@@ -1185,9 +1074,8 @@ body {
 }
 
 /* ========================================
-    通知
+   通知
    ======================================== */
-
 .notification-container {
     position: fixed;
     top: 72px;
@@ -1275,11 +1163,9 @@ body {
     }
 }
 
-
 /* ========================================
    Infinity
    ======================================== */
-
 .infinity-overlay {
     position: fixed;
     inset: 0;
@@ -1301,7 +1187,7 @@ body {
     background: #071a1a;
     border: 2px solid #00FFFF;
     border-radius: 12px;
-    box-shadow: 0 0 24px rgba(0,255,255,0.6);
+    box-shadow: 0 0 24px rgba(0, 255, 255, 0.6);
     cursor: pointer;
     animation: infinityPulse 0.8s infinite alternate;
     letter-spacing: 4px;
@@ -1310,11 +1196,11 @@ body {
 @keyframes infinityPulse {
     from {
         transform: scale(1);
-        box-shadow: 0 0 10px rgba(0,255,255,0.4);
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
     }
     to {
         transform: scale(1.08);
-        box-shadow: 0 0 30px rgba(0,255,255,1);
+        box-shadow: 0 0 30px rgba(0, 255, 255, 1);
     }
 }
 
@@ -1338,17 +1224,17 @@ body {
     0% {
         transform: scale(1);
         opacity: 1;
-        box-shadow: 0 0 24px rgba(0,255,255,0.6);
+        box-shadow: 0 0 24px rgba(0, 255, 255, 0.6);
     }
     70% {
         transform: scale(0.25);
         opacity: 0.95;
-        box-shadow: 0 0 40px rgba(0,255,255,1);
+        box-shadow: 0 0 40px rgba(0, 255, 255, 1);
     }
     100% {
         transform: scale(0);
         opacity: 0;
-        box-shadow: 0 0 80px rgba(0,255,255,0);
+        box-shadow: 0 0 80px rgba(0, 255, 255, 0);
     }
 }
 
@@ -1375,10 +1261,6 @@ body {
     box-shadow: none;
     animation: none;
     transition: background-color 0.15s ease, transform 0.05s ease;
-}
-
-.quiet-infinity-button:hover {
-    background: #1d1d1d;
 }
 
 .quiet-infinity-button:active {
@@ -1418,8 +1300,6 @@ body {
     font-weight: bold;
     font-size: 1rem;
 }
-
-
 
 .axioms-text-part {
     font-size: 21px;
@@ -1485,7 +1365,135 @@ body {
     transition: all 0.2s ease;
 }
 
-.story-dialog-close:hover {
-    background: #00FFFF;
+/* ========================================
+   无限内选项卡
+   ======================================== */
+.infinity-tabs-container {
+    margin: 16px 0 8px;
+    display: flex;
+    justify-content: center;
+}
+
+.infinity-tabs {
+    display: flex;
+    background: #1a1a1a;
+    border-radius: 5px;
+    padding: 4px;
+    border: 1px solid #333;
+    gap: 4px;
+}
+
+.infinity-tab {
+    width: 70px;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.infinity-tab.active {
+    background: #B0FFFF;
     color: #121212;
+    box-shadow: 0 2px 12px #00FFFF33;
+}
+
+.infinity-tab-content {
+    display: none;
+    animation: fadeSlideIn 0.25s ease;
+}
+
+.infinity-tab-content.active {
+    display: block;
+}
+
+.divide-infinity {
+    width: 90%;
+    height: 1px;
+    background: linear-gradient(90deg, #00000000, #00FFFF, #00000000);
+    margin: 12px auto;
+}
+
+/* ========================================
+   悬停样式 (仅桌面鼠标设备)
+   ======================================== */
+@media (hover: hover) and (pointer: fine) {
+    /* 桌面导航 */
+    .desktop-nav-list li:hover {
+        background: #2a2a2a;
+        color: #fff;
+    }
+
+    /* 侧边导航 */
+    .side-nav-list li:hover {
+        background: #252525;
+        color: #fff;
+    }
+
+    /* 设置按钮 */
+    .settings-btn:hover {
+        background: #3a3a3a;
+    }
+    .settings-btn.danger:hover {
+        background: #2a1a1a;
+    }
+
+    /* 生产选项卡 */
+    .game-tab:hover {
+        color: #fff;
+        background: #2a2a2a;
+    }
+
+    /* 无限选项卡 */
+    .infinity-tab:hover {
+        color: #fff;
+        background: #2a2a2a;
+    }
+
+    /* 批量购买选项 */
+    .batch-option:hover {
+        color: #ddd;
+        background: #2a2a2a;
+    }
+
+    /* 安静归零按钮 */
+    .quiet-infinity-button:hover {
+        background: #1d1d1d;
+    }
+
+    /* 剧情弹窗关闭按钮 */
+    .story-dialog-close:hover {
+        background: #00FFFF;
+        color: #121212;
+    }
+
+    /* 声望按钮 (桌面悬停) */
+    .prestige-btn:hover {
+        transform: scale(1.02);
+    }
+
+    /* 发电机按钮 (桌面悬停) */
+    .multipler-generator-button:hover {
+        background-color: #444444;
+        transform: scale(1.05);
+    }
+    .multipler-generator-button.upgrade-mode:hover {
+        background-color: #3a2222;
+        transform: scale(1.05);
+    }
+
+    /* 挑战卡片 (桌面悬停) */
+    .challenge-card:hover {
+        transform: scale(1.03);
+    }
+
+    /* 侧边关闭按钮 (桌面悬停) */
+    .side-nav-close:hover {
+        color: #fff;
+    }
 }
