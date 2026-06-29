@@ -480,11 +480,7 @@ function getStats() {
 
     return {
         playtime: (Date.now() - state.gameStartTime) / 1000,
-        clicks: state.totalClicks,
-        generatorTotalLevel: totalLevel,
-        peakPoints: state.peakPoints,
-        pointsTotalEarned: state.totalPointsEarned,
-        generatorQuantityCount: state.totalQuantityCount,
+        rebootCount: state.rebootCount,
     };
 }
 

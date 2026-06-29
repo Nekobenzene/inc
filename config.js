@@ -719,11 +719,7 @@ const STATS_CONFIG = {
                 return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
             }
         },
-        { id: 'clicks', label: '总点击数', format: (value) => formatDecimal(value) },
-        { id: 'generatorTotalLevel', label: '总等级', format: (value) => formatDecimal(value) },
-        { id: 'peakPoints', label: '最高 P', format: (value) => formatDecimal(value) },
-        { id: 'pointsTotalEarned', label: '累计获得 P', format: (value) => formatDecimal(value) },
-        { id: 'generatorQuantityCount', label: '升级总次数', format: (value) => formatDecimal(value) },
+        { id: 'rebootCount', label: '归零次数', format: (value) => formatDecimal(value) },
     ]
 };
 
