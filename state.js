@@ -168,7 +168,7 @@ function initState() {
     state.isInfinityBroken = false;
     state.isInfinityResetting = false;
     state.rebootCount = new Decimal('0');
-    peakPointsForReboot = new Decimal('0');
+    state.peakPointsForReboot = new Decimal('0');
     state.axioms = new Decimal('0')
 
     checkGeneratorUnlock();

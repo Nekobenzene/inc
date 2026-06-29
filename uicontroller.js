@@ -307,6 +307,7 @@ function bindEvents() {
             this.classList.add('active');
             state.batchAmount = this.dataset.amount;
             console.log('批量购买模式切换为:', this.dataset.amount);
+            renderMainUI();
         });
     });
     

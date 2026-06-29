@@ -130,7 +130,7 @@ function triggerInfinity() {
 
 function performInfinityReset(keepPaused = false) {
     
-    axiomsGain = INFINITY_CONFIG.axiomsGainFn(state)
+    const axiomsGain = INFINITY_CONFIG.axiomsGainFn(state)
     state.axioms = state.axioms.add(axiomsGain);
 
     state.speed = new Decimal('1');
