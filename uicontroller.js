@@ -16,23 +16,38 @@ function navClickHandler(e) {
 }
 
 function navigateTo(pageId) {
+    // 更新桌面导航
     document.querySelectorAll('.desktop-nav-item').forEach(el => {
-        el.classList.toggle('active', el.dataset.page === pageId);
-    });
-    document.querySelectorAll('.side-nav-item').forEach(el => {
-        el.classList.toggle('active', el.dataset.page === pageId);
+        const isActive = el.dataset.page === pageId;
+        el.classList.toggle('active', isActive);
+        el.classList.remove('gold', 'cyan', 'default');
+        if (isActive) {
+            if (pageId === 'game') el.classList.add('gold');
+            else if (pageId === 'infinity') el.classList.add('cyan');
+            else el.classList.add('default');
+        }
     });
 
+    // 更新侧边导航
+    document.querySelectorAll('.side-nav-item').forEach(el => {
+        const isActive = el.dataset.page === pageId;
+        el.classList.toggle('active', isActive);
+        el.classList.remove('gold', 'cyan', 'default');
+        if (isActive) {
+            if (pageId === 'game') el.classList.add('gold');
+            else if (pageId === 'infinity') el.classList.add('cyan');
+            else el.classList.add('default');
+        }
+    });
+
+    // 更新页面视图
     document.querySelectorAll('.page-view').forEach(el => {
         el.classList.toggle('active', el.dataset.page === pageId);
     });
 
-    if (pageId === 'achievements') {
-        renderAchievements();
-    }
-    if (pageId === 'stats') {
-        renderStats();
-    }
+    // 按需渲染
+    if (pageId === 'achievements') renderAchievements();
+    if (pageId === 'stats') renderStats();
 }
 
 function toggleMenu(open) {
@@ -318,7 +333,7 @@ function bindEvents() {
             const targetContent = document.getElementById('infinity-tab-' + tabName);
             if (targetContent) targetContent.classList.add('active');
         });
-    });
+});
 
     bindNotificationEvents();
 }

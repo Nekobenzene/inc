@@ -70,9 +70,33 @@ body {
     white-space: nowrap;
 }
 
-.desktop-nav-list li.active {
-    background: #1e1a0e;
-    color: #FFD700;
+/* ===== 导航文字颜色 ===== */
+.desktop-nav-list li.active.gold,
+.side-nav-list li.active.gold {
+    color: #FFD700;  /* 金色 */
+}
+
+.desktop-nav-list li.active.cyan,
+.side-nav-list li.active.cyan {
+    color: #00FFFF;  /* 青色 */
+}
+
+.desktop-nav-list li.active.default,
+.side-nav-list li.active.default {
+    color: #e0e0e0;  /* 白色（默认文字色） */
+}
+
+/* 侧边导航左侧装饰条颜色跟随页面 */
+.side-nav-list li.active.gold {
+    border-left-color: #FFD700;   /* 生产页金色 */
+}
+
+.side-nav-list li.active.cyan {
+    border-left-color: #00FFFF;   /* 无限页青色 */
+}
+
+.side-nav-list li.active.default {
+    border-left-color: #e0e0e0;   /* 其他页白色/浅灰 */
 }
 
 .desktop-nav-list li {
