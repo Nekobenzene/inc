@@ -793,7 +793,7 @@ const INFINITY_CONFIG = {
     axiomsGainFn: (peakPoints) => {
         return new Decimal(1);
     },
-    story: "分数超过了双精度浮点数上限\n游戏因溢出而归零。\n\n你获得了一些{garble:公理}。\n尝试用{garble:公理}打破无限。"
+    story: "分数超过了双精度浮点数上限\n 游戏因溢出而归零。\n\n 你获得了一些{garble:公理|Axioms}。\n 尝试用{garble:公理|Axioms}打破无限。"
 };
 
 const DEVELOPER_PASSWORD = '';

@@ -128,7 +128,7 @@ function triggerInfinity() {
     return true;
 }
 
-function performInfinityReset() {
+function performInfinityReset(keepPaused = false) {
     
     axiomsGain = INFINITY_CONFIG.axiomsGainFn(state)
     state.axioms = state.axioms.add(axiomsGain);
@@ -187,7 +187,15 @@ function performInfinityReset() {
     state.notificationQueue = [];
 
     state.rebootCount = new Decimal(state.rebootCount).add(new Decimal('1'));
-    state.isInfinityReached = false;
+    
+    if (!keepPaused) {
+        state.isInfinityReached = false;
+        state._pendingUnpause = false;
+    } else {
+        state.isInfinityReached = true;
+        state._pendingUnpause = true;
+    }
+    
     state.isInfinityBroken = false;
     state.isInfinityResetting = false;
     state.isFirstInfinity = false;
@@ -223,11 +231,21 @@ function playInfinityResetSequence() {
             overlay.style.display = 'none';
             btn.classList.remove('shrinking');
             btn.disabled = false;
-            performInfinityReset();
 
-            // 如果是第一次归零，延迟显示剧情弹窗
             if (isFirst) {
-                setTimeout(showStoryDialog, 100);
+                // 第一次归零：暂停游戏，显示故事弹窗
+                performInfinityReset(true);
+                setTimeout(() => {
+                    showStoryDialog(() => {
+                        // 弹窗关闭时恢复游戏
+                        state.isInfinityReached = false;
+                        state._pendingUnpause = false;
+                        renderAll();
+                    });
+                }, 100);
+            } else {
+                // 非第一次：直接恢复
+                performInfinityReset(false);
             }
 
             state.isInfinityResetting = false;
@@ -476,7 +494,7 @@ function escapeHtml(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function showStoryDialog() {
+function showStoryDialog(onClose) {
     removeStoryDialog();
     
     const overlay = document.createElement('div');
@@ -493,14 +511,15 @@ function showStoryDialog() {
     const storyText = INFINITY_CONFIG.story || "";
     const content = document.getElementById('story-dialog-content');
     
-    // 解析 {garble:原始文本}
+    // 解析 {garble:原始文本} 格式，支持多个选项用 | 分隔
     const parts = storyText.split(/(\{garble:[^}]*\})/g);
     let html = '';
     for (const part of parts) {
         const match = part.match(/^\{garble:([^}]*)\}$/);
         if (match) {
-            const original = match[1];
-            html += `<span class="story-garble" data-original="${escapeHtml(original)}">${escapeHtml(original)}</span>`;
+            const options = match[1].split('|').map(s => s.trim());
+            const original = options[0];
+            html += `<span class="story-garble" data-original="${escapeHtml(original)}" data-alternatives='${JSON.stringify(options)}'>${escapeHtml(original)}</span>`;
         } else {
             html += escapeHtml(part);
         }
@@ -509,8 +528,12 @@ function showStoryDialog() {
     
     const garbleSpans = content.querySelectorAll('.story-garble');
     if (garbleSpans.length === 0) {
-        // 没有占位符，直接显示普通文本
-        document.getElementById('story-dialog-close').addEventListener('click', removeStoryDialog);
+        document.getElementById('story-dialog-close').addEventListener('click', function() {
+            removeStoryDialog();
+            if (typeof onClose === 'function') {
+                onClose();
+            }
+        });
         return;
     }
     
@@ -527,7 +550,14 @@ function showStoryDialog() {
             });
         } else {
             garbleSpans.forEach(span => {
-                span.textContent = span.dataset.original;
+                let alternatives;
+                try {
+                    alternatives = JSON.parse(span.dataset.alternatives);
+                } catch {
+                    alternatives = [span.dataset.original];
+                }
+                const chosen = alternatives[Math.floor(Math.random() * alternatives.length)];
+                span.textContent = chosen;
             });
         }
     }
@@ -539,7 +569,7 @@ function showStoryDialog() {
         
         if (storyGarbleMode) {
             if (storyGarbleInterval) clearInterval(storyGarbleInterval);
-            storyGarbleInterval = setInterval(updateStoryGarble, 10); // 每10ms刷新乱码
+            storyGarbleInterval = setInterval(updateStoryGarble, 10);
         } else {
             if (storyGarbleInterval) {
                 clearInterval(storyGarbleInterval);
@@ -558,7 +588,26 @@ function showStoryDialog() {
     window._storyGarbleInterval = storyGarbleInterval;
     window._storySwitchTimeout = storySwitchTimeout;
     
-    document.getElementById('story-dialog-close').addEventListener('click', removeStoryDialog);
+    // 关闭按钮事件 - 调用 onClose
+    document.getElementById('story-dialog-close').addEventListener('click', function() {
+        // 清理定时器
+        if (window._storyGarbleInterval) {
+            clearInterval(window._storyGarbleInterval);
+            window._storyGarbleInterval = null;
+        }
+        if (window._storySwitchTimeout) {
+            clearTimeout(window._storySwitchTimeout);
+            window._storySwitchTimeout = null;
+        }
+        if (storyInterval) {
+            clearInterval(storyInterval);
+            storyInterval = null;
+        }
+        removeStoryDialog();
+        if (typeof onClose === 'function') {
+            onClose();
+        }
+    });
 }
 
 function removeStoryDialog() {

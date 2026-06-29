@@ -295,15 +295,14 @@ function bindEvents() {
         });
     });
     
-    const infinityQuietBtn = document.getElementById('infinity-quiet-infinity-button');
-    if (infinityQuietBtn) {
-        infinityQuietBtn.addEventListener('click', () => {
+    // 绑定所有安静归零按钮（两个页面都生效）
+    document.querySelectorAll('.quiet-infinity-button').forEach(btn => {
+        btn.addEventListener('click', function() {
             if (!state.isInfinityReached) return;
             performInfinityReset();
-            // 重置后刷新UI
             renderAll();
         });
-    }
-    
+    });
+
     bindNotificationEvents();
 }

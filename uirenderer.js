@@ -77,7 +77,6 @@ function renderPrestigeButton() {
 
 function renderInfinityOverlay() {
     const overlay = document.getElementById('infinity-overlay');
-    const quietWrapper = document.getElementById('quiet-infinity-wrapper');
 
     // ----- 大按钮（首次无限特效）-----
     if (state.isInfinityReached && state.currentInfinityIsFirst) {
@@ -87,22 +86,28 @@ function renderInfinityOverlay() {
     }
 
     // ----- 常驻三行按钮（首次归零后出现）-----
+    // 获取所有安静归零按钮的容器
+    const allWrappers = document.querySelectorAll('.quiet-infinity-wrapper');
+    
     if (state.rebootCount.gt(0)) {
-        quietWrapper.style.display = 'flex';
-        const btn = document.getElementById('quiet-infinity-button');
-        if (btn) {
-            const peak = state.peakPointsForReboot;
-            const axiomsGain = INFINITY_CONFIG.axiomsGainFn(peak);
-            btn.innerHTML = `
-                <div class="qi-title">归零</div>
-                <div class="qi-peak">P最高：<span class="qi-peak-value">${formatDecimal(peak)}</span></div>
-                <div class="qi-gain">归零后获得<span class="qi-gain-value">${formatDecimal(axiomsGain)}</span>公理</div>
-            `;
-            // 根据是否达到无限切换锁定样式
-            btn.classList.toggle('locked', !state.isInfinityReached);
-        }
+        allWrappers.forEach(wrapper => {
+            wrapper.style.display = 'flex';
+            const btn = wrapper.querySelector('.quiet-infinity-button');
+            if (btn) {
+                const peak = state.peakPointsForReboot;
+                const axiomsGain = INFINITY_CONFIG.axiomsGainFn(peak);
+                btn.innerHTML = `
+                    <div class="qi-title">归零</div>
+                    <div class="qi-peak">P最高：<span class="qi-peak-value">${formatDecimal(peak)}</span></div>
+                    <div class="qi-gain">归零后获得<span class="qi-gain-value">${formatDecimal(axiomsGain)}</span>公理</div>
+                `;
+                btn.classList.toggle('locked', !state.isInfinityReached);
+            }
+        });
     } else {
-        quietWrapper.style.display = 'none';
+        allWrappers.forEach(wrapper => {
+            wrapper.style.display = 'none';
+        });
     }
 }
 
