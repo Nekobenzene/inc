@@ -309,7 +309,7 @@ const GROWTH_CONFIG = {
         }
         if (!state.isInfinityReached) {
             state.peakPointsForReboot = Decimal.max(state.peakPointsForReboot, state.points);
-        }
+    }
         
         renderPrestigeButton();
         checkGeneratorUnlock();
@@ -792,7 +792,10 @@ const INFINITY_CONFIG = {
     garbleInterval: 120,
     axiomsGainFn: (peakPoints) => {
         return new Decimal(1);
-    }
+    },
+    story: "分数超过了双精度浮点数上限\n游戏因溢出而归零。\n\n你获得了一些公理。\n尝试用公理打破无限。"
 };
 
 const DEVELOPER_PASSWORD = '';
+
+

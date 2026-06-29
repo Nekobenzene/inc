@@ -192,6 +192,7 @@ function performInfinityReset() {
     state.isInfinityResetting = false;
     state.isFirstInfinity = false;
     state.currentInfinityIsFirst = false;
+    state.peakPointsForReboot = new Decimal('0');
 
     stopInfinityTextEffect();
     checkGeneratorUnlock();
@@ -201,31 +202,35 @@ function performInfinityReset() {
 function playInfinityResetSequence() {
     if (!state.isInfinityReached) return;
     if (state.isInfinityResetting) return;
-
     state.isInfinityResetting = true;
+
+    const isFirst = state.currentInfinityIsFirst;   // 记录是否为第一次归零
 
     const btn = document.getElementById('infinity-button');
     const overlay = document.getElementById('infinity-overlay');
-
     if (!btn || !overlay) {
         state.isInfinityResetting = false;
         return;
     }
 
     stopInfinityTextEffect();
-
     btn.classList.add('shrinking');
     btn.disabled = true;
 
     setTimeout(() => {
         startInfinityFlash();
-
         setTimeout(() => {
             overlay.style.display = 'none';
             btn.classList.remove('shrinking');
             btn.disabled = false;
-
             performInfinityReset();
+
+            // 如果是第一次归零，延迟显示剧情弹窗
+            if (isFirst) {
+                setTimeout(showStoryDialog, 100);
+            }
+
+            state.isInfinityResetting = false;
         }, 300);
     }, 800);
 }
@@ -463,4 +468,59 @@ function getStats() {
         pointsTotalEarned: state.totalPointsEarned,
         generatorQuantityCount: state.totalQuantityCount,
     };
+}
+
+let storyInterval = null;
+
+function showStoryDialog() {
+    removeStoryDialog();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'story-dialog-overlay';
+    overlay.className = 'story-dialog-overlay';
+    overlay.innerHTML = `
+        <div class="story-dialog-box">
+            <div class="story-dialog-content" id="story-dialog-content"></div>
+            <button class="story-dialog-close" id="story-dialog-close">关闭</button>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    // 从配置读取，并提供默认值
+    const storyText = INFINITY_CONFIG.story || "你感受到了无限的力量。";
+
+    const content = document.getElementById('story-dialog-content');
+    content.innerHTML = '';
+
+    const parts = storyText.split(/(\{garble\})/g);
+    const garbleSpans = [];
+    parts.forEach((part) => {
+        if (part === '{garble}') {
+            const span = document.createElement('span');
+            span.className = 'story-garble';
+            span.textContent = randomInfinityGarbleText(3);
+            content.appendChild(span);
+            garbleSpans.push(span);
+        } else {
+            content.appendChild(document.createTextNode(part));
+        }
+    });
+
+    if (storyInterval) clearInterval(storyInterval);
+    storyInterval = setInterval(() => {
+        garbleSpans.forEach(span => {
+            span.textContent = randomInfinityGarbleText(3);
+        });
+    }, 200);
+
+    document.getElementById('story-dialog-close').addEventListener('click', removeStoryDialog);
+}
+
+function removeStoryDialog() {
+    if (storyInterval) {
+        clearInterval(storyInterval);
+        storyInterval = null;
+    }
+    const overlay = document.getElementById('story-dialog-overlay');
+    if (overlay) overlay.remove();
 }

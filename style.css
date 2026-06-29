@@ -1432,3 +1432,60 @@ body {
     color: #00FFFF;
     font-weight: bold;
 }
+
+/* 剧情弹窗 */
+.story-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.story-dialog-box {
+    max-width: 600px;
+    width: 90%;
+    background: #1a1a1a;
+    border: 2px solid #00FFFF;
+    border-radius: 20px;
+    padding: 32px 28px 24px;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+    text-align: center;
+}
+
+.story-dialog-content {
+    color: #ffffff;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 28px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.story-garble {
+    color: #00FFFF;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    display: inline-block;
+    min-width: 1.5em;
+}
+
+.story-dialog-close {
+    background: transparent;
+    border: 2px solid #00FFFF;
+    border-radius: 12px;
+    color: #FFD700;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 10px 32px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.story-dialog-close:hover {
+    background: #00FFFF;
+    color: #121212;
+}
