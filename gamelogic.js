@@ -472,9 +472,13 @@ function getStats() {
 
 let storyInterval = null;
 
+function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 function showStoryDialog() {
     removeStoryDialog();
-
+    
     const overlay = document.createElement('div');
     overlay.id = 'story-dialog-overlay';
     overlay.className = 'story-dialog-overlay';
@@ -485,38 +489,89 @@ function showStoryDialog() {
         </div>
     `;
     document.body.appendChild(overlay);
-
-    // 从配置读取，并提供默认值
-    const storyText = INFINITY_CONFIG.story || "你感受到了无限的力量。";
-
+    
+    const storyText = INFINITY_CONFIG.story || "";
     const content = document.getElementById('story-dialog-content');
-    content.innerHTML = '';
-
-    const parts = storyText.split(/(\{garble\})/g);
-    const garbleSpans = [];
-    parts.forEach((part) => {
-        if (part === '{garble}') {
-            const span = document.createElement('span');
-            span.className = 'story-garble';
-            span.textContent = randomInfinityGarbleText(3);
-            content.appendChild(span);
-            garbleSpans.push(span);
+    
+    // 解析 {garble:原始文本}
+    const parts = storyText.split(/(\{garble:[^}]*\})/g);
+    let html = '';
+    for (const part of parts) {
+        const match = part.match(/^\{garble:([^}]*)\}$/);
+        if (match) {
+            const original = match[1];
+            html += `<span class="story-garble" data-original="${escapeHtml(original)}">${escapeHtml(original)}</span>`;
         } else {
-            content.appendChild(document.createTextNode(part));
+            html += escapeHtml(part);
         }
-    });
-
-    if (storyInterval) clearInterval(storyInterval);
-    storyInterval = setInterval(() => {
-        garbleSpans.forEach(span => {
-            span.textContent = randomInfinityGarbleText(3);
-        });
-    }, 200);
-
+    }
+    content.innerHTML = html;
+    
+    const garbleSpans = content.querySelectorAll('.story-garble');
+    if (garbleSpans.length === 0) {
+        // 没有占位符，直接显示普通文本
+        document.getElementById('story-dialog-close').addEventListener('click', removeStoryDialog);
+        return;
+    }
+    
+    // 乱码状态与定时器
+    let storyGarbleMode = false;
+    let storyGarbleInterval = null;
+    let storySwitchTimeout = null;
+    
+    function updateStoryGarble() {
+        if (storyGarbleMode) {
+            garbleSpans.forEach(span => {
+                const len = span.dataset.original.length;
+                span.textContent = randomInfinityGarbleText(len);
+            });
+        } else {
+            garbleSpans.forEach(span => {
+                span.textContent = span.dataset.original;
+            });
+        }
+    }
+    
+    function switchStoryGarbleMode() {
+        if (!document.getElementById('story-dialog-overlay')) return; // 弹窗已关闭
+        storyGarbleMode = !storyGarbleMode;
+        updateStoryGarble();
+        
+        if (storyGarbleMode) {
+            if (storyGarbleInterval) clearInterval(storyGarbleInterval);
+            storyGarbleInterval = setInterval(updateStoryGarble, 10); // 每10ms刷新乱码
+        } else {
+            if (storyGarbleInterval) {
+                clearInterval(storyGarbleInterval);
+                storyGarbleInterval = null;
+            }
+        }
+        
+        const nextDelay = Math.floor(Math.random() * 250) + 50;
+        storySwitchTimeout = setTimeout(switchStoryGarbleMode, nextDelay);
+    }
+    
+    // 初始延迟后开始切换
+    storySwitchTimeout = setTimeout(switchStoryGarbleMode, Math.floor(Math.random() * 600) + 100);
+    
+    // 保存定时器以便清理
+    window._storyGarbleInterval = storyGarbleInterval;
+    window._storySwitchTimeout = storySwitchTimeout;
+    
     document.getElementById('story-dialog-close').addEventListener('click', removeStoryDialog);
 }
 
 function removeStoryDialog() {
+    // 清理新定时器
+    if (window._storyGarbleInterval) {
+        clearInterval(window._storyGarbleInterval);
+        window._storyGarbleInterval = null;
+    }
+    if (window._storySwitchTimeout) {
+        clearTimeout(window._storySwitchTimeout);
+        window._storySwitchTimeout = null;
+    }
+    // 清理旧定时器（如果有）
     if (storyInterval) {
         clearInterval(storyInterval);
         storyInterval = null;
