@@ -499,7 +499,7 @@ function showStoryDialog(onClose) {
     overlay.innerHTML = `
         <div class="story-dialog-box">
             <div class="story-dialog-content" id="story-dialog-content"></div>
-            <button class="story-dialog-close" id="story-dialog-close">关闭</button>
+            <button class="story-dialog-close" id="story-dialog-close">确定</button>
         </div>
     `;
     document.body.appendChild(overlay);

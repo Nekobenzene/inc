@@ -195,10 +195,13 @@ function bindEvents() {
         playInfinityResetSequence();
     });
 
-    const quietInfinityBtn = document.getElementById('quiet-infinity-button');
-    quietInfinityBtn?.addEventListener('click', () => {
-        if (!state.isInfinityReached) return;
-        performInfinityReset();
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.quiet-infinity-button');
+        if (btn && !btn.classList.contains('locked') && state.isInfinityReached) {
+            e.preventDefault();          // 阻止可能的默认行为
+            performInfinityReset();
+            renderAll();
+        }
     });
 
     navigateTo('game');
@@ -312,14 +315,15 @@ function bindEvents() {
     });
     
     // 绑定所有安静归零按钮（两个页面都生效）
-    document.querySelectorAll('.quiet-infinity-button').forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (!state.isInfinityReached) return;
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.quiet-infinity-button');
+        if (btn && !btn.classList.contains('locked') && state.isInfinityReached) {
+            e.preventDefault();
             performInfinityReset();
             renderAll();
-        });
+        }
     });
-    
+
     // 无限页选项卡切换
     document.querySelectorAll('.infinity-tab').forEach(tab => {
         tab.addEventListener('click', function() {
