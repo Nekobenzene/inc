@@ -1190,7 +1190,7 @@ body {
 /* ========================================
    Infinity
    ======================================== */
-.infinity-overlay {
+.reboot-overlay {
     position: fixed;
     inset: 0;
     z-index: 10000;
@@ -1201,7 +1201,7 @@ body {
     backdrop-filter: blur(2px);
 }
 
-.infinity-button {
+.reboot-button {
     min-width: 320px;
     min-height: 120px;
     padding: 24px 40px;
@@ -1240,7 +1240,7 @@ body {
     100% { background-color: #121212; }
 }
 
-.infinity-button.shrinking {
+.reboot-button.shrinking {
     animation: infinityShrink 0.8s ease forwards !important;
 }
 
@@ -1262,7 +1262,7 @@ body {
     }
 }
 
-.quiet-infinity-wrapper {
+.quiet-reboot-wrapper {
     display: flex;
     justify-content: center;
     margin: 8px 0 12px;
@@ -1270,7 +1270,7 @@ body {
     align-items: center;
 }
 
-.quiet-infinity-button {
+.quiet-reboot-button {
     width: 100%;
     max-width: 100%;
     text-align: center;
@@ -1287,11 +1287,11 @@ body {
     transition: background-color 0.15s ease, transform 0.05s ease;
 }
 
-.quiet-infinity-button:active {
+.quiet-reboot-button:active {
     transform: scale(0.98);
 }
 
-.quiet-infinity-button.locked {
+.quiet-reboot-button.locked {
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
@@ -1486,7 +1486,7 @@ body {
     }
 
     /* 安静归零按钮 */
-    .quiet-infinity-button:hover {
+    .quiet-reboot-button:hover {
         background: #1d1d1d;
     }
 

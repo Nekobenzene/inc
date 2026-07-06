@@ -46,7 +46,7 @@ function randomInfinityGarbleText(length = 2) {
 function startInfinityTextEffect() {
     stopInfinityTextEffect();
 
-    const btn = document.getElementById('infinity-button');
+    const btn = document.getElementById('reboot-button');
     if (!btn) return;
 
     btn.textContent = '归零';
@@ -99,7 +99,7 @@ function stopInfinityTextEffect() {
         infinityUpdateTimer = null;
     }
     isGarbleMode = false;
-    const btn = document.getElementById('infinity-button');
+    const btn = document.getElementById('reboot-button');
     if (btn) btn.textContent = '归零';
 }
 
@@ -214,8 +214,8 @@ function playInfinityResetSequence() {
 
     const isFirst = state.currentInfinityIsFirst;   // 记录是否为第一次归零
 
-    const btn = document.getElementById('infinity-button');
-    const overlay = document.getElementById('infinity-overlay');
+    const btn = document.getElementById('reboot-button');
+    const overlay = document.getElementById('reboot-overlay');
     if (!btn || !overlay) {
         state.isInfinityResetting = false;
         return;

@@ -76,7 +76,7 @@ function renderPrestigeButton() {
 }
 
 function renderInfinityOverlay() {
-    const overlay = document.getElementById('infinity-overlay');
+    const overlay = document.getElementById('reboot-overlay');
 
     // ----- 大按钮（首次无限特效）-----
     if (state.isInfinityReached && state.currentInfinityIsFirst) {
@@ -87,12 +87,12 @@ function renderInfinityOverlay() {
 
     // ----- 常驻三行按钮（首次归零后出现）-----
     // 获取所有安静归零按钮的容器
-    const allWrappers = document.querySelectorAll('.quiet-infinity-wrapper');
+    const allWrappers = document.querySelectorAll('.quiet-reboot-wrapper');
     
     if (state.rebootCount.gt(0)) {
         allWrappers.forEach(wrapper => {
             wrapper.style.display = 'flex';
-            const btn = wrapper.querySelector('.quiet-infinity-button');
+            const btn = wrapper.querySelector('.quiet-reboot-button');
             if (btn) {
                 const peak = state.peakPointsForReboot;
                 const axiomsGain = INFINITY_CONFIG.axiomsGainFn(peak);

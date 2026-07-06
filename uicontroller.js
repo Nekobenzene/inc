@@ -189,14 +189,14 @@ function bindEvents() {
         performPrestige();
     });
 
-    const infinityBtn = document.getElementById('infinity-button');
-    infinityBtn?.addEventListener('click', () => {
+    const rebootBtn = document.getElementById('reboot-button');
+    rebootBtn?.addEventListener('click', () => {
         if (!state.isInfinityReached) return;
         playInfinityResetSequence();
     });
 
     document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.quiet-infinity-button');
+        const btn = e.target.closest('.quiet-reboot-button');
         if (btn && !btn.classList.contains('locked') && state.isInfinityReached) {
             e.preventDefault();          // 阻止可能的默认行为
             performInfinityReset();
@@ -316,7 +316,7 @@ function bindEvents() {
     
     // 绑定所有安静归零按钮（两个页面都生效）
     document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.quiet-infinity-button');
+        const btn = e.target.closest('.quiet-reboot-button');
         if (btn && !btn.classList.contains('locked') && state.isInfinityReached) {
             e.preventDefault();
             performInfinityReset();
