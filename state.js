@@ -53,7 +53,9 @@ const state = {
     isInfinityResetting: false,
     rebootCount: new Decimal('0'),
     peakPointsForReboot: new Decimal('0'),
-    axioms: new Decimal('0')
+    axioms: new Decimal('0'),
+    
+    infinityUpgrades: [],
 };
 
 function getAchievementCount(state) {
@@ -169,7 +171,11 @@ function initState() {
     state.isInfinityResetting = false;
     state.rebootCount = new Decimal('0');
     state.peakPointsForReboot = new Decimal('0');
-    state.axioms = new Decimal('0')
+    state.axioms = new Decimal('0');
+    state.infinityUpgrades = INFINITY_UPGRADES.map(() => ({
+        purchased: false,
+        unlocked: false,
+    }));
 
     checkGeneratorUnlock();
 }
@@ -240,7 +246,8 @@ function serializeState() {
         isInfinityResetting: state.isInfinityResetting,
         rebootCount: state.rebootCount,
         peakPointsForReboot: state.peakPointsForReboot,
-        axioms: state.axioms
+        axioms: state.axioms,
+        infinityUpgrades: stete.infinityUpgrades,
     };
 
     return serializeValue(stateToSerialize);
@@ -412,6 +419,18 @@ function deserializeState(data) {
     }
 
     state.axioms = toDecimal(deserialized.axioms, 0);
+
+    if (Array.isArray(deserialized.infinityUpgrades)) {
+        state.infinityUpgrades = deserialized.infinityUpgrades.map(item => ({
+            purchased: !!item.purchased,
+            unlocked: !!item.unlocked,
+        }));
+    } else {
+        state.infinityUpgrades = INFINITY_UPGRADES.map(() => ({
+            purchased: false,
+            unlocked: false,
+        }));
+    };
 
     checkGeneratorUnlock();
 }

@@ -260,6 +260,43 @@ function renderChallenges() {
     counter.textContent = `${completedCount} / ${total}`;
 }
 
+function renderInfinityUpgrades() {
+    const grid = document.getElementById('infinity-upgrade-grid');
+    if (!grid) return;
+    
+    const upgrades = INFINITY_UPGRADES || [];
+    const states = state.infinityUpgrades || [];
+    
+    grid.innerHTML = ''; // 清空
+    
+    upgrades.forEach((upgrade, index) => {
+        const card = document.createElement('div');
+        card.className = 'infinity-upgrade-card';
+        card.dataset.index = index;
+        
+        const st = states[index] || { purchased: false, unlocked: false };
+        
+        // 根据状态添加样式类
+        if (st.purchased) {
+            card.classList.add('purchased');
+        } else if (st.unlocked) {
+            card.classList.add('unlocked');
+        } else {
+            card.classList.add('locked');
+        }
+        
+        // 填充内容（仅显示，不实现交互）
+        card.innerHTML = `
+            <div class="infinity-upgrade-name">${upgrade.name}</div>
+            <div class="infinity-upgrade-desc">${upgrade.description}</div>
+            <div class="infinity-upgrade-cost">消耗：${formatDecimal(upgrade.cost)} 公理</div>
+            <div class="infinity-upgrade-status">${st.purchased ? '已购买' : st.unlocked ? '可购买' : '未解锁'}</div>
+        `;
+        
+        grid.appendChild(card);
+    });
+}
+
 function renderNotifications() {
     const container = document.getElementById('notification-container');
     if (!container) return;
@@ -408,4 +445,5 @@ function renderAll() {
     renderChallenges();
     renderPrestigeButton();
     renderInfinityOverlay();
+    renderInfinityUpgrades();
 }

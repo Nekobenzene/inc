@@ -390,6 +390,15 @@ const PRESTIGE_CONFIG = {
     }
 };
 
+const INFINITY_UPGRADES = [
+    {
+        id: '',
+        name: '',
+        description: '',
+        cost: new Decimal('0'),
+    },
+];
+
 const NOTIFICATIONS = [
     // 成就完成
     {

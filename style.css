@@ -1443,6 +1443,65 @@ body {
     margin: 12px auto;
 }
 
+
+.infinity-upgrade-grid {
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+    margin-top: 8px;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+
+
+.infinity-upgrade-card {
+    background: #151515;
+    border: 2px solid #444;
+    padding: 16px 18px;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 8px;
+    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.infinity-upgrade-card.pending {
+    opacity: 0.6;
+    filter: grayscale(0.3);
+    border-color: #333;
+}
+
+.infinity-upgrade-card.locked{
+    border-color: #004040;
+    background: #1f1a0e;
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
+}
+
+.infinity-upgrade-card.unlocked{
+    border-color: #00FF37;
+    background: #1f1a0e;
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
+}
+
+.infinity-upgrade-card.purchased{
+    border-color: #00FFFF;
+    background: #1f1a0e;
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
+}
+
+
 /* ========================================
    悬停样式 (仅桌面鼠标设备)
    ======================================== */
@@ -1516,6 +1575,11 @@ body {
         transform: scale(1.03);
     }
 
+    /* 无限升级卡片（桌面悬停） */
+    .infinity-upgrade-card:hover{
+        transform: scale(1.03);    
+    }
+    
     /* 侧边关闭按钮 (桌面悬停) */
     .side-nav-close:hover {
         color: #fff;
