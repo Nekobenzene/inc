@@ -274,15 +274,15 @@ function renderInfinityUpgrades() {
         card.className = 'infinity-upgrade-card';
         card.dataset.index = index;
         
-        const st = states[index] || { purchased: false, unlocked: false };
+        const st = states[index] || { purchased: false, available: false };
         
         // 根据状态添加样式类
         if (st.purchased) {
             card.classList.add('purchased');
-        } else if (st.unlocked) {
-            card.classList.add('unlocked');
+        } else if (st.available) {
+            card.classList.add('available');
         } else {
-            card.classList.add('locked');
+            card.classList.add('disabled');
         }
         
         // 填充内容（仅显示，不实现交互）
@@ -290,7 +290,7 @@ function renderInfinityUpgrades() {
             <div class="infinity-upgrade-name">${upgrade.name}</div>
             <div class="infinity-upgrade-desc">${upgrade.description}</div>
             <div class="infinity-upgrade-cost">消耗：${formatDecimal(upgrade.cost)} 公理</div>
-            <div class="infinity-upgrade-status">${st.purchased ? '已购买' : st.unlocked ? '可购买' : '未解锁'}</div>
+            <div class="infinity-upgrade-status">${st.purchased ? '已购买' : st.available ? '可购买' : '未解锁'}</div>
         `;
         
         grid.appendChild(card);

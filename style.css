@@ -1483,21 +1483,21 @@ body {
     border-color: #333;
 }
 
-.infinity-upgrade-card.locked{
+.infinity-upgrade-card.disabled{
     border-color: #004040;
     background: #1f1a0e;
     box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
 }
 
-.infinity-upgrade-card.unlocked{
+.infinity-upgrade-card.available{
     border-color: #00FF37;
-    background: #1f1a0e;
+    background: #375236;
     box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
 }
 
 .infinity-upgrade-card.purchased{
     border-color: #00FFFF;
-    background: #1f1a0e;
+    background: #084C4C;
     box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
 }
 

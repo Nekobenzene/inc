@@ -392,7 +392,25 @@ const PRESTIGE_CONFIG = {
 
 const INFINITY_UPGRADES = [
     {
-        id: '',
+        id: '1',
+        name: '',
+        description: '',
+        cost: new Decimal('0'),
+    },
+    {
+        id: '2',
+        name: '',
+        description: '',
+        cost: new Decimal('0'),
+    },
+    {
+        id: '3',
+        name: '',
+        description: '',
+        cost: new Decimal('0'),
+    },
+    {
+        id: '4',
         name: '',
         description: '',
         cost: new Decimal('0'),

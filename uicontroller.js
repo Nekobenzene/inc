@@ -301,14 +301,6 @@ function bindEvents() {
         toggleChallenge(index);
     });
 
-    document.getElementById('infinity-upgrade-grid').addEventListener('click', function(e) {
-        const card = e.target.closest('.infinity-upgrade-card');
-        if (!card) return;
-        const index = parseInt(card.dataset.index);
-        if (isNaN(index)) return;
-        toggleChallenge(index);
-    });
-
     document.querySelectorAll('.batch-option').forEach(btn => {
         btn.addEventListener('click', function() {
             if (state.isInfinityReached) return;
@@ -335,7 +327,7 @@ function bindEvents() {
     // 无限页选项卡切换
     document.querySelectorAll('.infinity-tab').forEach(tab => {
         tab.addEventListener('click', function() {
-            const tabName = this.dataset.infinityTab;
+            const tabName = this.dataset.tab;
 
             // 切换选项卡按钮激活状态
             document.querySelectorAll('.infinity-tab').forEach(t => t.classList.remove('active'));

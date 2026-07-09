@@ -174,7 +174,7 @@ function initState() {
     state.axioms = new Decimal('0');
     state.infinityUpgrades = INFINITY_UPGRADES.map(() => ({
         purchased: false,
-        unlocked: false,
+        available: false,
     }));
 
     checkGeneratorUnlock();
@@ -247,7 +247,7 @@ function serializeState() {
         rebootCount: state.rebootCount,
         peakPointsForReboot: state.peakPointsForReboot,
         axioms: state.axioms,
-        infinityUpgrades: stete.infinityUpgrades,
+        infinityUpgrades: state.infinityUpgrades,
     };
 
     return serializeValue(stateToSerialize);
@@ -423,12 +423,12 @@ function deserializeState(data) {
     if (Array.isArray(deserialized.infinityUpgrades)) {
         state.infinityUpgrades = deserialized.infinityUpgrades.map(item => ({
             purchased: !!item.purchased,
-            unlocked: !!item.unlocked,
+            available: !!item.available,
         }));
     } else {
         state.infinityUpgrades = INFINITY_UPGRADES.map(() => ({
             purchased: false,
-            unlocked: false,
+            available: false,
         }));
     };
 
