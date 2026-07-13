@@ -132,6 +132,7 @@ function performInfinityReset(keepPaused = false) {
     
     const axiomsGain = INFINITY_CONFIG.axiomsGainFn(state)
     state.axioms = state.axioms.add(axiomsGain);
+    updateInfinityUpgradeAvailability();
 
     state.speed = new Decimal('1');
     state.points = new Decimal(GAME_CONFIG.startingPoints);
@@ -449,6 +450,64 @@ function performPrestige() {
     resetForPrestige();
 
     renderAll();
+    return true;
+}
+
+function updateInfinityUpgradeAvailability() {
+    if (!Array.isArray(state.infinityUpgrades)) {
+        state.infinityUpgrades = INFINITY_UPGRADES.map(() => ({
+            purchased: false,
+            available: false,
+        }));
+    }
+    
+    for (let i = 0; i < INFINITY_UPGRADES.length; i++) {
+        const upgrade = INFINITY_UPGRADES[i];
+        const upgradeState = state.infinityUpgrades[i];
+        
+        if (!upgradeState) {
+            state.infinityUpgrades[i] = {
+                purchased: false,
+                available: false,
+            };
+        }
+        
+        if (state.infinityUpgrades[i].purchased) {
+            state.infinityUpgrades[i].available = false;
+        } else {
+            state.infinityUpgrades[i].available = state.axioms.gte(upgrade.cost);
+        }
+    }
+}
+
+function canBuyInfinityUpgrade(index) {
+    const upgrade = INFINITY_UPGRADES[index];
+    const upgradeState = state.infinityUpgrades[index];
+    
+    if (!upgrade || !upgradeState) return false;
+    if (upgradeState.purchased) return false;
+    
+    return state.axioms.gte(upgrade.cost);
+}
+function buyInfinityUpgrade(index) {
+    const upgrade = INFINITY_UPGRADES[index];
+    const upgradeState = state.infinityUpgrades[index];
+    
+    if (!upgrade || !upgradeState) return false;
+    if (!canBuyInfinityUpgrade(index)) return false;
+    
+    state.axioms = state.axioms.sub(upgrade.cost);
+    upgradeState.purchased = true;
+    upgradeState.available = false;
+    
+    if (typeof upgrade.reward === 'function') {
+        upgrade.reward(state);
+    }
+    
+    updateInfinityUpgradeAvailability();
+    renderAll();
+    saveGame();
+    
     return true;
 }
 

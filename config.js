@@ -274,7 +274,7 @@ const GROWTH_CONFIG = {
     },
 
     applyGrowth: (state, deltaSeconds) => {
-        state.speed = state.challengeReward.cha1;
+        state.speed = state.challengeReward.cha1.mul(state.infinityUpgradeReward.iu1);
         let speed = state.speed;
 
         if (state.isInChallenge === 0) {
@@ -392,28 +392,28 @@ const PRESTIGE_CONFIG = {
 
 const INFINITY_UPGRADES = [
     {
-        id: '1',
-        name: '',
-        description: '',
-        cost: new Decimal('0'),
+        id: 'IU1',
+        description: '为游戏速度提供×3加成',
+        cost: new Decimal('1'),
+        reward: (state) => {
+            state.infinityUpgradeReward.iu1 = new Decimal('3');
+        }
     },
     {
-        id: '2',
-        name: '',
-        description: '',
-        cost: new Decimal('0'),
+        id: 'IU2',
+        description: '为游戏速度提供×3加成',
+        cost: new Decimal('1'),
+        reward: (state) => {
+            state.infinityUpgradeReward.iu1 = new Decimal('3');
+        }
     },
     {
-        id: '3',
-        name: '',
-        description: '',
-        cost: new Decimal('0'),
-    },
-    {
-        id: '4',
-        name: '',
-        description: '',
-        cost: new Decimal('0'),
+        id: 'IU3',
+        description: '为游戏速度提供×3加成',
+        cost: new Decimal('5'),
+        reward: (state) => {
+            state.infinityUpgradeReward.iu1 = new Decimal('3');
+        }
     },
 ];
 

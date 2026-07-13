@@ -264,10 +264,12 @@ function renderInfinityUpgrades() {
     const grid = document.getElementById('infinity-upgrade-grid');
     if (!grid) return;
     
+    updateInfinityUpgradeAvailability();
+    
     const upgrades = INFINITY_UPGRADES || [];
     const states = state.infinityUpgrades || [];
     
-    grid.innerHTML = ''; // 清空
+    grid.innerHTML = '';
     
     upgrades.forEach((upgrade, index) => {
         const card = document.createElement('div');
@@ -276,7 +278,6 @@ function renderInfinityUpgrades() {
         
         const st = states[index] || { purchased: false, available: false };
         
-        // 根据状态添加样式类
         if (st.purchased) {
             card.classList.add('purchased');
         } else if (st.available) {
@@ -285,12 +286,12 @@ function renderInfinityUpgrades() {
             card.classList.add('disabled');
         }
         
-        // 填充内容（仅显示，不实现交互）
         card.innerHTML = `
-            <div class="infinity-upgrade-name">${upgrade.name}</div>
             <div class="infinity-upgrade-desc">${upgrade.description}</div>
-            <div class="infinity-upgrade-cost">消耗：${formatDecimal(upgrade.cost)} 公理</div>
-            <div class="infinity-upgrade-status">${st.purchased ? '已购买' : st.available ? '可购买' : '未解锁'}</div>
+            <div class="infinity-upgrade-cost">消耗:${formatDecimal(upgrade.cost)} 公理</div>
+            <div class="infinity-upgrade-status">
+                ${st.purchased ? '已购买' : st.available ? '可购买' : '不可购买'}
+            </div>
         `;
         
         grid.appendChild(card);

@@ -56,6 +56,9 @@ const state = {
     axioms: new Decimal('0'),
     
     infinityUpgrades: [],
+    infinityUpgradeReward:{
+        iu1: new Decimal('1'),
+    },
 };
 
 function getAchievementCount(state) {
@@ -176,8 +179,12 @@ function initState() {
         purchased: false,
         available: false,
     }));
+    state.infinityUpgradeReward = {
+        iu1: new Decimal('1'),
+    };
 
     checkGeneratorUnlock();
+    updateInfinityUpgradeAvailability();
 }
 
 function serializeState() {
@@ -248,6 +255,7 @@ function serializeState() {
         peakPointsForReboot: state.peakPointsForReboot,
         axioms: state.axioms,
         infinityUpgrades: state.infinityUpgrades,
+        infinityUpgradeReward: state.infinityUpgradeReward,
     };
 
     return serializeValue(stateToSerialize);
@@ -431,8 +439,20 @@ function deserializeState(data) {
             available: false,
         }));
     };
+    
+    if (deserialized.infinityUpgradeReward && typeof deserialized.infinityUpgradeReward === 'object') {
+        state.infinityUpgradeReward = {
+            iu1: toDecimal(deserialized.infinityUpgradeReward.iu1, 1),
+        };
+    } else {
+        state.infinityUpgradeReward = {
+            iu1: new Decimal(1),
+        };
+    }
+
 
     checkGeneratorUnlock();
+    updateInfinityUpgradeAvailability();
 }
 
 function saveGame() {

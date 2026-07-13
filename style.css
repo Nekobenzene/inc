@@ -1477,10 +1477,8 @@ body {
     user-select: none;
 }
 
-.infinity-upgrade-card.pending {
-    opacity: 0.6;
-    filter: grayscale(0.3);
-    border-color: #333;
+.infinity-upgrade-card.available{
+    transform: scale(0.98);
 }
 
 .infinity-upgrade-card.disabled{

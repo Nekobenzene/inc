@@ -338,7 +338,18 @@ function bindEvents() {
             const targetContent = document.getElementById('infinity-tab-' + tabName);
             if (targetContent) targetContent.classList.add('active');
         });
-});
+    });
+    
+    // 无限升级
+    document.getElementById('infinity-upgrade-grid')?.addEventListener('click', function(e) {
+        const card = e.target.closest('.infinity-upgrade-card');
+        if (!card) return;
+    
+        const index = parseInt(card.dataset.index);
+        if (isNaN(index)) return;
+    
+        buyInfinityUpgrade(index);
+    });
 
     bindNotificationEvents();
 }
