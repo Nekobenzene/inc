@@ -58,6 +58,9 @@ const state = {
     infinityUpgrades: [],
     infinityUpgradeReward:{
         iu1: new Decimal('1'),
+        iu2: new Decimal('0'),
+        iu3: new Decimal('1'),
+        iu4: new Decimal('1'),
     },
 };
 
@@ -181,6 +184,9 @@ function initState() {
     }));
     state.infinityUpgradeReward = {
         iu1: new Decimal('1'),
+        iu2: new Decimal('0'),
+        iu3: new Decimal('1'),
+        iu4: new Decimal('1'),
     };
 
     checkGeneratorUnlock();
@@ -443,10 +449,16 @@ function deserializeState(data) {
     if (deserialized.infinityUpgradeReward && typeof deserialized.infinityUpgradeReward === 'object') {
         state.infinityUpgradeReward = {
             iu1: toDecimal(deserialized.infinityUpgradeReward.iu1, 1),
+            iu2: toDecimal(deserialized.infinityUpgradeReward.iu2, 1),
+            iu3: toDecimal(deserialized.infinityUpgradeReward.iu3, 1),
+            iu4: toDecimal(deserialized.infinityUpgradeReward.iu4, 1),
         };
     } else {
         state.infinityUpgradeReward = {
             iu1: new Decimal(1),
+            iu2: new Decimal(1),
+            iu3: new Decimal(1),
+            iu4: new Decimal(1),
         };
     }
 
