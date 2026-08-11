@@ -183,25 +183,27 @@ function bindEvents() {
     });
 
     const prestigeBtn = document.querySelector('.prestige-btn');
-    prestigeBtn?.addEventListener('click', () => {
+    prestigeBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (state.isInfinityReached) return;
         if (!canPrestige()) return;
         performPrestige();
     });
 
     const rebootBtn = document.getElementById('reboot-button');
-    rebootBtn?.addEventListener('click', () => {
+    rebootBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (!state.isInfinityReached) return;
         playInfinityResetSequence();
     });
 
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.quiet-reboot-button');
-        if (btn && !btn.classList.contains('locked') && state.isInfinityReached) {
-            e.preventDefault();          // 阻止可能的默认行为
+    document.querySelectorAll('.quiet-reboot-button').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (btn.classList.contains('locked') || !state.isInfinityReached) return;
             performInfinityReset();
             renderAll();
-        }
+        });
     });
 
     navigateTo('game');
@@ -314,16 +316,6 @@ function bindEvents() {
         });
     });
     
-    // 绑定所有安静归零按钮（两个页面都生效）
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.quiet-reboot-button');
-        if (btn && !btn.classList.contains('locked') && state.isInfinityReached) {
-            e.preventDefault();
-            performInfinityReset();
-            renderAll();
-        }
-    });
-
     // 无限页选项卡切换
     document.querySelectorAll('.infinity-tab').forEach(tab => {
         tab.addEventListener('click', function() {

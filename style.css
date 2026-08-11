@@ -1077,6 +1077,9 @@ body {
     text-transform: uppercase;
 }
 
+.prestige-btn * {
+    pointer-events: none;
+}
 .prestige-btn.locked {
     opacity: 0.4;
     cursor: not-allowed;
@@ -1285,6 +1288,10 @@ body {
     box-shadow: none;
     animation: none;
     transition: background-color 0.15s ease, transform 0.05s ease;
+}
+
+.quiet-reboot-button * {
+    pointer-events: none;
 }
 
 .quiet-reboot-button:active {
