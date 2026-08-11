@@ -142,6 +142,17 @@ const ACHIEVEMENTS = [
         check: () => state.rebootCount.gte(new Decimal('1')),
         stage: 2,
     },
+    {
+        id: 'achievement_16',
+        name: '双倍无限',
+        description: '执行两次归零',
+        check: () => state.rebootCount.gte(new Decimal('2')),
+        rewardDescription: '解锁自动化!',
+        reward: (state) => {
+            state.isAutomationUnlocked = true;
+        },
+        stage: 2,
+    },
 ];
 
 const GAME_CONFIG = {
@@ -155,6 +166,7 @@ const GAME_CONFIG = {
 const NAV_PAGES = [
     { id: 'game', label: '生产' },
     { id: 'infinity', label: '无限' },
+    { id: 'automation', label: '自动化' },
     { id: 'achievements', label: '成就' },
     { id: 'stats', label: '统计' },
     { id: 'settings', label: '设置' },

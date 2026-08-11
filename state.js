@@ -62,6 +62,8 @@ const state = {
         iu3: new Decimal('1'),
         iu4: new Decimal('1'),
     },
+
+    isAutomationUnlocked: false,
 };
 
 function getAchievementCount(state) {
@@ -189,6 +191,8 @@ function initState() {
         iu4: new Decimal('1'),
     };
 
+    state.isAutomationUnlocked = false;
+
     checkGeneratorUnlock();
     updateInfinityUpgradeAvailability();
 }
@@ -262,6 +266,8 @@ function serializeState() {
         axioms: state.axioms,
         infinityUpgrades: state.infinityUpgrades,
         infinityUpgradeReward: state.infinityUpgradeReward,
+
+        isAutomationUnlocked: state.isAutomationUnlocked,
     };
 
     return serializeValue(stateToSerialize);
@@ -461,6 +467,8 @@ function deserializeState(data) {
             iu4: new Decimal(1),
         };
     }
+
+    state.isAutomationUnlocked = !!deserialized.isAutomationUnlocked;
 
 
     checkGeneratorUnlock();
