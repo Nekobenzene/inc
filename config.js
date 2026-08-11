@@ -111,7 +111,7 @@ const ACHIEVEMENTS = [
         name: '满分',
         description: '达到e100 P',
         check: () => state.points.gte(new Decimal('1e100')),
-        rewardDescription: '成就8加成为^2.5更强',
+        rewardDescription: '成就7加成为^2.5更强',
         reward: (state)  => {
             state.achReward.ach12 = new Decimal('2.5')
         },
@@ -164,26 +164,26 @@ const GENERATOR_CONFIGS = [
     {
         costFn: (quantity, level) => {
             let costInc = new Decimal('2')
-            if (state.isInChallenge === 2) {
+            if (state.isInChallenge === 3) {
                 costInc = costInc.pow(new Decimal('1.5'))
             } else {
                 costInc = costInc.pow(state.achReward.ach6);
             };
             costInc = costInc.pow(state.infinityUpgradeReward.iu3);
-        const cost = new Decimal('10').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha3)
+        const cost = new Decimal('10').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha4)
             return cost
         },
         maxQuantityFn: (level) => new Decimal(level).add(new Decimal('1')).mul(new Decimal('10')),
         rateFn: (quantity, level) => {
             const base = new Decimal(quantity).mul(new Decimal('1.01').pow(quantity)).mul(new Decimal('5').pow(level)).mul(state.achReward.ach3);
-            if (state.isInChallenge === 3) {
+            if (state.isInChallenge === 1) {
                 return base.pow(new Decimal('0.3'));
             } else {
-                let effectiveCha4 = state.challengeReward.cha4;
-                if (effectiveCha4.gt(new Decimal('1'))) {
-                    effectiveCha4 = effectiveCha4.mul(state.infinityUpgradeReward.iu4);
+                let effectiveCha2 = state.challengeReward.cha2;
+                if (effectiveCha2.gt(new Decimal('1'))) {
+                    effectiveCha2 = effectiveCha2.mul(state.infinityUpgradeReward.iu4);
                 }
-                return base.pow(effectiveCha4);
+                return base.pow(effectiveCha2);
             }
         },
         initial: { quantity: new Decimal('0'), level: new Decimal('0'), multiple: new Decimal('1') }
@@ -191,26 +191,26 @@ const GENERATOR_CONFIGS = [
     {
         costFn: (quantity, level) => {
             let costInc = new Decimal('4')
-            if (state.isInChallenge === 2) {
+            if (state.isInChallenge === 3) {
                 costInc = costInc.pow(new Decimal('1.5'))
             } else {
                 costInc = costInc.pow(state.achReward.ach6);
             };
             costInc = costInc.pow(state.infinityUpgradeReward.iu3);
-        const cost = new Decimal('1000').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha3)
+        const cost = new Decimal('1000').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha4)
             return cost
         },
         maxQuantityFn: (level) => new Decimal(level).add(new Decimal('1')).mul(new Decimal('15')),
         rateFn: (quantity, level) => {
             const base = new Decimal(quantity).mul(new Decimal('1.15').pow(quantity)).mul(new Decimal('8').pow(level)).mul(state.achReward.ach3);
-            if (state.isInChallenge === 3) {
+            if (state.isInChallenge === 1) {
                 return base.pow(new Decimal('0.3'));
             } else {
-                let effectiveCha4 = state.challengeReward.cha4;
-                if (effectiveCha4.gt(new Decimal('1'))) {
-                    effectiveCha4 = effectiveCha4.mul(state.infinityUpgradeReward.iu4);
+                let effectiveCha2 = state.challengeReward.cha2;
+                if (effectiveCha2.gt(new Decimal('1'))) {
+                    effectiveCha2 = effectiveCha2.mul(state.infinityUpgradeReward.iu4);
                 }
-                return base.pow(effectiveCha4);
+                return base.pow(effectiveCha2);
             }
         },
         initial: { quantity: new Decimal('0'), level: new Decimal('0'), multiple: new Decimal('1')}
@@ -218,26 +218,26 @@ const GENERATOR_CONFIGS = [
     {
         costFn: (quantity, level) => {
             let costInc = new Decimal('8')
-            if (state.isInChallenge === 2) {
+            if (state.isInChallenge === 3) {
                 costInc = costInc.pow(new Decimal('1.5'))
             } else {
                 costInc = costInc.pow(state.achReward.ach6);
             };
             costInc = costInc.pow(state.infinityUpgradeReward.iu3);
-        const cost = new Decimal('1e7').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha3)
+        const cost = new Decimal('1e7').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha4)
             return cost
         },
         maxQuantityFn: (level) => new Decimal(level).add(new Decimal('1')).mul(new Decimal('20')),
         rateFn: (quantity, level) => {
             const base = new Decimal(quantity).mul(new Decimal('1.28').pow(quantity)).mul(new Decimal('15').pow(level)).mul(state.achReward.ach3);
-            if (state.isInChallenge === 3) {
+            if (state.isInChallenge === 1) {
                 return base.pow(new Decimal('0.3'));
             } else {
-                let effectiveCha4 = state.challengeReward.cha4;
-                if (effectiveCha4.gt(new Decimal('1'))) {
-                    effectiveCha4 = effectiveCha4.mul(state.infinityUpgradeReward.iu4);
+                let effectiveCha2 = state.challengeReward.cha2;
+                if (effectiveCha2.gt(new Decimal('1'))) {
+                    effectiveCha2 = effectiveCha2.mul(state.infinityUpgradeReward.iu4);
                 }
-                return base.pow(effectiveCha4);
+                return base.pow(effectiveCha2);
             }
         },
         initial: { quantity: new Decimal('0'), level: new Decimal('0'), multiple: new Decimal('1')}
@@ -245,26 +245,26 @@ const GENERATOR_CONFIGS = [
     {
         costFn: (quantity, level) => {
             let costInc = new Decimal('15')
-            if (state.isInChallenge === 2) {
+            if (state.isInChallenge === 3) {
                 costInc = costInc.pow(new Decimal('1.5'))
             } else {
                 costInc = costInc.pow(state.achReward.ach6);
             };
             costInc = costInc.pow(state.infinityUpgradeReward.iu3);
-        const cost = new Decimal('1e13').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha3)
+        const cost = new Decimal('1e13').mul(new Decimal(costInc).pow(quantity.add(new Decimal(level).mul(new Decimal('4'))))).pow(state.challengeReward.cha4)
             return cost
         },
         maxQuantityFn: (level) => new Decimal(level).add(new Decimal('1')).mul(new Decimal('30')),
         rateFn: (quantity, level) => {
             const base = new Decimal(quantity).mul(new Decimal('1.35').pow(quantity)).mul(new Decimal('25').pow(level)).mul(state.achReward.ach3);
-            if (state.isInChallenge === 3) {
+            if (state.isInChallenge === 1) {
                 return base.pow(new Decimal('0.3'));
             } else {
-                let effectiveCha4 = state.challengeReward.cha4;
-                if (effectiveCha4.gt(new Decimal('1'))) {
-                    effectiveCha4 = effectiveCha4.mul(state.infinityUpgradeReward.iu4);
+                let effectiveCha2 = state.challengeReward.cha2;
+                if (effectiveCha2.gt(new Decimal('1'))) {
+                    effectiveCha2 = effectiveCha2.mul(state.infinityUpgradeReward.iu4);
                 }
-                return base.pow(effectiveCha4);
+                return base.pow(effectiveCha2);
             }
         },
         initial: { quantity: new Decimal('0'), level: new Decimal('0'), multiple: new Decimal('1')}
@@ -286,11 +286,11 @@ const GROWTH_CONFIG = {
         } else {state.pointMult = new Decimal('1')}
         state.pointMult = state.pointMult.mul(state.prestigeMult)
         // Pe
-        let effectiveCha2 = state.challengeReward.cha2;
-        if (effectiveCha2.gt(new Decimal('0'))) {
-            effectiveCha2 = effectiveCha2.mul(state.infinityUpgradeReward.iu4);
+        let effectiveCha3 = state.challengeReward.cha3;
+        if (effectiveCha3.gt(new Decimal('0'))) {
+            effectiveCha3 = effectiveCha3.mul(state.infinityUpgradeReward.iu4);
         }
-        state.pointExp = state.achReward.ach8.add(effectiveCha2).add(new Decimal('1')).mul(state.prestigeExp)
+        state.pointExp = state.achReward.ach8.add(effectiveCha3).add(new Decimal('1')).mul(state.prestigeExp)
         // 输出
         r = r.mul(state.pointMult);
         r = r.pow(state.pointExp);
@@ -298,11 +298,12 @@ const GROWTH_CONFIG = {
     },
 
     applyGrowth: (state, deltaSeconds) => {
-        let effectiveCha1 = state.challengeReward.cha1;
-        if (effectiveCha1.gt(new Decimal('1'))) {
-            effectiveCha1 = effectiveCha1.mul(state.infinityUpgradeReward.iu4);
+        let effectiveCha2 = state.challengeReward.cha2;
+        if (effectiveCha2.gt(new Decimal('1'))) {
+            effectiveCha2 = effectiveCha2.mul(state.infinityUpgradeReward.iu4);
         }
-        state.speed = effectiveCha1.mul(state.infinityUpgradeReward.iu1);
+        let effectiveIU1 = state.rebootCount.add(new Decimal('1')).mul(state.rebootCount.add(new Decimal('1')).log(new Decimal('10'))).pow(state.infinityUpgradeReward.iu1);
+        state.speed = effectiveCha2.mul(effectiveIU1).mul(state.challengeReward.cha1);
         let speed = state.speed;
 
         if (state.isInChallenge === 0) {
@@ -358,37 +359,37 @@ const CHALLENGES = [
     },
     {
         id: 'challenge_2',
+        name: '极致压缩',
+        limitationDescription: '发电机效率变为^0.3',
+        target: '拥有2级发电机2',
+        reward: (state) => {
+            state.challengeReward.cha2 = new Decimal('1.1');
+        },
+        rewardDescription: '所有发电机效率^1.1',
+        check: (state) => state.generatorUpgrades[1].level.gte(new Decimal('2'))
+    },
+    {
+        id: 'challenge_3',
         name: '双人成行',
         limitationDescription: '后两个发电机被锁定',
         target: '达到2级发电机2',
         reward: (state) => {
-            state.challengeReward.cha2 = state.challengeReward.cha2.add(new Decimal('0.05'));
+            state.challengeReward.cha3 = state.challengeReward.cha3.add(new Decimal('0.05'));
             checkGeneratorUnlock();
         },
         rewardDescription: '指数提升0.05',
         check: (state) => state.generatorUpgrades[1].level.gte(new Decimal('2'))
     },
     {
-        id: 'challenge_3',
+        id: 'challenge_4',
         name: '通货膨胀',
-        limitationDescription: '价格增长^1.5，成就6效果禁用',
+        limitationDescription: '价格增长^1.5，成就6无用',
         target: '拥有10级发电机1',
         reward: (state) => {
-            state.challengeReward.cha3 = new Decimal('0.95');
+            state.challengeReward.cha4 = new Decimal('0.95');
         },
         rewardDescription: '所有发电机价格^0.95',
         check: (state) => state.generatorUpgrades[0].level.gte(new Decimal('10'))
-    },
-    {
-        id: 'challenge_4',
-        name: '极致压缩',
-        limitationDescription: '发电机效率变为^0.3',
-        target: '拥有2级发电机2',
-        reward: (state) => {
-            state.challengeReward.cha4 = new Decimal('1.1');
-        },
-        rewardDescription: '所有发电机效率^1.1',
-        check: (state) => state.generatorUpgrades[1].level.gte(new Decimal('2'))
     },
 ];
 
@@ -421,18 +422,18 @@ const PRESTIGE_CONFIG = {
 const INFINITY_UPGRADES = [
     {
         id: 'IU1',
-        description: '为游戏速度提供×3加成',
+        description: '根据归零次数+1以xlogx加成游戏速度',
         cost: new Decimal('1'),
         reward: (state) => {
-            state.infinityUpgradeReward.iu1 = new Decimal('3');
+            state.infinityUpgradeReward.iu1 = new Decimal('1');
         }
     },
     {
         id: 'IU2',
-        description: '归零获得公理 +1',
-        cost: new Decimal('5'),
+        description: '归零保留全部成就',
+        cost: new Decimal('1'),
         reward: (state) => {
-            state.infinityUpgradeReward.iu2 = new Decimal('1');
+            state.infinityUpgradeReward.iu2 = new Decimal('0');
         }
     },
     {
@@ -619,31 +620,31 @@ const NOTIFICATIONS = [
     {
         id: 'notify_challenge2',
         title: '挑战成功',
-        message: 'Pe提升0.05',
+        message: '发电机效率＾1.1',
         type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.challengeReward.cha2.eq(new Decimal('0.05')),
+        condition: (state) => state.challengeReward.cha2.eq(new Decimal('1.1')),
         stage: 1,
     },
     {
         id: 'notify_challenge3',
         title: '挑战成功',
-        message: '发电机价格增速＾0.95',
+        message: 'Pe提升0.05',
         type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.challengeReward.cha3.eq(new Decimal('0.95')),
+        condition: (state) => state.challengeReward.cha3.eq(new Decimal('0.05')),
         stage: 1,
     },
     {
         id: 'notify_challenge4',
         title: '挑战成功',
-        message: '发电机效率＾1.1',
+        message: '发电机价格增速＾0.95',
         type: 'reward',
         duration: 2,
         once: true,
-        condition: (state) => state.challengeReward.cha4.eq(new Decimal('1.1')),
+        condition: (state) => state.challengeReward.cha4.eq(new Decimal('0.95')),
         stage: 1,
     },
     // 成就奖励
@@ -850,7 +851,7 @@ const INFINITY_CONFIG = {
     flashDuration: 1000,
     garbleInterval: 120,
     axiomsGainFn: (peakPoints) => {
-        return new Decimal(1).add(state.infinityUpgradeReward.iu2);
+        return new Decimal(1);
     },
     story: "分数超过了双精度浮点数上限\n 游戏因溢出而归零。\n\n 你获得了一些{garble:公理|Axioms}。\n 尝试用{garble:公理|Axioms}打破无限。"
 };

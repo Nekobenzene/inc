@@ -288,10 +288,7 @@ function renderInfinityUpgrades() {
         
         card.innerHTML = `
             <div class="infinity-upgrade-desc">${upgrade.description}</div>
-            <div class="infinity-upgrade-cost">消耗:${formatDecimal(upgrade.cost)} 公理</div>
-            <div class="infinity-upgrade-status">
-                ${st.purchased ? '已购买' : st.available ? '可购买' : '不可购买'}
-            </div>
+            <div class="infinity-upgrade-cost">${formatDecimal(upgrade.cost)} 公理</div>
         `;
         
         grid.appendChild(card);

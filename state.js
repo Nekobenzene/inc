@@ -26,8 +26,8 @@ const state = {
     challengeUnlocked: false,
     challengeReward: {
         cha1: new Decimal('1'),
-        cha2: new Decimal('0'),
-        cha3: new Decimal('1'),
+        cha2: new Decimal('1'),
+        cha3: new Decimal('0'),
         cha4: new Decimal('1'),
     },
     challengeSpendTime: [],
@@ -57,8 +57,8 @@ const state = {
     
     infinityUpgrades: [],
     infinityUpgradeReward:{
-        iu1: new Decimal('1'),
-        iu2: new Decimal('0'),
+        iu1: new Decimal('0'),
+        iu2: new Decimal('1'),
         iu3: new Decimal('1'),
         iu4: new Decimal('1'),
     },
@@ -113,8 +113,8 @@ function checkGeneratorUnlock() {
             state.generatorUnlocked[i] = true;
         }
 
-        // challenge_2 的索引是 1:后两个发电机临时锁定
-        if (state.isInChallenge === 1 && i >= 2) {
+        // challenge后两个发电机临时锁定
+        if (state.isInChallenge === 2 && i >= 2) {
             u.unlocked = false;
         } else {
             u.unlocked = !!state.generatorUnlocked[i];
@@ -150,8 +150,8 @@ function initState() {
     state.challengeUnlocked = false;
     state.challengeReward = {
         cha1: new Decimal('1'),
-        cha2: new Decimal('0'),
-        cha3: new Decimal('1'),
+        cha2: new Decimal('1'),
+        cha3: new Decimal('0'),
         cha4: new Decimal('1'),
     };
     state.challengeSpendTime = CHALLENGES.map(() => new Decimal('-1'));
@@ -183,8 +183,8 @@ function initState() {
         available: false,
     }));
     state.infinityUpgradeReward = {
-        iu1: new Decimal('1'),
-        iu2: new Decimal('0'),
+        iu1: new Decimal('0'),
+        iu2: new Decimal('1'),
         iu3: new Decimal('1'),
         iu4: new Decimal('1'),
     };
@@ -371,15 +371,15 @@ function deserializeState(data) {
     if (deserialized.challengeReward && typeof deserialized.challengeReward === 'object') {
         state.challengeReward = {
             cha1: toDecimal(deserialized.challengeReward.cha1, 1),
-            cha2: toDecimal(deserialized.challengeReward.cha2, 0),
-            cha3: toDecimal(deserialized.challengeReward.cha3, 1),
+            cha2: toDecimal(deserialized.challengeReward.cha2, 1),
+            cha3: toDecimal(deserialized.challengeReward.cha3, 0),
             cha4: toDecimal(deserialized.challengeReward.cha4, 1),
         };
     } else {
         state.challengeReward = {
             cha1: new Decimal(1),
-            cha2: new Decimal(0),
-            cha3: new Decimal(1),
+            cha2: new Decimal(1),
+            cha3: new Decimal(0),
             cha4: new Decimal(1),
         };
     }
@@ -448,14 +448,14 @@ function deserializeState(data) {
     
     if (deserialized.infinityUpgradeReward && typeof deserialized.infinityUpgradeReward === 'object') {
         state.infinityUpgradeReward = {
-            iu1: toDecimal(deserialized.infinityUpgradeReward.iu1, 1),
+            iu1: toDecimal(deserialized.infinityUpgradeReward.iu1, 0),
             iu2: toDecimal(deserialized.infinityUpgradeReward.iu2, 1),
             iu3: toDecimal(deserialized.infinityUpgradeReward.iu3, 1),
             iu4: toDecimal(deserialized.infinityUpgradeReward.iu4, 1),
         };
     } else {
         state.infinityUpgradeReward = {
-            iu1: new Decimal(1),
+            iu1: new Decimal(0),
             iu2: new Decimal(1),
             iu3: new Decimal(1),
             iu4: new Decimal(1),

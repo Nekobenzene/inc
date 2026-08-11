@@ -144,26 +144,28 @@ function performInfinityReset(keepPaused = false) {
     state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => createGeneratorUpgrade(config, index));
     state.generatorUnlocked = GENERATOR_CONFIGS.map(() => false);
     const oldAchievements = state.achievements.slice();
-    state.achievements = ACHIEVEMENTS.map((a, index) => {
-        if (a.stage === 2 && oldAchievements[index] === true) {
-            return true;
-        }
-        return false;
-    });
-    state.achReward = {
-        ach3: new Decimal('1'),
-        ach6: new Decimal('1'),
-        ach7: new Decimal('0'),
-        ach8: new Decimal('0'),
-        ach12: new Decimal('1'),
+    if (state.infinityUpgradeReward.iu2.gt(new Decimal('1'))) {
+        state.achievements = ACHIEVEMENTS.map((a, index) => {
+            if (a.stage === 2 && oldAchievements[index] === true) {
+                return true;
+            }
+            return false;
+        });
+        state.achReward = {
+            ach3: new Decimal('1'),
+            ach6: new Decimal('1'),
+            ach7: new Decimal('0'),
+            ach8: new Decimal('0'),
+            ach12: new Decimal('1'),
+        };
     };
     state.pointExp = new Decimal('1');
     state.pointMult = new Decimal('1');
     state.challengeUnlocked = false;
     state.challengeReward = {
         cha1: new Decimal('1'),
-        cha2: new Decimal('0'),
-        cha3: new Decimal('1'),
+        cha2: new Decimal('1'),
+        cha3: new Decimal('0'),
         cha4: new Decimal('1'),
     };
     state.challengeSpendTime = CHALLENGES.map(() => new Decimal('-1'));

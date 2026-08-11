@@ -1504,6 +1504,21 @@ body {
     border-color: #00FFFF;
     background: #084C4C;
     box-shadow: 0 0 20px rgba(255, 165, 0, 0.08);
+    transform: scale(1.015);
+}
+
+.infinity-upgrade-desc {
+    font-size: 1em;
+    color: #ffffaa;
+    line-height: 1.5;
+    margin-top: 2px;
+}
+
+.infinity-upgrade-cost {
+    font-size: 0.8em;
+    color: #ffffff;
+    line-height: 1.5;
+    margin-top: 2px;
 }
 
 
@@ -1581,8 +1596,8 @@ body {
     }
 
     /* 无限升级卡片（桌面悬停） */
-    .infinity-upgrade-card:hover{
-        transform: scale(1.03);    
+    .infinity-upgrade-card.available:hover{
+        transform: scale(1.015);    
     }
     
     /* 侧边关闭按钮 (桌面悬停) */
