@@ -124,6 +124,14 @@ function checkGeneratorUnlock() {
     }
 }
 
+function refreshUnlocks() {
+    const findAch = (id) => ACHIEVEMENTS.findIndex(a => a.id === id);
+    state.challengeUnlocked = !!state.achievements[findAch('achievement_9')];
+    state.batchPurchaseUnlocked = !!state.achievements[findAch('achievement_10')];
+    state.prestigeUnlocked = !!state.achievements[findAch('achievement_13')];
+    state.isAutomationUnlocked = !!state.achievements[findAch('achievement_16')];
+}
+
 function initState() {
     state.speed = new Decimal('1');
     state.developerSpeeduper = new Decimal('1');

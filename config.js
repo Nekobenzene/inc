@@ -147,7 +147,7 @@ const ACHIEVEMENTS = [
         name: '双倍无限',
         description: '执行两次归零',
         check: () => state.rebootCount.gte(new Decimal('2')),
-        rewardDescription: '解锁自动化!',
+        rewardDescription: '解锁发电机购入自动化!',
         reward: (state) => {
             state.isAutomationUnlocked = true;
         },
@@ -781,7 +781,16 @@ const NOTIFICATIONS = [
         condition: (state) => state.prestigeUnlocked,
         stage: 1,
     },
-
+    {
+        id: 'notify_automation_unlock',
+        title: '解锁功能',
+        message: '解锁自动化！',
+        type: 'unlock',
+        duration: 2,
+        once: true,
+        condition: (state) => state.isAutomationUnlocked,
+        stage: 2,
+    }
 ];
 
 const STATS_CONFIG = {

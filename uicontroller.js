@@ -194,14 +194,14 @@ function bindEvents() {
     rebootBtn?.addEventListener('click', (e) => {
         e.stopPropagation();
         if (!state.isInfinityReached) return;
-        playInfinityResetSequence();
+        playRebootSequence();
     });
 
     document.querySelectorAll('.quiet-reboot-button').forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (btn.classList.contains('locked') || !state.isInfinityReached) return;
-            performInfinityReset();
+            performReboot();
             renderAll();
         });
     });

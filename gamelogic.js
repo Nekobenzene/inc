@@ -128,7 +128,7 @@ function triggerInfinity() {
     return true;
 }
 
-function performInfinityReset(keepPaused = false) {
+function performReboot(keepPaused = false) {
     
     const axiomsGain = INFINITY_CONFIG.axiomsGainFn(state)
     state.axioms = state.axioms.add(axiomsGain);
@@ -144,7 +144,7 @@ function performInfinityReset(keepPaused = false) {
     state.generatorUpgrades = GENERATOR_CONFIGS.map((config, index) => createGeneratorUpgrade(config, index));
     state.generatorUnlocked = GENERATOR_CONFIGS.map(() => false);
     const oldAchievements = state.achievements.slice();
-    if (state.infinityUpgradeReward.iu2.gt(new Decimal('1'))) {
+    if (state.infinityUpgradeReward.iu2.eq(new Decimal('1'))) {
         state.achievements = ACHIEVEMENTS.map((a, index) => {
             if (a.stage === 2 && oldAchievements[index] === true) {
                 return true;
@@ -161,7 +161,6 @@ function performInfinityReset(keepPaused = false) {
     };
     state.pointExp = new Decimal('1');
     state.pointMult = new Decimal('1');
-    state.challengeUnlocked = false;
     state.challengeReward = {
         cha1: new Decimal('1'),
         cha2: new Decimal('1'),
@@ -171,9 +170,7 @@ function performInfinityReset(keepPaused = false) {
     state.challengeSpendTime = CHALLENGES.map(() => new Decimal('-1'));
     state.isInChallenge = -1;
     state.challengeStartTime = 0;
-    state.batchPurchaseUnlocked = false;
     state.batchAmount = '1';
-    state.prestigeUnlocked = false;
     state.peakPointsForPrestige = new Decimal('0');
     state.prestigePointsLimit = new Decimal('2').pow(new Decimal('512'));
     state.prestigeMult = new Decimal('1');
@@ -199,18 +196,18 @@ function performInfinityReset(keepPaused = false) {
         state._pendingUnpause = true;
     }
     
-    state.isInfinityBroken = false;
     state.isInfinityResetting = false;
     state.isFirstInfinity = false;
     state.currentInfinityIsFirst = false;
     state.peakPointsForReboot = new Decimal('0');
 
+    refreshUnlocks();
     stopInfinityTextEffect();
     checkGeneratorUnlock();
     renderAll();
 }
 
-function playInfinityResetSequence() {
+function playRebootSequence() {
     if (!state.isInfinityReached) return;
     if (state.isInfinityResetting) return;
     state.isInfinityResetting = true;
@@ -237,7 +234,7 @@ function playInfinityResetSequence() {
 
             if (isFirst) {
                 // 第一次归零：暂停游戏，显示故事弹窗
-                performInfinityReset(true);
+                performReboot(true);
                 setTimeout(() => {
                     showStoryDialog(() => {
                         // 弹窗关闭时恢复游戏
@@ -248,7 +245,7 @@ function playInfinityResetSequence() {
                 }, 100);
             } else {
                 // 非第一次：直接恢复
-                performInfinityReset(false);
+                performReboot(false);
             }
 
             state.isInfinityResetting = false;
