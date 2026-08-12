@@ -363,6 +363,9 @@ function renderNav() {
         if (page.id === 'infinity' && state.rebootCount.lte(0)) {
             return;
         }
+        if (page.id === 'automation' && !state.isAutomationUnlocked) {
+            return;
+        }
         const desktopItem = document.createElement('li');
         desktopItem.className = 'desktop-nav-item';
         desktopItem.dataset.page = page.id;

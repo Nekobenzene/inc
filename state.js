@@ -62,6 +62,8 @@ const state = {
         iu3: new Decimal('1'),
         iu4: new Decimal('1'),
     },
+
+    isAutomationUnlocked: false,
 };
 
 function getAchievementCount(state) {
@@ -120,6 +122,14 @@ function checkGeneratorUnlock() {
             u.unlocked = !!state.generatorUnlocked[i];
         }
     }
+}
+
+function refreshUnlocks() {
+    const findAch = (id) => ACHIEVEMENTS.findIndex(a => a.id === id);
+    state.challengeUnlocked = !!state.achievements[findAch('achievement_9')];
+    state.batchPurchaseUnlocked = !!state.achievements[findAch('achievement_10')];
+    state.prestigeUnlocked = !!state.achievements[findAch('achievement_13')];
+    state.isAutomationUnlocked = !!state.achievements[findAch('achievement_16')];
 }
 
 function initState() {
@@ -188,6 +198,8 @@ function initState() {
         iu3: new Decimal('1'),
         iu4: new Decimal('1'),
     };
+
+    state.isAutomationUnlocked = false;
 
     checkGeneratorUnlock();
     updateInfinityUpgradeAvailability();
@@ -262,6 +274,8 @@ function serializeState() {
         axioms: state.axioms,
         infinityUpgrades: state.infinityUpgrades,
         infinityUpgradeReward: state.infinityUpgradeReward,
+
+        isAutomationUnlocked: state.isAutomationUnlocked,
     };
 
     return serializeValue(stateToSerialize);
@@ -461,6 +475,8 @@ function deserializeState(data) {
             iu4: new Decimal(1),
         };
     }
+
+    state.isAutomationUnlocked = !!deserialized.isAutomationUnlocked;
 
 
     checkGeneratorUnlock();
